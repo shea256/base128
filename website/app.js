@@ -11,6 +11,7 @@ const customAlphabet = $('custom-alphabet');
 const directionButtons = [$('dir-encode'),$('dir-decode')];
 let direction = 'encode';
 let lastOutput = '';
+let conversionSucceeded = false;
 let lastDownload = {bytes:new Uint8Array(), filename:'base128.txt',mime:'text/plain;charset=utf-8'};
 
 function hexToBytes(text) {
@@ -40,6 +41,8 @@ function updateComparison(bytes,encoded) {
   setMetric('base64-chars',Math.ceil(bytes.length*8/6).toLocaleString());
 }
 function update() {
+  $('type-label').textContent=direction==='encode'?'Input type':'Output type';
+  $('input-label').textContent=direction==='encode'?'Input':'Base128 input';
   $('input-hint').textContent=direction==='encode'
     ? {text:'Text is converted to UTF-8 bytes',hex:'Whitespace in hex is ignored',integer:'Nonnegative decimal BigInt'}[inputType.value]
     : 'Paste a Base128 payload using the selected alphabet';
@@ -68,18 +71,23 @@ function update() {
     }
     output.value=result;
     lastOutput=result;
+    conversionSucceeded=true;
     const downloadable = inputType.value==='hex' && direction==='decode' ? bytes : new TextEncoder().encode(result);
     lastDownload={bytes:downloadable,filename:inputType.value==='hex'&&direction==='decode'?'base128-decoded.bin':'base128-output.txt',mime:inputType.value==='hex'&&direction==='decode'?'application/octet-stream':'text/plain;charset=utf-8'};
     updateComparison(bytes,encoded);
     setFeedback('');
   } catch(error) {
     output.value='';lastOutput='';
+    conversionSucceeded=false;
     updateComparison(null);
     setFeedback(error.message||String(error),true);
   }
 }
 
 function setDirection(next) {
+  if (next===direction) return;
+  // The previous result is the input for the inverse conversion.
+  input.value=conversionSucceeded?lastOutput:'';
   direction=next;
   directionButtons.forEach(btn=>{
     const isCurrent=btn.id===`dir-${next}`;
@@ -93,10 +101,8 @@ $('dir-decode').addEventListener('click',()=>setDirection('decode'));
 [input,inputType,customAlphabet].forEach(el=>el.addEventListener('input',update));
 $('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';update();});
 $('swap').addEventListener('click',()=>{
-  if (!lastOutput) return;
+  if (!conversionSucceeded) return;
   const next=direction==='encode'?'decode':'encode';
-  // Encoding hex bytes and decoding hex bytes use matching types.
-  input.value=lastOutput;
   setDirection(next);
 });
 $('copy-output').addEventListener('click',async()=>{
