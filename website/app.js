@@ -10,13 +10,16 @@ const inputType = $('input-type');
 const customAlphabet = $('custom-alphabet');
 const directionButtons = [$('dir-encode'),$('dir-decode')];
 let direction = 'encode';
+let selectedType = inputType.value;
+const encodeDrafts = {text:input.value, hex:'', integer:'1000'};
 let lastOutput = '';
 let conversionSucceeded = false;
 let lastDownload = {bytes:new Uint8Array(), filename:'base128.txt',mime:'text/plain;charset=utf-8'};
 
 function hexToBytes(text) {
   const hex=text.replace(/\s/g,'');
-  if (hex.length % 2 || !/^[0-9a-f]*$/i.test(hex)) throw new Error('Hex bytes must contain an even number of hexadecimal digits');
+  if (!/^[0-9a-f]*$/i.test(hex)) throw new Error('Use only hexadecimal digits (0–9, A–F) and whitespace');
+  if (hex.length % 2) throw new Error(`Incomplete hex byte: ${hex.length} digits. Each byte needs two digits; add or remove a digit.`);
   const bytes=new Uint8Array(hex.length/2);
   for(let i=0;i<bytes.length;i++) bytes[i]=parseInt(hex.slice(i*2,i*2+2),16);
   return bytes;
@@ -44,7 +47,7 @@ function update() {
   $('type-label').textContent=direction==='encode'?'Input type':'Output type';
   $('input-label').textContent=direction==='encode'?'Input':'Base128 input';
   $('input-hint').textContent=direction==='encode'
-    ? {text:'Text is converted to UTF-8 bytes',hex:'Whitespace in hex is ignored',integer:'Nonnegative decimal BigInt'}[inputType.value]
+    ? {text:'Text is converted to UTF-8 bytes',hex:'Two hex digits per byte, e.g. 48 65 6c 6c 6f',integer:'Nonnegative decimal BigInt'}[inputType.value]
     : 'Paste a Base128 payload using the selected alphabet';
   $('output-hint').textContent=direction==='encode'?'Base128 payload':
     {text:'Decoded UTF-8 text',hex:'Decoded binary (hex)',integer:'Decoded decimal integer'}[inputType.value];
@@ -82,6 +85,27 @@ function update() {
     updateComparison(null);
     setFeedback(error.message||String(error),true);
   }
+  $('copy-output').disabled=!conversionSucceeded || !lastOutput;
+  $('download-output').disabled=!conversionSucceeded;
+  $('swap').disabled=!conversionSucceeded;
+}
+
+function setType() {
+  const next=inputType.value;
+  if (next===selectedType) return;
+  if (direction==='encode') {
+    encodeDrafts[selectedType]=input.value;
+    // Text and hex are two representations of the same bytes.
+    if (selectedType==='text' && next==='hex') {
+      encodeDrafts.hex=bytesToHex(new TextEncoder().encode(input.value));
+    } else if (selectedType==='hex' && next==='text') {
+      try { encodeDrafts.text=new TextDecoder('utf-8',{fatal:true}).decode(hexToBytes(input.value)); }
+      catch { /* Restore the previous text draft when the bytes are not UTF-8. */ }
+    }
+    input.value=encodeDrafts[next];
+  }
+  selectedType=next;
+  update();
 }
 
 function setDirection(next) {
@@ -98,7 +122,8 @@ function setDirection(next) {
 }
 $('dir-encode').addEventListener('click',()=>setDirection('encode'));
 $('dir-decode').addEventListener('click',()=>setDirection('decode'));
-[input,inputType,customAlphabet].forEach(el=>el.addEventListener('input',update));
+[input,customAlphabet].forEach(el=>el.addEventListener('input',update));
+inputType.addEventListener('change',setType);
 $('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';update();});
 $('swap').addEventListener('click',()=>{
   if (!conversionSucceeded) return;
@@ -118,7 +143,7 @@ function downloadBytes(bytes,filename,mime) {
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 $('download-output').addEventListener('click',()=>{
-  if (lastOutput || output.value==='') downloadBytes(lastDownload.bytes,lastDownload.filename,lastDownload.mime);
+  if (conversionSucceeded) downloadBytes(lastDownload.bytes,lastDownload.filename,lastDownload.mime);
 });
 $('file-run').addEventListener('click',async()=>{
   const status=$('file-status');
