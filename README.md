@@ -87,6 +87,10 @@ The CLI streams files rather than reading them fully into memory. With `-o`, its
 
 ### Website
 
+Live site: **https://shea256.github.io/base128/**
+
+GitHub Actions builds, tests, and deploys the site to GitHub Pages on every push to `master`. The [Deploy website workflow](.github/workflows/pages.yml) can also be run manually from the Actions tab. Repository Settings → Pages must use **GitHub Actions** as the publishing source. Only static website assets are published.
+
 ```bash
 npm run site
 # Open http://localhost:8080/
