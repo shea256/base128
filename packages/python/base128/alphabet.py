@@ -3,7 +3,8 @@
 from types import MappingProxyType
 
 DEFAULT_ALPHABET_TEXT = (
-    "".join(chr(i) for i in range(33, 127))
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    + "".join(chr(i) for i in range(33, 127) if not chr(i).isalnum())
     + "ΓΔΘΛΞΠΦΨΩ"
     + "αβγδεζηθικλμξπστφψω"
     + "∑∏∫∂∇∞"

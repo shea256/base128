@@ -1,4 +1,4 @@
-/** The v1 alphabet is ordered, not normalized, and immutable. */
+/** The v2 alphabet is ordered, not normalized, and immutable. */
 export declare const DEFAULT_ALPHABET_TEXT: string;
 /** A compiled alphabet: 128 unique Unicode scalar values, in index order. */
 export declare class Alphabet {

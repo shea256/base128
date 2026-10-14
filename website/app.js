@@ -1,7 +1,7 @@
 import {
   DEFAULT_ALPHABET, createAlphabet, encode, decode,
   encodeInteger, decodeInteger,
-} from './vendor/index.js';
+} from './vendor/index.js?v=alphabet-v2';
 
 const $ = id => document.getElementById(id);
 const input = $('payload-input');

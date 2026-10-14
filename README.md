@@ -2,20 +2,23 @@
 
 A small, dependency-free encoding library built around a fixed **128-character Unicode alphabet**, with support for user-defined alphabets. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
 
-**Version:** 0.1.0 · **License:** Apache-2.0 · **Status:** Working implementation / prepublication; package names are provisional.
+**Version:** 0.2.0 · **License:** Apache-2.0 · **Status:** Working implementation / prepublication; package names are provisional.
 
-> Base128 is **not Base64-compatible** and is not interchangeable with other libraries also called "Base128". Its exact algorithm and alphabet are defined in [`specs/encoding-v1.md`](specs/encoding-v1.md).
+> Base128 is **not Base64-compatible** and is not interchangeable with other libraries also called "Base128". Its exact algorithm and alphabet are defined in [`specs/encoding-v2.md`](specs/encoding-v2.md).
 
 ## Why Base128?
 
 A 128-symbol alphabet provides exactly **7 bits per displayed symbol**. The binary algorithm uses simple 7-bit packing; the integer algorithm uses positional base-128 arithmetic. ASCII/UTF-8 are converted into bytes before binary encoding; they aren't independent Base128 algorithms.
 
-- 94 ASCII characters `!` through `~` (indices 0–93)
+- ASCII digits `0–9` (indices 0–9)
+- Uppercase Latin letters `A–Z` (indices 10–35)
+- Lowercase Latin letters `a–z` (indices 36–61)
+- ASCII punctuation in ascending code-point order (indices 62–93)
 - 9 uppercase Greek symbols `ΓΔΘΛΞΠΦΨΩ` (indices 94–102)
 - 19 lowercase Greek symbols `αβγδεζηθικλμξπστφψω` (indices 103–121)
 - 6 mathematical symbols `∑∏∫∂∇∞` (indices 122–127)
 
-The default alphabet is in [`specs/alphabet-v1.json`](specs/alphabet-v1.json). Other valid ordered sets of exactly 128 distinct Unicode scalar values may be supplied as configuration. No headers, prefixes, checksums, or padding characters are inserted.
+The default alphabet is in [`specs/alphabet-v2.json`](specs/alphabet-v2.json). Other valid ordered sets of exactly 128 distinct Unicode scalar values may be supplied as configuration. No headers, prefixes, checksums, or padding characters are inserted.
 
 **Important:** Base128 usually uses fewer visible characters than Base64, but it may use **more UTF-8 bytes** and is not URL-safe, shell-safe, or visually unambiguous. It provides neither encryption nor checksums. Avoid using encoded text as an unescaped URL component or assuming it resists transcription errors.
 
@@ -34,8 +37,8 @@ const encoded = encode(bytes);
 console.log(encoded);
 console.log(new TextDecoder('utf-8', {fatal:true}).decode(decode(encoded)));
 
-console.log(encodeInteger(1000n)); // (β
-console.log(decodeInteger('(β')); // 1000n
+console.log(encodeInteger(1000n)); // 7β
+console.log(decodeInteger('7β')); // 1000n
 
 // Example: reverse the default alphabet (still 128 unique characters)
 const {DEFAULT_ALPHABET_TEXT} = await import('./packages/js/dist/index.js');
@@ -55,8 +58,8 @@ from base128 import encode, decode, encode_integer, decode_integer, create_alpha
 encoded = encode('Hello, 世界!'.encode('utf-8'))
 print(encoded)
 print(decode(encoded).decode('utf-8'))
-print(encode_integer(1000))  # (β
-assert decode_integer('(β') == 1000
+print(encode_integer(1000))  # 7β
+assert decode_integer('7β') == 1000
 PY
 ```
 
@@ -74,8 +77,8 @@ node packages/cli/bin/base128.mjs encode image.png -o image.b128
 node packages/cli/bin/base128.mjs decode image.b128 -o restored.png
 
 # Integer conversion (never appends a newline)
-node packages/cli/bin/base128.mjs integer encode 1000  # (β
-node packages/cli/bin/base128.mjs integer decode '(β'  # 1000
+node packages/cli/bin/base128.mjs integer encode 1000  # 7β
+node packages/cli/bin/base128.mjs integer decode '7β'  # 1000
 
 # Custom alphabet, exactly 128 Unicode code points in the file, without a newline
 node packages/cli/bin/base128.mjs encode image.png --alphabet-file alphabet.txt -o image.b128
@@ -97,6 +100,8 @@ npm run site
 ```
 
 The `website/` directory is a self-contained static site (its `vendor/` directory contains copies of the compiled ESM library). You can serve or deploy it using any static server. The local preview server uses only Node.js built-ins. The website implements live text, hexadecimal byte, and integer conversions; optional custom alphabets; byte-size comparison; a 128-symbol explorer; and browser-local file conversion. Browser file conversion loads the file into memory; use the CLI for large files.
+
+The default alphabet uses **format v2**. Existing v1 payloads require the explicit legacy alphabet; see the [migration guide](specs/encoding-v2.md#6-migration-from-v1). The [spoken alphabet table](specs/spoken-alphabet-v2.md) lists every character and its telephone name.
 
 ## Development and testing
 
@@ -125,7 +130,7 @@ base128/
 │   ├── python/             # Python stdlib-only package
 │   └── cli/                # Node.js streaming CLI
 ├── website/                # Standalone static playground and alphabet atlas
-├── specs/                  # Normative v1 spec, alphabet, fixtures
+├── specs/                  # Normative v2 spec, alphabet, fixtures
 ├── scripts/                # Builds and cross-language testing
 └── .github/workflows/      # Continuous integration
 ```

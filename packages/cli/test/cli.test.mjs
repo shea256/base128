@@ -26,15 +26,15 @@ test('CLI supports stdin and files without modifying raw content',()=>{
     assert.equal(run(['decode',text,'-o',output]).status,0);
     assert.deepEqual(readFileSync(output),bytes);
     writeFileSync(output, Buffer.from('DO NOT REPLACE'));
-    writeFileSync(text,Buffer.from('!"'));
+    writeFileSync(text,Buffer.from('01'));
     assert.notEqual(run(['decode',text,'-o',output]).status,0);
     assert.equal(readFileSync(output).toString(),'DO NOT REPLACE');
   } finally { rmSync(dir,{recursive:true,force:true}); }
 });
 
 test('CLI integers and custom alphabets',()=>{
-  assert.equal(run(['integer','encode','1000']).stdout.toString(),'(β');
-  assert.equal(run(['integer','decode','(β']).stdout.toString(),'1000');
+  assert.equal(run(['integer','encode','1000']).stdout.toString(),'7β');
+  assert.equal(run(['integer','decode','7β']).stdout.toString(),'1000');
   const dir=mkdtempSync(join(tmpdir(),'base128-test-'));
   try {
     const abc=join(dir,'alphabet.txt');

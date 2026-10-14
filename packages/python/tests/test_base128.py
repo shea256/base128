@@ -18,7 +18,7 @@ class Base128Tests(unittest.TestCase):
         self.assertEqual(DEFAULT_ALPHABET_TEXT, VECTORS['alphabet'])
         self.assertEqual(len(DEFAULT_ALPHABET_TEXT), 128)
         self.assertEqual(len(set(DEFAULT_ALPHABET_TEXT)), 128)
-        self.assertEqual(DEFAULT_ALPHABET.symbol_at(0), '!')
+        self.assertEqual(DEFAULT_ALPHABET.symbol_at(0), '0')
         self.assertEqual(DEFAULT_ALPHABET.symbol_at(127), '∞')
         with self.assertRaises(AttributeError):
             DEFAULT_ALPHABET._text = 'changed'
@@ -33,6 +33,18 @@ class Base128Tests(unittest.TestCase):
             with self.subTest(item=item['decimal'][:24]):
                 self.assertEqual(encode_integer(int(item['decimal'])), item['encoded'])
                 self.assertEqual(decode_integer(item['encoded']), int(item['decimal']))
+
+    def test_legacy_alphabet(self):
+        legacy = json.loads((ROOT / 'specs' / 'test-vectors-v1.json').read_text())
+        alphabet = legacy['alphabet']
+        for item in legacy['binary']:
+            data = bytes.fromhex(item['hex'])
+            self.assertEqual(encode(data, alphabet=alphabet), item['encoded'])
+            self.assertEqual(decode(item['encoded'], alphabet=alphabet), data)
+        for item in legacy['integer']:
+            value = int(item['decimal'])
+            self.assertEqual(encode_integer(value, alphabet=alphabet), item['encoded'])
+            self.assertEqual(decode_integer(item['encoded'], alphabet=alphabet), value)
 
     def test_custom_vectors(self):
         alphabet = create_alphabet(VECTORS['custom']['alphabet'])
@@ -62,11 +74,11 @@ class Base128Tests(unittest.TestCase):
     def test_boundaries_and_invalid_strings(self):
         for value in [0, 1, 127, 128, 2**1024-1, 10**200]:
             self.assertEqual(decode_integer(encode_integer(value)), value)
-        for text in ['!', '!'*9, '!"', ' ', 'invalid text']:
+        for text in ['0', '0'*9, '01', ' ', 'invalid text']:
             with self.subTest(text=text), self.assertRaises(ValueError):
                 decode(text)
-        self.assertEqual(decode('!!'), bytes([0]))
-        for text in ['', '!!', '!A']:
+        self.assertEqual(decode('00'), bytes([0]))
+        for text in ['', '00', '0A']:
             with self.assertRaises(ValueError):
                 decode_integer(text)
         with self.assertRaises(ValueError):
@@ -89,8 +101,8 @@ class Base128Tests(unittest.TestCase):
 
     def test_unfinalized_stream_and_stream_reuse(self):
         e = BinaryEncoder()
-        self.assertEqual(e.write(b'\x01'), '!')
-        self.assertEqual(e.finish(), 'a')
+        self.assertEqual(e.write(b'\x01'), '0')
+        self.assertEqual(e.finish(), '#')
         with self.assertRaises(ValueError):
             e.write(b'')
         d = BinaryDecoder()

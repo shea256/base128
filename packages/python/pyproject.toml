@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "unicode-base128"
-version = "0.1.0"
+version = "0.2.0"
 description = "Dependency-free Base128 binary and integer encoding with configurable Unicode alphabets"
 readme = "README.md"
 requires-python = ">=3.10"

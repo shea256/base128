@@ -8,11 +8,11 @@ import {
 } from '../dist/index.js';
 const fixtures = JSON.parse(readFileSync(new URL('../../../specs/test-vectors.json', import.meta.url), 'utf8'));
 
-test('v1 alphabet is exact, unique, and immutable', () => {
+test('v2 alphabet is exact, unique, and immutable', () => {
   assert.equal(Array.from(DEFAULT_ALPHABET_TEXT).length, 128);
   assert.equal(new Set(Array.from(DEFAULT_ALPHABET_TEXT)).size, 128);
   assert.equal(DEFAULT_ALPHABET.text, fixtures.alphabet);
-  assert.equal(DEFAULT_ALPHABET.symbolAt(0), '!');
+  assert.equal(DEFAULT_ALPHABET.symbolAt(0), '0');
   assert.equal(DEFAULT_ALPHABET.symbolAt(127), '∞');
   assert.ok(Object.isFrozen(DEFAULT_ALPHABET));
   assert.equal(DEFAULT_ALPHABET.indexOf('∇'), 126);
@@ -74,13 +74,13 @@ test('full 0–255 byte spectrum and very large integers', () => {
 });
 
 test('strict canonical binary decoding rejects invalid lengths and padding', () => {
-  assert.throws(() => decode('!'), /length/);
-  assert.throws(() => decode('!'.repeat(9)), /length/);
-  assert.throws(() => decode('!"'), /padding/);
+  assert.throws(() => decode('0'), /length/);
+  assert.throws(() => decode('0'.repeat(9)), /length/);
+  assert.throws(() => decode('01'), /padding/);
   assert.throws(() => decode(' '), /Invalid/);
   assert.throws(() => decode('non alphabet text'), /Invalid/);
   assert.throws(() => decode('!\uD800'), /Incomplete Unicode surrogate/);
-  assert.deepEqual(decode('!!'), Uint8Array.from([0]));
+  assert.deepEqual(decode('00'), Uint8Array.from([0]));
 });
 
 test('strict input and integer validation', () => {
@@ -88,8 +88,8 @@ test('strict input and integer validation', () => {
   assert.throws(() => encodeInteger(12), /bigint/);
   assert.throws(() => encodeInteger(-1n), /nonnegative/);
   assert.throws(() => decodeInteger(''), /empty/);
-  assert.throws(() => decodeInteger('!!'), /leading zero/);
-  assert.throws(() => decodeInteger('!A'), /leading zero/);
+  assert.throws(() => decodeInteger('00'), /leading zero/);
+  assert.throws(() => decodeInteger('0A'), /leading zero/);
   assert.throws(() => decodeInteger('🙂'), /Invalid/);
   assert.throws(() => new Alphabet('x'), /128/);
   assert.throws(() => new Alphabet('x'.repeat(128)), /duplicate/);
@@ -114,4 +114,22 @@ test('supplementary Unicode symbols and UTF-16 split across decoder chunks', () 
   for (const utf16CodeUnit of encoded.split('')) decodedChunks.push(decoder.write(utf16CodeUnit));
   decoder.finish();
   assert.deepEqual(Buffer.concat(decodedChunks), Buffer.from(bytes));
+});
+
+
+test('v2 digit boundaries and explicit v1 compatibility', () => {
+  for (const [value, text] of [[0n,'0'],[15n,'F'],[16n,'G'],[35n,'Z'],[36n,'a'],[61n,'z'],[62n,'!'],[127n,'∞'],[128n,'10'],[129n,'11']]) {
+    assert.equal(encodeInteger(value), text);
+    assert.equal(decodeInteger(text), value);
+  }
+  const legacy = JSON.parse(readFileSync(new URL('../../../specs/test-vectors-v1.json', import.meta.url), 'utf8'));
+  const alphabet = legacy.alphabet;
+  for (const {hex, encoded} of legacy.binary) {
+    assert.equal(encode(Buffer.from(hex, 'hex'), {alphabet}), encoded);
+    assert.deepEqual(decode(encoded, {alphabet}), new Uint8Array(Buffer.from(hex, 'hex')));
+  }
+  for (const {decimal, encoded} of legacy.integer) {
+    assert.equal(encodeInteger(BigInt(decimal), {alphabet}), encoded);
+    assert.equal(decodeInteger(encoded, {alphabet}), BigInt(decimal));
+  }
 });
