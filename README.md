@@ -22,7 +22,7 @@ A 128-symbol alphabet provides exactly **7 bits per displayed symbol**. The bina
 
 The default alphabet is in [`specs/alphabet-v4.json`](specs/alphabet-v4.json). Other valid ordered sets of exactly 128 distinct Unicode scalar values may be supplied as configuration. No headers, prefixes, checksums, or padding characters are inserted.
 
-![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/alphabet-v4-chart.svg)
+![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/base128-alphabet-v4.svg)
 
 **Important:** Base128 usually uses fewer visible characters than Base64, but it may use **more UTF-8 bytes** and is not URL-safe, shell-safe, or visually unambiguous. It provides neither encryption nor checksums. Avoid using encoded text as an unescaped URL component or assuming it resists transcription errors.
 
