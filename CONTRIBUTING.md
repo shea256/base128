@@ -6,7 +6,7 @@ Thanks for contributing. Please keep published encoding formats **backward-compa
 
 1. Update or add tests for any behavioral change.
 2. Run `npm test` (Node.js 20+, Python 3.10+; TypeScript compiler from `npm install`).
-3. If changing the specification, update `specs/encoding-v2.md`, test vectors, and both language implementations as appropriate.
+3. If changing the specification, update `specs/encoding-v3.md`, test vectors, and both language implementations as appropriate.
 4. Avoid runtime dependencies unless their benefit clearly outweighs additional complexity.
 5. Write changes in an idiomatic style for each language; preserve TypeScript strict type-checking.
 

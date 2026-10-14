@@ -1,6 +1,6 @@
 {
   "name": "base128-monorepo",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Base128: configurable Unicode alphabets and canonical binary/integer encoding",
   "license": "Apache-2.0",

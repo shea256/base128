@@ -1,9 +1,9 @@
-"""Generate fixed, independently calculated v2 compatibility vectors."""
+"""Generate fixed, independently calculated v3 compatibility vectors."""
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-abc = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + "".join(chr(i) for i in range(33, 127) if not chr(i).isalnum()) + "ΓΔΘΛΞΠΦΨΩ" + "αβγδεζηθικλμξπστφψω" + "∑∏∫∂∇∞"
+abc = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + "".join(chr(i) for i in range(33, 127) if not chr(i).isalnum()) + "ΓΔΘΛΞΠΦΨΩ" + "αβγδεζηθικλμξπστφψω" + "∑∏∫∂∇√"
 assert len(abc) == len(set(abc)) == 128
 
 
@@ -25,7 +25,7 @@ integer_data = [0, 1, 7, 15, 16, 35, 36, 61, 62, 63, 64, 65, 127, 128, 129, 255,
 reversed_abc = abc[::-1]
 
 out = {
-    "format": "base128-v2-test-vectors",
+    "format": "base128-v3-test-vectors",
     "alphabet": abc,
     "binary": [{"hex": value.hex(), "encoded": binary_reference(value, abc)} for value in binary_data],
     "integer": [{"decimal": str(value), "encoded": integer_reference(value, abc)} for value in integer_data],
@@ -36,9 +36,9 @@ out = {
     },
 }
 (ROOT / "specs" / "test-vectors.json").write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-(ROOT / "specs" / "alphabet-v2.json").write_text(json.dumps({
-    "name": "Base128 default Unicode alphabet v2",
-    "version": 2,
+(ROOT / "specs" / "alphabet-v3.json").write_text(json.dumps({
+    "name": "Base128 default Unicode alphabet v3",
+    "version": 3,
     "alphabet": abc,
     "symbols": [{"index": i, "character": s, "unicode": f"U+{ord(s):04X}"} for i,s in enumerate(abc)],
 }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

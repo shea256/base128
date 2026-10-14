@@ -67,7 +67,7 @@ There is **no separate text encoding mode** in v2. Convert a string to UTF-8 byt
 - Invalid alphabets, unexpected input types, invalid symbols, impossible binary lengths, nonzero binary final padding, negative integer inputs, and nonminimal integer numerals are errors.
 - No implicit whitespace trimming or character-case conversion. Unicode normalization, if desired, must happen at the application layer before encoding.
 - There is no checksum, cryptographic authentication, or confidentiality. Consider a separate application-layer checksum and/or digital signature if typing errors or tampering matter.
-- Cross-language interoperability uses [`test-vectors.json`](test-vectors.json), including a reversed custom alphabet.
+- Cross-language interoperability uses [`test-vectors-v2.json`](test-vectors-v2.json), including a reversed custom alphabet.
 - In UTF-8, Greek and math symbols require multiple bytes. Fewer *displayed characters* than Base64 does not imply fewer bytes of storage/transmission.
 
 ## 6. Migration from v1
