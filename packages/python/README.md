@@ -10,6 +10,6 @@ custom = create_alphabet("... exactly 128 distinct Unicode characters ...")
 # encode(b"Hello", alphabet=custom)
 ```
 
-No runtime dependencies. Exact API and wire format are specified in `../../specs/encoding-v3.md`.
+No runtime dependencies. Exact API and wire format are specified in `../../specs/encoding-v4.md`.
 
 The PyPI package name `unicode-base128` is a proposed, **unverified** publishing name.

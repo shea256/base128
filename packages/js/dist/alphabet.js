@@ -1,10 +1,10 @@
-/** The v3 alphabet is ordered, not normalized, and immutable. */
+/** The v4 alphabet is ordered, not normalized, and immutable. */
 export const DEFAULT_ALPHABET_TEXT = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
     Array.from({ length: 94 }, (_, i) => String.fromCharCode(i + 33))
         .filter(symbol => !/[0-9A-Za-z]/.test(symbol)).join("") +
     "ΓΔΘΛΞΠΦΨΩ" +
     "αβγδεζηθικλμξπστφψω" +
-    "∑∏∫∂∇√";
+    "∂∇∏∑√∫";
 /** A compiled alphabet: 128 unique Unicode scalar values, in index order. */
 export class Alphabet {
     #symbols;

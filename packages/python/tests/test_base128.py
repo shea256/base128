@@ -19,7 +19,7 @@ class Base128Tests(unittest.TestCase):
         self.assertEqual(len(DEFAULT_ALPHABET_TEXT), 128)
         self.assertEqual(len(set(DEFAULT_ALPHABET_TEXT)), 128)
         self.assertEqual(DEFAULT_ALPHABET.symbol_at(0), '0')
-        self.assertEqual(DEFAULT_ALPHABET.symbol_at(127), '√')
+        self.assertEqual(DEFAULT_ALPHABET.symbol_at(127), '∫')
         with self.assertRaises(AttributeError):
             DEFAULT_ALPHABET._text = 'changed'
 
@@ -57,22 +57,24 @@ class Base128Tests(unittest.TestCase):
             self.assertEqual(encode_integer(int(item['decimal']), alphabet=alphabet), item['encoded'])
             self.assertEqual(decode_integer(item['encoded'], alphabet=alphabet), int(item['decimal']))
 
-    def test_square_root_and_v2_compatibility(self):
-        legacy = json.loads((ROOT / 'specs' / 'test-vectors-v2.json').read_text())
-        alphabet = legacy['alphabet']
-        self.assertEqual(DEFAULT_ALPHABET_TEXT, alphabet.replace('∞', '√'))
-        with self.assertRaises(ValueError):
-            decode_integer('∞')
-        with self.assertRaises(ValueError):
-            decode('∞#')
-        for item in legacy['binary']:
-            data = bytes.fromhex(item['hex'])
-            self.assertEqual(decode(item['encoded'], alphabet=alphabet), data)
-            self.assertEqual(encode(data), item['encoded'].replace('∞', '√'))
-        for item in legacy['integer']:
-            value = int(item['decimal'])
-            self.assertEqual(decode_integer(item['encoded'], alphabet=alphabet), value)
-            self.assertEqual(encode_integer(value), item['encoded'].replace('∞', '√'))
+    def test_math_order_and_legacy_compatibility(self):
+        self.assertEqual(DEFAULT_ALPHABET_TEXT[122:], '∂∇∏∑√∫')
+        self.assertEqual(list(DEFAULT_ALPHABET_TEXT[122:]), sorted(DEFAULT_ALPHABET_TEXT[122:]))
+        for index, symbol in enumerate('∂∇∏∑√∫', 122):
+            self.assertEqual(encode_integer(index), symbol)
+            self.assertEqual(decode_integer(symbol), index)
+        for version in [2, 3]:
+            legacy = json.loads((ROOT / 'specs' / f'test-vectors-v{version}.json').read_text())
+            alphabet = legacy['alphabet']
+            self.assertEqual(DEFAULT_ALPHABET_TEXT[:122], alphabet[:122])
+            for item in legacy['binary']:
+                data = bytes.fromhex(item['hex'])
+                self.assertEqual(decode(item['encoded'], alphabet=alphabet), data)
+                self.assertEqual(encode(data, alphabet=alphabet), item['encoded'])
+            for item in legacy['integer']:
+                value = int(item['decimal'])
+                self.assertEqual(decode_integer(item['encoded'], alphabet=alphabet), value)
+                self.assertEqual(encode_integer(value, alphabet=alphabet), item['encoded'])
 
     def test_round_trip_and_streaming(self):
         rng = random.Random(20261013)
@@ -112,7 +114,7 @@ class Base128Tests(unittest.TestCase):
             create_alphabet(DEFAULT_ALPHABET_TEXT[:-1] + '\ud800')
 
     def test_non_bmp_custom_alphabet(self):
-        custom = create_alphabet(DEFAULT_ALPHABET_TEXT.replace('√', '🧪'))
+        custom = create_alphabet(DEFAULT_ALPHABET_TEXT.replace('∫', '🧪'))
         for data in [b'\xfe', b'\xfe\x11\x63', b'\xff'*12]:
             self.assertEqual(decode(encode(data, alphabet=custom), alphabet=custom), data)
 

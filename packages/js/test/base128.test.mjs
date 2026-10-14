@@ -8,14 +8,14 @@ import {
 } from '../dist/index.js';
 const fixtures = JSON.parse(readFileSync(new URL('../../../specs/test-vectors.json', import.meta.url), 'utf8'));
 
-test('v3 alphabet is exact, unique, and immutable', () => {
+test('v4 alphabet is exact, unique, and immutable', () => {
   assert.equal(Array.from(DEFAULT_ALPHABET_TEXT).length, 128);
   assert.equal(new Set(Array.from(DEFAULT_ALPHABET_TEXT)).size, 128);
   assert.equal(DEFAULT_ALPHABET.text, fixtures.alphabet);
   assert.equal(DEFAULT_ALPHABET.symbolAt(0), '0');
-  assert.equal(DEFAULT_ALPHABET.symbolAt(127), '√');
+  assert.equal(DEFAULT_ALPHABET.symbolAt(127), '∫');
   assert.ok(Object.isFrozen(DEFAULT_ALPHABET));
-  assert.equal(DEFAULT_ALPHABET.indexOf('∇'), 126);
+  assert.equal(DEFAULT_ALPHABET.indexOf('∇'), 123);
 });
 
 test('independent reference vectors (binary and integer)', () => {
@@ -103,7 +103,7 @@ test('strict input and integer validation', () => {
 });
 
 test('supplementary Unicode symbols and UTF-16 split across decoder chunks', () => {
-  const custom = createAlphabet(DEFAULT_ALPHABET_TEXT.replace('√', '🧪'));
+  const custom = createAlphabet(DEFAULT_ALPHABET_TEXT.replace('∫', '🧪'));
   assert.equal(Array.from(custom.text).length, 128);
   const bytes = Uint8Array.from([254, 17, 99]);
   const encoded = encode(bytes, {alphabet: custom});
@@ -117,8 +117,8 @@ test('supplementary Unicode symbols and UTF-16 split across decoder chunks', () 
 });
 
 
-test('v3 digit boundaries and explicit v1 compatibility', () => {
-  for (const [value, text] of [[0n,'0'],[15n,'F'],[16n,'G'],[35n,'Z'],[36n,'a'],[61n,'z'],[62n,'!'],[127n,'√'],[128n,'10'],[129n,'11']]) {
+test('v4 digit boundaries and explicit v1 compatibility', () => {
+  for (const [value, text] of [[0n,'0'],[15n,'F'],[16n,'G'],[35n,'Z'],[36n,'a'],[61n,'z'],[62n,'!'],[122n,'∂'],[123n,'∇'],[124n,'∏'],[125n,'∑'],[126n,'√'],[127n,'∫'],[128n,'10'],[129n,'11']]) {
     assert.equal(encodeInteger(value), text);
     assert.equal(decodeInteger(text), value);
   }
@@ -134,18 +134,20 @@ test('v3 digit boundaries and explicit v1 compatibility', () => {
   }
 });
 
-test('v3 square root replaces infinity while v2 remains explicitly decodable', () => {
-  const legacy = JSON.parse(readFileSync(new URL('../../../specs/test-vectors-v2.json', import.meta.url), 'utf8'));
-  const alphabet = legacy.alphabet;
-  assert.equal(DEFAULT_ALPHABET_TEXT, alphabet.replace('∞', '√'));
-  assert.throws(() => decodeInteger('∞'), /Invalid/);
-  assert.throws(() => decode('∞#'), /Invalid/);
-  for (const {hex, encoded} of legacy.binary) {
-    assert.deepEqual(decode(encoded, {alphabet}), new Uint8Array(Buffer.from(hex, 'hex')));
-    assert.equal(encode(Buffer.from(hex, 'hex')), encoded.replaceAll('∞', '√'));
-  }
-  for (const {decimal, encoded} of legacy.integer) {
-    assert.equal(decodeInteger(encoded, {alphabet}), BigInt(decimal));
-    assert.equal(encodeInteger(BigInt(decimal)), encoded.replaceAll('∞', '√'));
-  }
-});
+for (const version of [2, 3]) {
+  test(`v${version} payloads remain explicitly decodable`, () => {
+    const legacy = JSON.parse(readFileSync(new URL(`../../../specs/test-vectors-v${version}.json`, import.meta.url), 'utf8'));
+    const alphabet = legacy.alphabet;
+    assert.equal(DEFAULT_ALPHABET_TEXT.slice(0, 122), alphabet.slice(0, 122));
+    assert.throws(() => decodeInteger('∞'), /Invalid/);
+    for (const {hex, encoded} of legacy.binary) {
+      const bytes = new Uint8Array(Buffer.from(hex, 'hex'));
+      assert.deepEqual(decode(encoded, {alphabet}), bytes);
+      assert.equal(encode(bytes, {alphabet}), encoded);
+    }
+    for (const {decimal, encoded} of legacy.integer) {
+      assert.equal(decodeInteger(encoded, {alphabet}), BigInt(decimal));
+      assert.equal(encodeInteger(BigInt(decimal), {alphabet}), encoded);
+    }
+  });
+}

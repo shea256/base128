@@ -1,6 +1,6 @@
 {
-  "format": "base128-v3-test-vectors",
-  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω∑∏∫∂∇√",
+  "format": "base128-v4-test-vectors",
+  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω∂∇∏∑√∫",
   "binary": [
     {
       "hex": "",
@@ -24,7 +24,7 @@
     },
     {
       "hex": "ff",
-      "encoded": "√#"
+      "encoded": "∫#"
     },
     {
       "hex": "0000",
@@ -40,7 +40,7 @@
     },
     {
       "hex": "ffffff",
-      "encoded": "√√√κ"
+      "encoded": "∫∫∫κ"
     },
     {
       "hex": "48656c6c6f",
@@ -60,7 +60,7 @@
     },
     {
       "hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
-      "encoded": "00WWOGA63%1G=iOD73Ξ18+cKA(%λ#ΦqRE7ZΛω0%YH,4?nS=fLAΨ%γuΓmO/)pX[ζtSEdZ`κ∑!V=8KID8(ZHγ4-fM/c@,σ2(a@gLgΨwΛo{j^B\\μ∂#ΛnOζ)hP;βq{:sΠr}ιuSkdR>δτxΓFN@ηψ∂\"Vκ8CA74%Λ=ψ'cLB)Znβ∫%ZI,ΨI`qΓnP:cξ,ζ∑\"W=β[wbM:d[grg~o|k^ζMRL;γr|jφB:δφyΓι^∫675&Ξnuζ!ZJ-ΨξP}τ\"X>γq∑:k|l_ζτ|zΩφzΔκuykVJ.Ωξ∑TU^l`ηφx∇FF.απ∑∂Γ√*ασ∏∇\"\"ιψ"
+      "encoded": "00WWOGA63%1G=iOD73Ξ18+cKA(%λ#ΦqRE7ZΛω0%YH,4?nS=fLAΨ%γuΓmO/)pX[ζtSEdZ`κ∂!V=8KID8(ZHγ4-fM/c@,σ2(a@gLgΨwΛo{j^B\\μ∑#ΛnOζ)hP;βq{:sΠr}ιuSkdR>δτxΓFN@ηψ∑\"Vκ8CA74%Λ=ψ'cLB)Znβ∏%ZI,ΨI`qΓnP:cξ,ζ∂\"W=β[wbM:d[grg~o|k^ζMRL;γr|jφB:δφyΓι^∏675&Ξnuζ!ZJ-ΨξP}τ\"X>γq∂:k|l_ζτ|zΩφzΔκuykVJ.Ωξ∂TU^l`ηφx√FF.απ∂∑Γ∫*ασ∇√\"\"ιψ"
     }
   ],
   "integer": [
@@ -113,8 +113,28 @@
       "encoded": "$"
     },
     {
-      "decimal": "127",
+      "decimal": "122",
+      "encoded": "∂"
+    },
+    {
+      "decimal": "123",
+      "encoded": "∇"
+    },
+    {
+      "decimal": "124",
+      "encoded": "∏"
+    },
+    {
+      "decimal": "125",
+      "encoded": "∑"
+    },
+    {
+      "decimal": "126",
       "encoded": "√"
+    },
+    {
+      "decimal": "127",
+      "encoded": "∫"
     },
     {
       "decimal": "128",
@@ -126,7 +146,7 @@
     },
     {
       "decimal": "255",
-      "encoded": "1√"
+      "encoded": "1∫"
     },
     {
       "decimal": "256",
@@ -138,11 +158,11 @@
     },
     {
       "decimal": "65535",
-      "encoded": "3√√"
+      "encoded": "3∫∫"
     },
     {
       "decimal": "18446744073709551615",
-      "encoded": "1√√√√√√√√√"
+      "encoded": "1∫∫∫∫∫∫∫∫∫"
     },
     {
       "decimal": "340282366920938463463374607431768211456",
@@ -150,15 +170,15 @@
     },
     {
       "decimal": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
-      "encoded": "F√√√√√√√√√√√√√√√√√√√√√√√√√√√√√√√√√√√√"
+      "encoded": "F∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫"
     },
     {
       "decimal": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-      "encoded": "9Ir?i@6∫σ%ΦψcJSBωΞ`Φ4u%Q!g]aOY=k*'00000000000000"
+      "encoded": "9Ir?i@6∏σ%ΦψcJSBωΞ`Φ4u%Q!g]aOY=k*'00000000000000"
     }
   ],
   "custom": {
-    "alphabet": "√∇∂∫∏∑ωψφτσπξμλκιθηζεδγβαΩΨΦΠΞΛΘΔΓ~}|{`_^]\\[@?>=<;:/.-,+*)('&%$#\"!zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA9876543210",
+    "alphabet": "∫√∑∏∇∂ωψφτσπξμλκιθηζεδγβαΩΨΦΠΞΛΘΔΓ~}|{`_^]\\[@?>=<;:/.-,+*)('&%$#\"!zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA9876543210",
     "binary": [
       {
         "hex": "",
@@ -166,11 +186,11 @@
       },
       {
         "hex": "00",
-        "encoded": "√√"
+        "encoded": "∫∫"
       },
       {
         "hex": "01",
-        "encoded": "√\""
+        "encoded": "∫\""
       },
       {
         "hex": "7f",
@@ -178,7 +198,7 @@
       },
       {
         "hex": "80",
-        "encoded": "\"√"
+        "encoded": "\"∫"
       },
       {
         "hex": "ff",
@@ -186,15 +206,15 @@
       },
       {
         "hex": "0000",
-        "encoded": "√√√"
+        "encoded": "∫∫∫"
       },
       {
         "hex": "0100",
-        "encoded": "√\"√"
+        "encoded": "∫\"∫"
       },
       {
         "hex": "0001",
-        "encoded": "√√Δ"
+        "encoded": "∫∫Δ"
       },
       {
         "hex": "ffffff",
@@ -206,7 +226,7 @@
       },
       {
         "hex": "48656c6c6f20776f726c6421",
-        "encoded": "|Ω?vS&\"8+ZovΓ∏"
+        "encoded": "|Ω?vS&\"8+ZovΓ∇"
       },
       {
         "hex": "48656c6c6f2c204261736531323821",
@@ -216,11 +236,11 @@
     "integer": [
       {
         "decimal": "0",
-        "encoded": "√"
+        "encoded": "∫"
       },
       {
         "decimal": "1",
-        "encoded": "∇"
+        "encoded": "√"
       },
       {
         "decimal": "7",
@@ -263,24 +283,44 @@
         "encoded": "!"
       },
       {
+        "decimal": "122",
+        "encoded": "5"
+      },
+      {
+        "decimal": "123",
+        "encoded": "4"
+      },
+      {
+        "decimal": "124",
+        "encoded": "3"
+      },
+      {
+        "decimal": "125",
+        "encoded": "2"
+      },
+      {
+        "decimal": "126",
+        "encoded": "1"
+      },
+      {
         "decimal": "127",
         "encoded": "0"
       },
       {
         "decimal": "128",
-        "encoded": "∇√"
+        "encoded": "√∫"
       },
       {
         "decimal": "129",
-        "encoded": "∇∇"
+        "encoded": "√√"
       },
       {
         "decimal": "255",
-        "encoded": "∇0"
+        "encoded": "√0"
       },
       {
         "decimal": "256",
-        "encoded": "∂√"
+        "encoded": "∑∫"
       },
       {
         "decimal": "1000",
@@ -288,15 +328,15 @@
       },
       {
         "decimal": "65535",
-        "encoded": "∫00"
+        "encoded": "∏00"
       },
       {
         "decimal": "18446744073709551615",
-        "encoded": "∇000000000"
+        "encoded": "√000000000"
       },
       {
         "decimal": "340282366920938463463374607431768211456",
-        "encoded": "∏√√√√√√√√√√√√√√√√√√"
+        "encoded": "∇∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫"
       },
       {
         "decimal": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
@@ -304,7 +344,7 @@
       },
       {
         "decimal": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-        "encoded": "τη-j@iω3AzR7`ζΠπ6TcR∏*zΨ$\\f|α~l>ux√√√√√√√√√√√√√√"
+        "encoded": "τη-j@iω3AzR7`ζΠπ6TcR∇*zΨ$\\f|α~l>ux∫∫∫∫∫∫∫∫∫∫∫∫∫∫"
       }
     ]
   }
