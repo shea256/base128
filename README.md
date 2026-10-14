@@ -1,6 +1,6 @@
 # Base128
 
-![Base128 — 128 symbols. 7 bits each.](docs/images/base128-cover.png)
+![Base128](docs/images/base128-cover-clean.png)
 
 A small, dependency-free encoding library built around a fixed **128-character Unicode alphabet**, with support for user-defined alphabets. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
 
@@ -22,7 +22,7 @@ A 128-symbol alphabet provides exactly **7 bits per displayed symbol**. The bina
 
 The default alphabet is in [`specs/alphabet-v4.json`](specs/alphabet-v4.json). Other valid ordered sets of exactly 128 distinct Unicode scalar values may be supplied as configuration. No headers, prefixes, checksums, or padding characters are inserted.
 
-![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/alphabet-v4.svg)
+![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/alphabet-v4-chart.svg)
 
 **Important:** Base128 usually uses fewer visible characters than Base64, but it may use **more UTF-8 bytes** and is not URL-safe, shell-safe, or visually unambiguous. It provides neither encryption nor checksums. Avoid using encoded text as an unescaped URL component or assuming it resists transcription errors.
 
@@ -30,7 +30,7 @@ The default alphabet is in [`specs/alphabet-v4.json`](specs/alphabet-v4.json). O
 
 Binary encoding reads the input bits in groups of seven, zero-fills the final group when needed, and maps each group to an alphabet symbol. For example, UTF-8 `Hi` becomes `aQW`:
 
-![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing aQW. The last five bits are zero-filled.](docs/images/binary-encoding.svg)
+![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing aQW. The last five bits are zero-filled.](docs/images/binary-encoding-example.svg)
 
 Integer encoding uses positional base-128 arithmetic instead: `126 → √`, `127 → ∫`, `128 → 10`, and `129 → 11`.
 
