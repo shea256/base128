@@ -1,0 +1,10 @@
+{
+  "name": "base128-unicode-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "bin": {"base128": "./bin/base128.mjs"},
+  "dependencies": {},
+  "engines": {"node": ">=20"}
+}

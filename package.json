@@ -1,0 +1,21 @@
+{
+  "name": "base128-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Base128: configurable Unicode alphabets and canonical binary/integer encoding",
+  "license": "Apache-2.0",
+  "type": "module",
+  "workspaces": ["packages/js", "packages/cli"],
+  "scripts": {
+    "build": "tsc -p packages/js/tsconfig.json && node scripts/build-website.mjs",
+    "test": "npm run build && npm run test:js && npm run test:python && npm run test:integration && npm run test:cli",
+    "test:js": "node --test packages/js/test/*.test.mjs",
+    "test:python": "python -m unittest discover -s packages/python/tests -v",
+    "test:integration": "python scripts/check-cross-language.py",
+    "test:cli": "node --test packages/cli/test/*.test.mjs",
+    "site": "node website/server.mjs",
+    "cli": "node packages/cli/bin/base128.mjs"
+  },
+  "devDependencies": {"typescript": "^5.8.3"},
+  "engines": {"node": ">=20"}
+}
