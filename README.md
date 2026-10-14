@@ -30,7 +30,7 @@ The default alphabet is in [`specs/alphabet-v4.json`](specs/alphabet-v4.json). O
 
 Binary encoding reads the input bits in groups of seven, zero-fills the final group when needed, and maps each group to an alphabet symbol. For example, UTF-8 `Hi` becomes `aQW`:
 
-![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing aQW. The last five bits are zero-filled.](docs/images/binary-encoding-example.svg)
+![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing aQW. The last five bits are zero-filled.](docs/images/how-base128-encodes-bytes.svg)
 
 Integer encoding uses positional base-128 arithmetic instead: `126 → √`, `127 → ∫`, `128 → 10`, and `129 → 11`.
 

@@ -57,5 +57,5 @@ for(const [i,symbol] of symbols.entries()) {
 }
 diagram+=text(40,550,'Gold bits are zero-filled tail bits, not extra input bytes. No padding character is added.',16,'#edcf82');
 diagram+=text(40,579,'Seven bits per symbol describes information content; a Unicode symbol may use multiple UTF-8 bytes.',15,'#9aaebd');
-await writeFile(resolve(dest,'binary-encoding-example.svg'),svg(560,'How Base128 Encodes Bytes','The UTF-8 bytes for Hi are 01001000 and 01101001. Regrouped and zero-filled: 0100100, 0011010, 0100000. Indices 36, 26, 32 map to a, Q, W. The payload is aQW.',diagram+'</g>'));
-console.log('Generated alphabet-v4-chart.svg and binary-encoding-example.svg from the v4 alphabet.');
+await writeFile(resolve(dest,'how-base128-encodes-bytes.svg'),svg(560,'How Base128 Encodes Bytes','The UTF-8 bytes for Hi are 01001000 and 01101001. Regrouped and zero-filled: 0100100, 0011010, 0100000. Indices 36, 26, 32 map to a, Q, W. The payload is aQW.',diagram+'</g>'));
+console.log('Generated alphabet-v4-chart.svg and how-base128-encodes-bytes.svg from the v4 alphabet.');
