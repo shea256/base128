@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Base128 — a deterministic, reversible Unicode binary-to-text and integer encoding library." />
   <title>Base128 — Encode beyond Base64</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css?v=python-example" />
   <script type="module" src="./app.js?v=alphabet-v4"></script>
 </head>
 <body>
@@ -43,13 +43,24 @@
 
       <section class="alphabet-section" id="alphabet"><div class="section-head"><div><div class="section-kicker">04 / SYMBOL REGISTRY</div><h2>The alphabet</h2><p>Digits first, then uppercase, lowercase, punctuation, Greek, and math. Each symbol maps to its zero-based index.</p></div><div class="alphabet-count">0 → 127</div></div><div class="legend"><span><i class="dot ascii"></i>94 ASCII</span><span><i class="dot upper"></i>9 uppercase Greek</span><span><i class="dot lower"></i>19 lowercase Greek</span><span><i class="dot math"></i>6 math symbols</span></div><div class="alphabet-grid" id="alphabet-grid"></div><p class="alphabet-note">Select a symbol to copy it. The character index and Unicode code point appear below each glyph.</p></section>
 
-      <section class="panel specification-section" id="specification"><div><div class="section-kicker">05 / DEVELOPERS</div><h2>Simple by design.</h2><p>Two algorithms, a fixed default alphabet, optional custom alphabets, deterministic output, and zero runtime dependencies.</p></div><pre><code>import { encode, decode, encodeInteger } from 'base128-unicode-codec';
+      <section class="panel specification-section" id="specification">
+        <div class="developer-intro"><div class="section-kicker">05 / DEVELOPERS</div><h2>JavaScript and Python</h2><p>Encode bytes or integers with either library. Both use the same alphabet and produce identical output.</p></div>
+        <div class="code-example"><h3>JavaScript</h3><pre><code>import { encode, decode, encodeInteger } from 'base128-unicode-codec';
 
 const bytes = new TextEncoder().encode('Hello!');
 const encoded = encode(bytes);
 const recovered = decode(encoded);
 
-const number = encodeInteger(1000n); // "7β"</code></pre><p class="muted">Project release 0.4.0 · Apache-2.0 · Encodings have no checksums, framing headers, or authentication.</p></section>
+const number = encodeInteger(1000n); // "7β"</code></pre></div>
+        <div class="code-example"><h3>Python</h3><pre><code>from base128 import encode, decode, encode_integer
+
+raw_bytes = "Hello!".encode("utf-8")
+encoded = encode(raw_bytes)
+recovered = decode(encoded)
+
+number = encode_integer(1000)  # "7β"</code></pre></div>
+        <p class="muted">Project release 0.4.0 · Apache-2.0 · Encodings have no checksums, framing headers, or authentication.</p>
+      </section>
     </main>
     <footer><span class="brand footer-brand">∇ base128<span class="brand-dot">.</span></span><span>Open specification · reproducible outputs · Unicode by design</span></footer>
   </div>
