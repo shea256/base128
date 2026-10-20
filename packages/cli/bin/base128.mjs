@@ -8,7 +8,8 @@ import {finished} from 'node:stream/promises';
 import {TextDecoder} from 'node:util';
 import {resolve, dirname, basename, join} from 'node:path';
 import {
-  BinaryEncoder, BinaryDecoder, TWO_BYTE_ALPHABET, createAlphabet, encodeInteger, decodeInteger,
+  DEFAULT_ALPHABET, TWO_BYTE_ALPHABET,
+  BinaryEncoder, BinaryDecoder, createAlphabet, encodeInteger, decodeInteger,
 } from '../../js/dist/index.js';
 
 const HELP=`Base128 CLI — no prefix, no padding character, exact Unicode alphabet
@@ -129,7 +130,7 @@ async function main(argv) {
   if (!options) return;
   const {acceptAliases}=options;
   if (acceptAliases && (subcommand || command)!=='decode') throw new Error('--accept-aliases is only valid for decode');
-  let alphabet=options.preset==='two-byte' ? TWO_BYTE_ALPHABET : undefined;
+  let alphabet=options.preset==='two-byte' ? TWO_BYTE_ALPHABET : DEFAULT_ALPHABET;
   if (options.alphabetFile) {
     alphabet=createAlphabet(await readFile(options.alphabetFile,'utf8'));
   }
