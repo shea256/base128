@@ -1,4 +1,4 @@
-import { resolveDecoderIndex, resolveAlphabet } from "./alphabet.js?v=initial-0.1";
+import { resolveDecoderIndex, resolveAlphabet } from "./alphabet.js?v=envelopes-0.1";
 /** Nonnegative integer → minimal, big-endian positional Base128 numeral. */
 export function encodeInteger(value, options = {}) {
     if (typeof value !== "bigint")

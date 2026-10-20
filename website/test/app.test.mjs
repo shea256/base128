@@ -84,5 +84,29 @@ test('website presets, strict and mixed decode, custom reset, explorer, and file
     await get('file-run').fire('click');
     assert.match(get('file-status').textContent,/Decoded mixed.b128 into 7 bytes/);
     assert.deepEqual(new Uint8Array(await downloaded.arrayBuffer()),new Uint8Array(7).fill(255));
+    // The two independent wrapper controls round-trip and require the requested shape.
+    get('input-type').value='integer';
+    await get('input-type').fire('change');
+    await get('dir-encode').fire('click');
+    get('payload-input').value='127';
+    get('wrap-prefix').checked=true;
+    get('wrap-checksum').checked=true;
+    await get('wrap-checksum').fire('change');
+    const envelope=get('payload-output').value;
+    assert.ok(envelope.startsWith('b128·1i1·÷·'));
+    await get('dir-decode').fire('click');
+    assert.equal(get('payload-output').value,'127');
+    get('payload-input').value=envelope.slice(0,-1)+(envelope.endsWith('0')?'1':'0');
+    await get('payload-input').fire('input');
+    assert.equal(get('payload-output').value,'');
+    assert.equal(get('download-output').disabled,true);
+    get('payload-input').value=envelope;
+    get('wrap-checksum').checked=false;
+    await get('wrap-checksum').fire('change');
+    assert.match(get('feedback').textContent,/field count/);
+    get('alphabet-preset').value='custom';
+    await get('alphabet-preset').fire('change');
+    assert.equal(get('wrap-prefix').disabled,true);
+    assert.equal(get('wrap-prefix').checked,false);
   } finally {URL.createObjectURL=original;delete globalThis.document;}
 });
