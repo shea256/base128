@@ -5,6 +5,8 @@ export const DEFAULT_ALPHABET_TEXT = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef
     "ΓΔΘΛΞΠΦΨΩ" +
     "αβγδεζηθικλμξπστφψω" +
     "∂∇∏∑√∫";
+/** Two-byte UTF-8 preset, with the final six symbols in code-point order. */
+export const TWO_BYTE_ALPHABET_TEXT = Array.from(DEFAULT_ALPHABET_TEXT).slice(0, 122).join("") + "§©®°¶÷";
 /** A compiled alphabet: 128 unique Unicode scalar values, in index order. */
 export class Alphabet {
     #symbols;
@@ -51,6 +53,7 @@ export class Alphabet {
     }
 }
 export const DEFAULT_ALPHABET = new Alphabet(DEFAULT_ALPHABET_TEXT);
+export const TWO_BYTE_ALPHABET = new Alphabet(TWO_BYTE_ALPHABET_TEXT);
 export function createAlphabet(text) { return new Alphabet(text); }
 export function resolveAlphabet(input) {
     if (input === undefined)
@@ -58,4 +61,16 @@ export function resolveAlphabet(input) {
     if (input instanceof Alphabet)
         return input;
     return new Alphabet(input);
+}
+export function resolveDecoderIndex(alphabet, acceptAliases = false) {
+    if (!acceptAliases)
+        return symbol => alphabet.indexOf(symbol);
+    if (alphabet.text !== DEFAULT_ALPHABET_TEXT && alphabet.text !== TWO_BYTE_ALPHABET_TEXT) {
+        throw new RangeError("Alias decoding requires the default or two-byte alphabet");
+    }
+    const aliases = new Map();
+    for (const text of [DEFAULT_ALPHABET_TEXT, TWO_BYTE_ALPHABET_TEXT]) {
+        Array.from(text).forEach((symbol, index) => aliases.set(symbol, index));
+    }
+    return symbol => aliases.get(symbol) ?? alphabet.indexOf(symbol);
 }

@@ -1,4 +1,4 @@
-import { type Alphabet, type Options, resolveAlphabet } from "./alphabet.js";
+import { type Alphabet, type Options, type DecodeOptions, resolveDecoderIndex, resolveAlphabet } from "./alphabet.js";
 
 /** Streaming MSB-first 7-bit byte encoder. No metadata or padding characters. */
 export class BinaryEncoder {
@@ -37,7 +37,7 @@ export class BinaryEncoder {
 
 /** Streaming decoder. Canonical trailing bits and encoded length checked in finish(). */
 export class BinaryDecoder {
-  readonly #alphabet: Alphabet;
+  readonly #indexOf: (symbol: string) => number;
   #buffer = 0;
   #bits = 0;
   #symbols = 0;
@@ -45,8 +45,8 @@ export class BinaryDecoder {
   #pendingHighSurrogate = "";
   #finished = false;
 
-  constructor(options: Options = {}) {
-    this.#alphabet = resolveAlphabet(options.alphabet);
+  constructor(options: DecodeOptions = {}) {
+    this.#indexOf = resolveDecoderIndex(resolveAlphabet(options.alphabet), options.acceptAliases);
   }
 
   write(text: string): Uint8Array {
@@ -64,7 +64,7 @@ export class BinaryDecoder {
 
     const result: number[] = [];
     for (const symbol of segment) {
-      const digit = this.#alphabet.indexOf(symbol);
+      const digit = this.#indexOf(symbol);
       this.#symbols++;
       this.#buffer = (this.#buffer << 7) | digit;
       this.#bits += 7;
@@ -99,7 +99,7 @@ export function encode(bytes: Uint8Array, options: Options = {}): string {
   return encoder.write(bytes) + encoder.finish();
 }
 
-export function decode(text: string, options: Options = {}): Uint8Array {
+export function decode(text: string, options: DecodeOptions = {}): Uint8Array {
   const decoder = new BinaryDecoder(options);
   const bytes = decoder.write(text);
   decoder.finish();

@@ -11,6 +11,9 @@ DEFAULT_ALPHABET_TEXT = (
 )
 
 
+TWO_BYTE_ALPHABET_TEXT = DEFAULT_ALPHABET_TEXT[:122] + "§©®°¶÷"
+
+
 class Alphabet:
     """128 distinct Unicode scalar values in canonical digit order."""
 
@@ -56,6 +59,7 @@ class Alphabet:
 
 
 DEFAULT_ALPHABET = Alphabet(DEFAULT_ALPHABET_TEXT)
+TWO_BYTE_ALPHABET = Alphabet(TWO_BYTE_ALPHABET_TEXT)
 
 
 def create_alphabet(text: str) -> Alphabet:
@@ -68,3 +72,20 @@ def resolve_alphabet(alphabet: Alphabet | str | None) -> Alphabet:
     if isinstance(alphabet, Alphabet):
         return alphabet
     return Alphabet(alphabet)
+
+
+def resolve_decoder_index(alphabet: Alphabet, accept_aliases: bool = False):
+    """Accept both built-in layouts only when explicitly requested."""
+    if not accept_aliases:
+        return alphabet.index_of
+    if alphabet.text not in (DEFAULT_ALPHABET_TEXT, TWO_BYTE_ALPHABET_TEXT):
+        raise ValueError("Alias decoding requires the default or two-byte alphabet")
+    aliases = {c: i for text in (DEFAULT_ALPHABET_TEXT, TWO_BYTE_ALPHABET_TEXT)
+               for i, c in enumerate(text)}
+
+    def index_of(symbol: str) -> int:
+        if symbol in aliases:
+            return aliases[symbol]
+        return alphabet.index_of(symbol)
+
+    return index_of

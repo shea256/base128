@@ -46,3 +46,22 @@ test('CLI integers and custom alphabets',()=>{
     assert.equal(decoded.stdout.toString(),'testing');
   } finally { rmSync(dir,{recursive:true,force:true}); }
 });
+
+test('CLI two-byte preset and opt-in aliases',()=>{
+  const bytes=Buffer.from([255,255,255,255,255,255,255]);
+  const encoded=run(['encode','--alphabet','two-byte'],bytes);
+  assert.equal(encoded.status,0,encoded.stderr.toString());
+  assert.equal(encoded.stdout.toString(),'÷'.repeat(8));
+  assert.equal(run(['decode'],encoded.stdout).status,1);
+  for (const args of [['decode','--alphabet','two-byte'],['decode','--accept-aliases']]) {
+    const decoded=run(args,encoded.stdout);
+    assert.equal(decoded.status,0,decoded.stderr.toString());
+    assert.deepEqual(decoded.stdout,bytes);
+  }
+  assert.deepEqual(run(['decode','--accept-aliases'],Buffer.from('∫÷'.repeat(4))).stdout,bytes);
+  assert.equal(run(['integer','encode','122','--alphabet','two-byte']).stdout.toString(),'§');
+  assert.equal(run(['integer','decode','§','--accept-aliases']).stdout.toString(),'122');
+  assert.equal(run(['encode','--accept-aliases'],bytes).status,1);
+  assert.equal(run(['encode','--alphabet','unknown'],bytes).status,1);
+  assert.equal(run(['encode','--alphabet','two-byte','--alphabet-file','missing'],bytes).status,1);
+});

@@ -18,6 +18,42 @@ The full ordered alphabet and the index-to-code-point mapping are in [`alphabet-
 
 Custom alphabets are allowed as caller-supplied configuration. A custom alphabet must contain exactly 128 **distinct Unicode scalar values**. Each code point is one digit, even if Unicode grapheme-cluster segmentation might combine it with an adjacent code point. Unpaired UTF-16 surrogates are invalid. Encoders and decoders must agree on the exact alphabet and order. The payload carries no alphabet identifier.
 
+### 1.1 Optional two-byte v1 preset and alias decoding
+
+The separately versioned [`alphabet-two-byte-v1.json`](alphabet-two-byte-v1.json)
+preset retains default v4 indices 0–121 and assigns these final six values:
+
+| Index | Default v4 | Two-byte v1 |
+| ---: | :---: | :---: |
+| 122 | ∂ | § |
+| 123 | ∇ | © |
+| 124 | ∏ | ® |
+| 125 | ∑ | ° |
+| 126 | √ | ¶ |
+| 127 | ∫ | ÷ |
+
+The preset has exactly 128 unique scalar values, each encoded in at most two
+UTF-8 bytes. It uses the same binary and integer algorithms. The default v4
+alphabet and all strict decoding rules remain unchanged.
+
+An explicitly enabled alias decoder may accept both characters in each row,
+including mixed spellings in a single payload. All other characters retain their
+v4 indices. Alias mode is supported only with the exact default v4 or two-byte v1
+layout, whether supplied as a compiled alphabet or text; requesting it with any
+other layout is an error. It does not detect legacy formats or normalize Unicode.
+
+Alias mode changes only character-to-digit lookup. Binary length and padding
+validation, integer minimality, case sensitivity, and whitespace rejection still
+apply. Re-encoding chooses the selected alphabet's canonical spelling, so an
+alias-containing input need not round-trip to the identical text. Applications
+comparing, hashing, or signing encoded text should first establish a canonical
+spelling, or use strict decoding. The payload carries no preset or alias-mode flag.
+
+[`test-vectors-two-byte-v1.json`](test-vectors-two-byte-v1.json) supplies independent
+binary and integer examples, including mixed spellings. Spoken names for the six
+alternative symbols are Section, Copyright, Registered, Degree, Paragraph, and
+Division; other names follow [`spoken-alphabet-v4.md`](spoken-alphabet-v4.md).
+
 ## 2. Binary-to-text encoding
 
 Input: a finite ordered sequence of octets (8-bit bytes). Output: a string of Base128 alphabet symbols. Output contains **no** header, prefix, length field, checksum, separators, or padding characters.
@@ -33,7 +69,7 @@ Example: bytes `01 00` have bitstream `00000001 00000000`, producing digits `[0,
 
 ### Binary decoding and validity
 
-1. Map every encoded Unicode code point to its digit index 0–127. Reject characters missing from the chosen alphabet.
+1. Map every encoded Unicode code point to its digit index 0–127. Reject characters missing from the chosen alphabet, except the explicit aliases in §1.1 when enabled.
 2. Concatenate their 7-bit unsigned representations, most-significant bit first.
 3. Emit full 8-bit groups from the start.
 4. Verify **both** conditions:

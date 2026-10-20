@@ -1,4 +1,4 @@
-import { type Options, resolveAlphabet } from "./alphabet.js";
+import { type Options, type DecodeOptions, resolveDecoderIndex, resolveAlphabet } from "./alphabet.js";
 
 /** Nonnegative integer → minimal, big-endian positional Base128 numeral. */
 export function encodeInteger(value: bigint, options: Options = {}): string {
@@ -15,9 +15,10 @@ export function encodeInteger(value: bigint, options: Options = {}): string {
 }
 
 /** Minimal, big-endian positional Base128 numeral → nonnegative bigint. */
-export function decodeInteger(text: string, options: Options = {}): bigint {
+export function decodeInteger(text: string, options: DecodeOptions = {}): bigint {
   if (typeof text !== "string") throw new TypeError("Encoded integer must be a string");
   const alphabet = resolveAlphabet(options.alphabet);
+  const indexOf = resolveDecoderIndex(alphabet, options.acceptAliases);
   const digits = Array.from(text);
   if (digits.length === 0) throw new RangeError("Encoded integer cannot be empty");
   if (digits.length > 1 && digits[0] === alphabet.symbolAt(0)) {
@@ -25,7 +26,7 @@ export function decodeInteger(text: string, options: Options = {}): bigint {
   }
   let value = 0n;
   for (const digit of digits) {
-    value = (value << 7n) | BigInt(alphabet.indexOf(digit));
+    value = (value << 7n) | BigInt(indexOf(digit));
   }
   return value;
 }
