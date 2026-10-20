@@ -10,8 +10,8 @@
     "build": "tsc -p packages/js/tsconfig.json && node scripts/build-website.mjs",
     "test": "npm run build && npm run test:js && npm run test:python && npm run test:integration && npm run test:cli",
     "test:js": "node --test packages/js/test/*.test.mjs",
-    "test:python": "python -m unittest discover -s packages/python/tests -v",
-    "test:integration": "python scripts/check-cross-language.py",
+    "test:python": "node scripts/run-python.mjs -m unittest discover -s packages/python/tests -v",
+    "test:integration": "node scripts/run-python.mjs scripts/check-cross-language.py",
     "test:cli": "node --test packages/cli/test/*.test.mjs",
     "site": "node website/server.mjs",
     "cli": "node packages/cli/bin/base128.mjs"

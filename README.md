@@ -168,6 +168,30 @@ The public project is named **Base128**. The proposed npm name `base128-unicode-
 
 Apache License, Version 2.0. See [`LICENSE`](LICENSE). Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
+## Using a repository checkout
+
+The package names in manifests and examples are not a guarantee of npm or PyPI
+publication. The CLI package is private. These checkout-based paths work without
+assuming any registry release:
+
+```sh
+npm ci
+npm run build
+node packages/cli/bin/base128.mjs --help
+```
+
+- **JavaScript/TypeScript:** import from `./packages/js/dist/index.js` when running
+  at the repository root. The build includes TypeScript declarations.
+- **Python:** create and activate a virtual environment, then run
+  `python -m pip install -e ./packages/python`; import from `base128`. Alternatively,
+  set `PYTHONPATH` to `packages/python` to use the source without installation.
+- **CLI:** run `node packages/cli/bin/base128.mjs`. See the [CLI reference](docs/cli.md)
+  for streams, exit codes, alphabet options, and transactional file output.
+
+Run `npm test` for all checks. It discovers Python 3.10+ automatically using
+`python3`, `python`, or Windows `py -3`; override with the `PYTHON` executable path.
+See [AGENTS.md](AGENTS.md) for agent and contributor guidance.
+
 ## Two-byte alternative and decoder aliases
 
 The optional **two-byte v1** preset preserves the first 122 digits of the default

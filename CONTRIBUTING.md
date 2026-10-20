@@ -11,3 +11,8 @@ Thanks for contributing. Please keep published encoding formats **backward-compa
 5. Write changes in an idiomatic style for each language; preserve TypeScript strict type-checking.
 
 Use the Apache-2.0 license for contributions to this repository. Do not include third-party code with incompatible licensing.
+
+The test runner discovers Python 3.10+ as `python3`, `python`, or Windows `py -3`.
+Set `PYTHON` to an executable path to select a specific interpreter. See
+[AGENTS.md](AGENTS.md) for repository layout, generated-file rules, and focused
+checks, and [the CLI reference](docs/cli.md) for automation-friendly usage.
