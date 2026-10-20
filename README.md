@@ -2,70 +2,87 @@
 
 ![Base128](docs/images/base128-cover-clean.png)
 
-A small, dependency-free encoding library built around a fixed **128-character Unicode alphabet**, with support for user-defined alphabets. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
+A small, dependency-free library for encoding bytes and nonnegative integers with a configurable **128-character Unicode alphabet**. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
 
-**Version:** 0.4.0 · **License:** Apache-2.0 · **Status:** Working implementation / prepublication; package names are provisional.
+**Version:** 0.4.0 · **License:** Apache-2.0 · **Status:** Working implementation / prepublication.
 
-> Base128 is **not Base64-compatible** and is not interchangeable with other libraries also called "Base128". Its exact algorithm and alphabet are defined in [`specs/encoding-v4.md`](specs/encoding-v4.md).
+**[Try the live playground](https://shea256.github.io/base128/)** · [Encoding specification](specs/encoding-v4.md) · [CLI reference](docs/cli.md)
+
+## Contents
+
+- [Why Base128?](#why-base128)
+- [Getting started](#getting-started)
+- [Usage](#usage)
+- [Alphabets and decoding](#alphabets-and-decoding)
+- [How it works](#how-it-works)
+- [Compatibility and limitations](#compatibility-and-limitations)
+- [Development and testing](#development-and-testing)
+- [Repository and contributing](#repository-and-contributing)
+- [License](#license)
 
 ## Why Base128?
 
-A 128-symbol alphabet provides exactly **7 bits per displayed symbol**. The binary algorithm uses simple 7-bit packing; the integer algorithm uses positional base-128 arithmetic. ASCII/UTF-8 are converted into bytes before binary encoding; they aren't independent Base128 algorithms.
+Each Base128 symbol carries **7 bits**, compared with Base64's 6 bits per symbol. This usually means fewer displayed characters for the same bytes. The format has a fixed, documented mapping, supports custom alphabets, and produces matching output in JavaScript and Python without runtime dependencies.
 
-- ASCII digits `0–9` (indices 0–9)
-- Uppercase Latin letters `A–Z` (indices 10–35)
-- Lowercase Latin letters `a–z` (indices 36–61)
-- ASCII punctuation in ascending code-point order (indices 62–93)
-- 9 uppercase Greek symbols `ΓΔΘΛΞΠΦΨΩ` (indices 94–102)
-- 19 lowercase Greek symbols `αβγδεζηθικλμξπστφψω` (indices 103–121)
-- 6 mathematical symbols `∂∇∏∑√∫` (indices 122–127)
+Fewer characters does **not** necessarily mean smaller storage: Unicode symbols can occupy multiple UTF-8 bytes. The playground compares both character counts and byte sizes. An optional two-byte alphabet limits every symbol to at most two UTF-8 bytes.
 
-The default alphabet is in [`specs/alphabet-v4.json`](specs/alphabet-v4.json). An optional [two-byte preset and decoder alias mode](#two-byte-alternative-and-decoder-aliases) are also available. Other valid ordered sets of exactly 128 distinct Unicode scalar values may be supplied as configuration. No headers, prefixes, checksums, or padding characters are inserted.
+Base128 is useful when you want this specific Unicode representation. It is not Base64-compatible, URL-safe, shell-safe, or visually unambiguous; see [limitations](#compatibility-and-limitations).
 
-![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/base128-alphabet-v4.svg)
+## Getting started
 
-**Important:** Base128 usually uses fewer visible characters than Base64, but it may use **more UTF-8 bytes** and is not URL-safe, shell-safe, or visually unambiguous. It provides neither encryption nor checksums. Avoid using encoded text as an unescaped URL component or assuming it resists transcription errors.
+Use a repository checkout. The manifest names `base128-unicode-codec` (npm) and `unicode-base128` (PyPI) are provisional and do not establish registry availability. The CLI package is private; the examples below do not require a published package.
 
-## How it works
+Run commands from the repository root. Shell examples use a POSIX-compatible shell.
 
-Binary encoding reads the input bits in groups of seven, zero-fills the final group when needed, and maps each group to an alphabet symbol. For example, UTF-8 `Hi` becomes `aQW`:
+| Interface | Requirement | Checkout entry point |
+| --- | --- | --- |
+| JavaScript / TypeScript | Node.js 20+ | `packages/js/dist/index.js` (ESM and `.d.ts` declarations) |
+| Python | Python 3.10+ | `packages/python/base128` |
+| CLI | Node.js 20+ | `node packages/cli/bin/base128.mjs` |
+| Website | A modern browser; Node.js for local preview | [Live playground](https://shea256.github.io/base128/) or `npm run site` |
 
-![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing aQW. The last five bits are zero-filled.](docs/images/how-base128-encodes-bytes.svg)
+Compiled JavaScript and browser vendor files are tracked, so the CLI and site can run directly from a checkout. To install development dependencies and rebuild:
 
-Integer encoding uses positional base-128 arithmetic instead: `126 → √`, `127 → ∫`, `128 → 10`, and `129 → 11`.
+```sh
+npm ci
+npm run build
+```
 
-## Quick start
+For Python, either use `PYTHONPATH=packages/python` as below, or install the local package into a virtual environment:
+
+```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e ./packages/python
+```
+
+On Windows, use the equivalent virtual-environment activation command and environment-variable syntax. The libraries have no third-party runtime dependencies; rebuilding JavaScript requires the TypeScript development dependency.
+
+## Usage
 
 ### JavaScript / TypeScript
 
-Run this repository locally with Node.js 20+:
-
-```bash
+```sh
 node --input-type=module <<'JS'
-import {encode, decode, encodeInteger, decodeInteger, createAlphabet} from './packages/js/dist/index.js';
+import {encode, decode, encodeInteger, decodeInteger} from './packages/js/dist/index.js';
 
 const bytes = new TextEncoder().encode('Hello, 世界!');
 const encoded = encode(bytes);
 console.log(encoded);
-console.log(new TextDecoder('utf-8', {fatal:true}).decode(decode(encoded)));
+console.log(new TextDecoder('utf-8', {fatal: true}).decode(decode(encoded)));
 
 console.log(encodeInteger(1000n)); // 7β
 console.log(decodeInteger('7β')); // 1000n
-
-// Example: reverse the default alphabet (still 128 unique characters)
-const {DEFAULT_ALPHABET_TEXT} = await import('./packages/js/dist/index.js');
-const custom = createAlphabet(Array.from(DEFAULT_ALPHABET_TEXT).reverse().join(''));
-console.log(encode(bytes, {alphabet:custom}));
 JS
 ```
 
-The JavaScript package is built from TypeScript sources and ships its compiled ESM and `.d.ts` declarations. It has **zero runtime npm dependencies**. A local TypeScript compiler is only required to rebuild from source.
+JavaScript integer conversion uses `bigint`, avoiding precision loss from large `number` values. See the [JavaScript package README](packages/js/README.md) for more examples.
 
 ### Python
 
-```bash
-PYTHONPATH=packages/python python - <<'PY'
-from base128 import encode, decode, encode_integer, decode_integer, create_alphabet
+```sh
+PYTHONPATH=packages/python python3 - <<'PY'
+from base128 import encode, decode, encode_integer, decode_integer
 
 encoded = encode('Hello, 世界!'.encode('utf-8'))
 print(encoded)
@@ -75,127 +92,63 @@ assert decode_integer('7β') == 1000
 PY
 ```
 
-Requires Python 3.10+. **Zero third-party runtime dependencies.** The proposed distribution name `unicode-base128` is not verified available on PyPI.
+Python integer conversion uses arbitrary-precision `int`. See the [Python package README](packages/python/README.md).
 
 ### CLI
 
-```bash
-# Byte-preserving stream encoding and decoding
-printf 'Hello!' | node packages/cli/bin/base128.mjs encode
+```sh
+# Byte-preserving stream round trip
 printf 'Hello!' | node packages/cli/bin/base128.mjs encode | node packages/cli/bin/base128.mjs decode
 
-# Files (binary input and output, transactional on disk)
+# Files
 node packages/cli/bin/base128.mjs encode image.png -o image.b128
 node packages/cli/bin/base128.mjs decode image.b128 -o restored.png
 
-# Integer conversion (never appends a newline)
+# Integer conversion
 node packages/cli/bin/base128.mjs integer encode 1000  # 7β
 node packages/cli/bin/base128.mjs integer decode '7β'  # 1000
-
-# Custom alphabet, exactly 128 Unicode code points in the file, without a newline
-node packages/cli/bin/base128.mjs encode image.png --alphabet-file alphabet.txt -o image.b128
 ```
 
-Encoded binary output has **no terminal newline**, and binary decoding rejects whitespace. Use `printf` rather than `echo` if piping encoded strings into `decode`.
+Output has **no added terminal newline**, and decoding rejects whitespace. Use `printf` rather than `echo` when piping encoded strings into `decode`.
 
-The CLI streams files rather than reading them fully into memory. With `-o`, its output is written to a temporary file then atomically renamed on successful completion, so invalid input cannot overwrite an existing destination. When output is stdout, consumers must check the process exit code because a stream decoder can emit initial bytes before detecting an invalid final group.
+The CLI streams files. With `-o`, it writes a temporary file and renames it only after successful completion; invalid input cannot overwrite an existing destination. Stdout can contain partial decoded bytes before a validation failure, so consumers must check the exit status. See the [CLI reference](docs/cli.md) for all options and error behavior.
 
 ### Website
 
-Live site: **https://shea256.github.io/base128/**
+Use the **[live playground](https://shea256.github.io/base128/)** or start a local preview:
 
-GitHub Actions builds, tests, and deploys the site to GitHub Pages on every push to `master`. The [Deploy website workflow](.github/workflows/pages.yml) can also be run manually from the Actions tab. Repository Settings → Pages must use **GitHub Actions** as the publishing source. Only static website assets are published.
-
-```bash
+```sh
 npm run site
 # Open http://localhost:8080/
 ```
 
-The `website/` directory is a self-contained static site (its `vendor/` directory contains copies of the compiled ESM library). You can serve or deploy it using any static server. The local preview server uses only Node.js built-ins. The website implements live text, hexadecimal byte, and integer conversions; default, two-byte, and custom alphabets; byte-size comparison; a 128-symbol explorer; and browser-local file conversion. Browser file conversion loads the file into memory; use the CLI for large files.
+The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Default (v4), Two-byte (v1), or Custom. Decoding is strict unless **Accept both alphabets when decoding** is checked; custom alphabets disable that option.
 
-The default alphabet uses **format v4**. Existing v1, v2, or v3 payloads require their explicit legacy alphabet; see the [migration guide](specs/encoding-v4.md#6-migration-from-earlier-versions). The [spoken alphabet table](specs/spoken-alphabet-v4.md) lists every character and its telephone name.
+The site also compares UTF-8 size and character counts. Files are processed locally in the browser and loaded into memory; use the streaming CLI for large files.
 
-## Development and testing
+## Alphabets and decoding
 
-```bash
-# Node.js >=20, Python >=3.10
-# TypeScript >=5.8 compiler is needed only for regenerating JS build output.
-npm install        # installs TypeScript dev dependency; zero runtime dependencies
-npm test           # rebuilds; JS, Python, interoperability, CLI tests
-npm run build      # compiles JS + refreshes website/vendor
-npm run test:js
-npm run test:python
-npm run test:integration
-npm run test:cli
-```
+### Default v4 alphabet
 
-The generated JS `packages/js/dist/` and `website/vendor/` are included in this repository so the CLI and site can be used directly without first running a build.
+The default alphabet is an immutable, ordered set of 128 distinct Unicode scalar values:
 
-The README's alphabet chart and encoding diagram are generated from the v4 alphabet with `node scripts/build-readme-images.mjs` after building the JavaScript library. The cover illustration's generation prompt is saved in [`docs/images/cover-prompt.txt`](docs/images/cover-prompt.txt).
+| Indices | Characters |
+| --- | --- |
+| 0–9 | ASCII digits `0–9` |
+| 10–35 | Uppercase Latin letters `A–Z` |
+| 36–61 | Lowercase Latin letters `a–z` |
+| 62–93 | ASCII punctuation, in ascending code-point order |
+| 94–102 | Uppercase Greek `ΓΔΘΛΞΠΦΨΩ` |
+| 103–121 | Lowercase Greek `αβγδεζηθικλμξπστφψω` |
+| 122–127 | Mathematical symbols `∂∇∏∑√∫` |
 
-The compatibility fixtures in [`specs/test-vectors.json`](specs/test-vectors.json) were independently generated from bit-string grouping and division/modulus logic, not from either language library. The cross-language integration tests additionally compare hundreds of random byte arrays and integers between Python and Node with default and custom alphabets.
+![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/base128-alphabet-v4.svg)
 
-## Repository
+The [alphabet specification](specs/alphabet-v4.json) fixes every index and code point. The [spoken alphabet table](specs/spoken-alphabet-v4.md) provides proposed telephone names and numeric fallbacks.
 
-```text
-base128/
-├── packages/
-│   ├── js/                 # TypeScript source, compiled ESM + .d.ts
-│   ├── python/             # Python stdlib-only package
-│   └── cli/                # Node.js streaming CLI
-├── website/                # Standalone static playground and alphabet atlas
-├── specs/                  # Normative v4 spec, alphabet, fixtures
-├── scripts/                # Builds and cross-language testing
-└── .github/workflows/      # Continuous integration
-```
+### Two-byte alternative and decoder aliases
 
-## Design decisions
-
-1. Two encoding primitives: **binary 7-bit packing**, **integer radix conversion**.
-2. Text is handled as binary after explicit UTF-8 conversion; no separate ASCII/Unicode algorithm.
-3. The default alphabet is immutable/versioned. A custom alphabet requires matching configuration on decode.
-4. Strict canonical representation: binary padding bits and encoded length are validated; integer leading-zero digits are rejected.
-5. Binary streams carry incomplete bit groups across chunks; decoding validates on finalization.
-6. No prefixes, length headers, output padding characters, framing, checksums, or compression.
-7. No external **runtime** dependencies; TypeScript compilation needs a **development** dependency.
-8. The optional two-byte v1 preset preserves digit values; decoder aliases are opt-in.
-
-## Package naming
-
-The public project is named **Base128**. The proposed npm name `base128-unicode-codec` and PyPI name `unicode-base128` are **not verified to be registrable**. Confirm availability, trademark considerations, and publisher ownership before publishing or changing these fields. Our format is not compatible with `rpuntaie/base128` and the latter's alternative alphabets/metadata format.
-
-## License
-
-Apache License, Version 2.0. See [`LICENSE`](LICENSE). Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
-## Using a repository checkout
-
-The package names in manifests and examples are not a guarantee of npm or PyPI
-publication. The CLI package is private. These checkout-based paths work without
-assuming any registry release:
-
-```sh
-npm ci
-npm run build
-node packages/cli/bin/base128.mjs --help
-```
-
-- **JavaScript/TypeScript:** import from `./packages/js/dist/index.js` when running
-  at the repository root. The build includes TypeScript declarations.
-- **Python:** create and activate a virtual environment, then run
-  `python -m pip install -e ./packages/python`; import from `base128`. Alternatively,
-  set `PYTHONPATH` to `packages/python` to use the source without installation.
-- **CLI:** run `node packages/cli/bin/base128.mjs`. See the [CLI reference](docs/cli.md)
-  for streams, exit codes, alphabet options, and transactional file output.
-
-Run `npm test` for all checks. It discovers Python 3.10+ automatically using
-`python3`, `python`, or Windows `py -3`; override with the `PYTHON` executable path.
-See [AGENTS.md](AGENTS.md) for agent and contributor guidance.
-
-## Two-byte alternative and decoder aliases
-
-The optional **two-byte v1** preset preserves the first 122 digits of the default
-v4 alphabet and replaces the final six in Unicode code-point order:
+The **two-byte v1** preset preserves indices 0–121 and replaces the final six symbols in Unicode code-point order:
 
 | Value | Default v4 | Two-byte v1 | Alternative spoken name |
 | ---: | :---: | :---: | --- |
@@ -206,43 +159,117 @@ v4 alphabet and replaces the final six in Unicode code-point order:
 | 126 | √ | ¶ | Paragraph |
 | 127 | ∫ | ÷ | Division |
 
-Every character in this preset uses at most two UTF-8 bytes. Its ordered mapping
-is fixed in [the specification](specs/alphabet-two-byte-v1.json); the
-[alphabet file](specs/alphabet-two-byte-v1.txt) has no terminating newline.
-The default encoder and its existing outputs are unchanged.
+Every symbol in this preset occupies at most two UTF-8 bytes. Its fixed mapping is in the [preset specification](specs/alphabet-two-byte-v1.json); a [newline-free alphabet file](specs/alphabet-two-byte-v1.txt) is also available. The default encoder is unchanged.
+
+**Decoding is strict to the selected alphabet by default.** Opt-in aliases accept either symbol in each row, even mixed in one payload. For example, integer strings `∂∇`, `§©`, and `∂©` all represent 15739 in alias mode.
 
 ```js
 import {encode, decode, TWO_BYTE_ALPHABET} from './packages/js/dist/index.js';
-const text = encode(bytes, {alphabet: TWO_BYTE_ALPHABET});
-const restored = decode(text, {acceptAliases: true});
+
+const bytes = Uint8Array.of(255);
+const text = encode(bytes, {alphabet: TWO_BYTE_ALPHABET}); // "÷#"
+const strict = decode(text, {alphabet: TWO_BYTE_ALPHABET});
+const tolerant = decode(text, {acceptAliases: true});
 ```
 
 ```python
 from base128 import encode, decode, TWO_BYTE_ALPHABET
-text = encode(b'Hello', alphabet=TWO_BYTE_ALPHABET)
-restored = decode(text, accept_aliases=True)
+
+text = encode(bytes([255]), alphabet=TWO_BYTE_ALPHABET)  # "÷#"
+strict = decode(text, alphabet=TWO_BYTE_ALPHABET)
+tolerant = decode(text, accept_aliases=True)
 ```
 
 ```sh
 node packages/cli/bin/base128.mjs encode input.bin --alphabet two-byte -o output.b128
+# Strict: accept only the selected alphabet
+node packages/cli/bin/base128.mjs decode output.b128 --alphabet two-byte -o restored.bin
+# Tolerant: accept either built-in form, including mixed input
 node packages/cli/bin/base128.mjs decode output.b128 --accept-aliases -o restored.bin
 ```
 
-By default, decoding is strict to the selected alphabet. Opt-in `acceptAliases`
-(JavaScript), `accept_aliases` (Python), or `--accept-aliases` (CLI) accepts either
-symbol in each table row, including mixed input. This works for binary, streaming,
-and integer decoders. It is restricted to the exact default v4 and two-byte v1
-layouts, including those supplied as strings; other custom alphabets are rejected
-when alias mode is requested. No alphabet detection or Unicode normalization is
-performed. Length, trailing padding bits, and integer leading-zero checks still
-apply. Alias decoding allows multiple text spellings of the same value;
-re-encoding emits only the selected alphabet's canonical spelling.
+Alias options work with binary, streaming, and integer decoders. They are restricted to the exact default v4 and two-byte v1 layouts, including those supplied as strings. Other custom layouts are rejected in alias mode. Length, trailing-padding, and integer leading-zero checks always apply.
 
-For text comparison, hashing, or signing, choose one canonical alphabet and
-re-encode alias-decoded values before using their textual representation.
+Alias mode allows multiple strings to represent the same value. For text comparison, hashing, or signing, choose one canonical alphabet and re-encode decoded values into that alphabet, or use strict decoding.
 
-### Website alphabet controls
+### Custom alphabets
 
-The website's alphabet selector controls the converter, file tool, and explorer.
-Default v4 and two-byte v1 decoding are strict unless **Accept both alphabets when
-decoding** is checked. Selecting a custom alphabet disables alias acceptance.
+Supply exactly **128 unique Unicode scalar values** in digit order. Encoders and decoders must agree on the mapping; the payload carries no alphabet identifier.
+
+```js
+import {DEFAULT_ALPHABET_TEXT, createAlphabet, encode, decode} from './packages/js/dist/index.js';
+
+const alphabet = createAlphabet(Array.from(DEFAULT_ALPHABET_TEXT).reverse().join(''));
+const bytes = Uint8Array.of(1, 2, 3);
+const text = encode(bytes, {alphabet});
+const restored = decode(text, {alphabet});
+```
+
+Python accepts `alphabet=...` as text or a compiled `create_alphabet(...)` result. The CLI accepts `--alphabet-file FILE`, containing the exact UTF-8 alphabet with no terminating newline. The website accepts custom text under **Custom alphabet**.
+
+## How it works
+
+**Binary encoding** reads bytes in most-significant-bit-first groups of seven, zero-fills the final group if necessary, and maps each group to a symbol. For example, UTF-8 `Hi` becomes `aQW`:
+
+![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing aQW. The last five bits are zero-filled.](docs/images/how-base128-encodes-bytes.svg)
+
+For `n` bytes, binary encoding emits `ceil(8n / 7)` symbols. Decoding validates the encoded length and trailing zero bits. Streaming encoders and decoders carry incomplete bit groups between chunks; decoders validate final length and padding when finalized.
+
+**Integer encoding** uses minimal, big-endian positional base-128 arithmetic: `126 → √`, `127 → ∫`, `128 → 10`, and `129 → 11` with the default alphabet. Negative values and unnecessary leading zero digits are rejected.
+
+**Binary and integer representations are not interchangeable.** Binary mode preserves byte length and leading zero bytes; integer mode represents a numeric value. Text uses explicit UTF-8 conversion followed by binary encoding—there is no separate text encoding algorithm.
+
+## Compatibility and limitations
+
+- Base128 is **not Base64-compatible** or interchangeable with other projects called “Base128.” The [v4 specification](specs/encoding-v4.md) defines this format.
+- Existing v1, v2, and v3 payloads require their exact legacy alphabet. Do not infer a version from the symbols; see the [migration guide](specs/encoding-v4.md#6-migration-from-earlier-versions). Alias mode does not detect legacy versions.
+- No prefixes, framing headers, checksums, authentication, encryption, or compression are included. Zero-filled final bits are part of binary packing; there are no padding characters.
+- No implicit whitespace trimming, case folding, or Unicode normalization occurs. Preserve exact characters and use strict UTF-8 decoding when textual round-trip accuracy matters.
+- Output is not URL-safe or shell-safe. Escape it for its destination and quote command-line arguments; files and stdin avoid shell interpretation of arbitrary payloads.
+- Some symbols resemble one another. Successful decoding alone does not establish accurate transcription.
+- A smaller symbol count does not guarantee fewer UTF-8 bytes than Base64.
+
+## Development and testing
+
+From the repository root, with Node.js 20+ and Python 3.10+:
+
+```sh
+npm ci
+npm test                   # rebuild; JS, Python, interoperability, CLI, website tests
+npm run build              # compile JS and refresh website/vendor
+npm run test:js
+npm run test:python
+npm run test:integration
+npm run test:cli
+npm run test:website
+```
+
+The test runner discovers Python using `python3`, `python`, or Windows `py -3`. Set `PYTHON` to an executable path to override discovery. Run `npm run build` before focused tests when TypeScript or browser vendor inputs change.
+
+The shared [default vectors](specs/test-vectors.json) and [two-byte vectors](specs/test-vectors-two-byte-v1.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
+
+Generated `packages/js/dist/` and `website/vendor/` files are tracked; commit rebuilt outputs with their source changes. README figures are generated with `node scripts/build-readme-images.mjs` after building the library. The cover illustration's prompt is in [`docs/images/cover-prompt.txt`](docs/images/cover-prompt.txt).
+
+GitHub Actions [builds, tests, and deploys](.github/workflows/pages.yml) the static website on pushes to `master`; the workflow can also be dispatched manually. GitHub Pages must use **GitHub Actions** as its publishing source. PR branches do not update the live site.
+
+## Repository and contributing
+
+```text
+base128/
+├── packages/
+│   ├── js/                 # TypeScript source, compiled ESM + declarations
+│   ├── python/             # Python stdlib-only package
+│   └── cli/                # Node.js streaming CLI
+├── website/                # Static playground, explorer, and interaction tests
+├── specs/                  # Versioned specifications, alphabets, and vectors
+├── scripts/                # Builds, interpreter discovery, and interoperability checks
+├── docs/                   # CLI reference and README images
+├── AGENTS.md               # Agent setup, generated files, and compatibility rules
+└── .github/workflows/      # CI and GitHub Pages deployment
+```
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution requirements and [AGENTS.md](AGENTS.md) for agent and maintainer guidance. Published alphabet mappings are immutable; format changes need a separately documented version. Keep both language implementations and their tests aligned.
+
+## License
+
+Apache License, Version 2.0. See [`LICENSE`](LICENSE).
