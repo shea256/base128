@@ -164,10 +164,6 @@ base128/
 
 The public project is named **Base128**. The proposed npm name `base128-unicode-codec` and PyPI name `unicode-base128` are **not verified to be registrable**. Confirm availability, trademark considerations, and publisher ownership before publishing or changing these fields. Our format is not compatible with `rpuntaie/base128` and the latter's alternative alphabets/metadata format.
 
-## License
-
-Apache License, Version 2.0. See [`LICENSE`](LICENSE). Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
 ## Using a repository checkout
 
 The package names in manifests and examples are not a guarantee of npm or PyPI
@@ -246,3 +242,7 @@ re-encode alias-decoded values before using their textual representation.
 The website's alphabet selector controls the converter, file tool, and explorer.
 Default v4 and two-byte v1 decoding are strict unless **Accept both alphabets when
 decoding** is checked. Selecting a custom alphabet disables alias acceptance.
+
+## License
+
+Apache License, Version 2.0. See [`LICENSE`](LICENSE). Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
