@@ -216,3 +216,31 @@ re-encoding emits only the selected alphabet's canonical spelling.
 
 For text comparison, hashing, or signing, choose one canonical alphabet and
 re-encode alias-decoded values before using their textual representation.
+
+## Using a repository checkout
+
+The package names in manifests and examples are not a guarantee of npm or PyPI
+publication. The CLI package is private. These checkout-based paths work without
+assuming any registry release:
+
+```sh
+npm ci
+npm run build
+node packages/cli/bin/base128.mjs --help
+```
+
+- **JavaScript/TypeScript:** import from `./packages/js/dist/index.js` when running
+  at the repository root. The build includes TypeScript declarations.
+- **Python:** create and activate a virtual environment, then run
+  `python -m pip install -e ./packages/python`; import from `base128`. Alternatively,
+  set `PYTHONPATH` to `packages/python` to use the source without installation.
+- **CLI:** run `node packages/cli/bin/base128.mjs`. See the [CLI reference](docs/cli.md)
+  for streams, exit codes, alphabet options, and transactional file output.
+
+Run `npm test` for all checks. It discovers Python 3.10+ automatically using
+`python3`, `python`, or Windows `py -3`; override with the `PYTHON` executable path.
+See [AGENTS.md](AGENTS.md) for agent and contributor guidance.
+
+The website's alphabet selector controls the converter, file tool, and explorer.
+Default v4 and two-byte v1 decoding are strict unless **Accept both alphabets when
+decoding** is checked. Selecting a custom alphabet disables alias acceptance.

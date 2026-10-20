@@ -1,4 +1,4 @@
-import { resolveDecoderIndex, resolveAlphabet } from "./alphabet.js?v=alphabet-v4";
+import { resolveDecoderIndex, resolveAlphabet } from "./alphabet.js?v=alphabet-presets";
 /** Streaming MSB-first 7-bit byte encoder. No metadata or padding characters. */
 export class BinaryEncoder {
     #alphabet;
