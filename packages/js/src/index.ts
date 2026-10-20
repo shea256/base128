@@ -5,3 +5,4 @@ export {
 } from "./alphabet.js";
 export { BinaryEncoder, BinaryDecoder, encode, decode } from "./binary.js";
 export { encodeInteger, decodeInteger } from "./integer.js";
+export {wrap, unwrap, type EnvelopeMode, type EnvelopeOptions, type Unwrapped} from './envelope.js';

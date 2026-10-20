@@ -8,7 +8,7 @@ import {
 } from '../dist/index.js';
 const fixtures = JSON.parse(readFileSync(new URL('../../../specs/test-vectors.json', import.meta.url), 'utf8'));
 
-test('v4 alphabet is exact, unique, and immutable', () => {
+test('v0.1 alphabet is exact, unique, and immutable', () => {
   assert.equal(Array.from(DEFAULT_ALPHABET_TEXT).length, 128);
   assert.equal(new Set(Array.from(DEFAULT_ALPHABET_TEXT)).size, 128);
   assert.equal(DEFAULT_ALPHABET.text, fixtures.alphabet);
@@ -117,44 +117,16 @@ test('supplementary Unicode symbols and UTF-16 split across decoder chunks', () 
 });
 
 
-test('v4 digit boundaries and explicit v1 compatibility', () => {
+test('default digit boundaries', () => {
   for (const [value, text] of [[0n,'0'],[15n,'F'],[16n,'G'],[35n,'Z'],[36n,'a'],[61n,'z'],[62n,'!'],[122n,'∂'],[123n,'∇'],[124n,'∏'],[125n,'∑'],[126n,'√'],[127n,'∫'],[128n,'10'],[129n,'11']]) {
     assert.equal(encodeInteger(value), text);
     assert.equal(decodeInteger(text), value);
   }
-  const legacy = JSON.parse(readFileSync(new URL('../../../specs/test-vectors-v1.json', import.meta.url), 'utf8'));
-  const alphabet = legacy.alphabet;
-  for (const {hex, encoded} of legacy.binary) {
-    assert.equal(encode(Buffer.from(hex, 'hex'), {alphabet}), encoded);
-    assert.deepEqual(decode(encoded, {alphabet}), new Uint8Array(Buffer.from(hex, 'hex')));
-  }
-  for (const {decimal, encoded} of legacy.integer) {
-    assert.equal(encodeInteger(BigInt(decimal), {alphabet}), encoded);
-    assert.equal(decodeInteger(encoded, {alphabet}), BigInt(decimal));
-  }
 });
-
-for (const version of [2, 3]) {
-  test(`v${version} payloads remain explicitly decodable`, () => {
-    const legacy = JSON.parse(readFileSync(new URL(`../../../specs/test-vectors-v${version}.json`, import.meta.url), 'utf8'));
-    const alphabet = legacy.alphabet;
-    assert.equal(DEFAULT_ALPHABET_TEXT.slice(0, 122), alphabet.slice(0, 122));
-    assert.throws(() => decodeInteger('∞'), /Invalid/);
-    for (const {hex, encoded} of legacy.binary) {
-      const bytes = new Uint8Array(Buffer.from(hex, 'hex'));
-      assert.deepEqual(decode(encoded, {alphabet}), bytes);
-      assert.equal(encode(bytes, {alphabet}), encoded);
-    }
-    for (const {decimal, encoded} of legacy.integer) {
-      assert.equal(decodeInteger(encoded, {alphabet}), BigInt(decimal));
-      assert.equal(encodeInteger(BigInt(decimal), {alphabet}), encoded);
-    }
-  });
-}
 
 test('two-byte preset and mixed aliases preserve every digit in both decoder modes', async () => {
   const {TWO_BYTE_ALPHABET, TWO_BYTE_ALPHABET_TEXT} = await import('../dist/index.js');
-  const spec = JSON.parse(readFileSync(new URL('../../../specs/alphabet-two-byte-v1.json', import.meta.url), 'utf8'));
+  const spec = JSON.parse(readFileSync(new URL('../../../specs/alphabet-two-byte.json', import.meta.url), 'utf8'));
   assert.equal(TWO_BYTE_ALPHABET_TEXT, spec.alphabet);
   assert.equal(TWO_BYTE_ALPHABET_TEXT.slice(122), '§©®°¶÷');
   for (const c of TWO_BYTE_ALPHABET_TEXT) assert.ok(Buffer.byteLength(c) <= 2);
@@ -189,9 +161,9 @@ test('two-byte preset and mixed aliases preserve every digit in both decoder mod
 
 test('two-byte reference vectors, canonicalization, and alphabet file', async () => {
   const {TWO_BYTE_ALPHABET, TWO_BYTE_ALPHABET_TEXT} = await import('../dist/index.js');
-  const vectors = JSON.parse(readFileSync(new URL('../../../specs/test-vectors-two-byte-v1.json', import.meta.url), 'utf8'));
+  const vectors = JSON.parse(readFileSync(new URL('../../../specs/test-vectors-two-byte.json', import.meta.url), 'utf8'));
   assert.equal(vectors.alphabet,TWO_BYTE_ALPHABET_TEXT);
-  assert.equal(readFileSync(new URL('../../../specs/alphabet-two-byte-v1.txt', import.meta.url),'utf8'),TWO_BYTE_ALPHABET_TEXT);
+  assert.equal(readFileSync(new URL('../../../specs/alphabet-two-byte.txt', import.meta.url),'utf8'),TWO_BYTE_ALPHABET_TEXT);
   assert.ok(Object.isFrozen(TWO_BYTE_ALPHABET));
   for (const {hex,encoded,mixed} of vectors.binary) {
     const bytes=Uint8Array.from(Buffer.from(hex,'hex'));
@@ -204,8 +176,5 @@ test('two-byte reference vectors, canonicalization, and alphabet file', async ()
     assert.equal(decodeInteger(mixed,{acceptAliases:true}),BigInt(decimal));
     assert.equal(decodeInteger(encoded,{alphabet:TWO_BYTE_ALPHABET}),BigInt(decimal));
   }
-  for (const version of [1,2,3]) {
-    const legacy=JSON.parse(readFileSync(new URL(`../../../specs/alphabet-v${version}.json`, import.meta.url),'utf8')).alphabet;
-    assert.throws(()=>decode('',{alphabet:legacy,acceptAliases:true}),/requires/);
-  }
+
 });

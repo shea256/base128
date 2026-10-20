@@ -1,5 +1,5 @@
 {
-  "format": "base128-v4-test-vectors",
+  "format": "base128-v0.1-test-vectors",
   "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω∂∇∏∑√∫",
   "binary": [
     {

@@ -25,16 +25,18 @@ arguments containing punctuation; use files or stdin for arbitrary payloads.
 
 | Option | Behavior |
 | --- | --- |
-| `--alphabet default` | Default v4 alphabet; also used when omitted |
-| `--alphabet two-byte` | Fixed two-byte v1 alternative |
+| `--alphabet default` | Default alphabet; also used when omitted |
+| `--alphabet two-byte` | Fixed two-byte alternative |
 | `--alphabet-file FILE` | Exactly 128 unique Unicode scalar values, UTF-8, no newline; cannot combine with `--alphabet` |
-| `--accept-aliases` | Decode only: accepts either built-in symbol form, even mixed; rejects unrelated custom/legacy layouts |
+| `--prefix` | Encode: add the metadata prefix. Decode: require it and infer its alphabet unless explicitly constrained. |
+| `--checksum` | Encode: append CRC-32 in five Base128 symbols. Decode: require and verify it. |
+| `--accept-aliases` | Decode only: accepts either built-in symbol form, even mixed; rejects unrelated custom layouts |
 | `-o FILE` | Write output to a file (`-` means stdout) |
 | `--help`, `-h` | Show usage |
 
 Decoding is strict unless `--accept-aliases` is present. All modes enforce binary
 length/padding and integer leading-zero rules as applicable. Alias mode does not
-trim whitespace or detect legacy versions. See the [specification](../specs/encoding-v4.md).
+trim whitespace or detect alphabets. See the [specification](../specs/encoding.md).
 
 ```sh
 printf 'Hello' | node packages/cli/bin/base128.mjs encode
@@ -50,4 +52,4 @@ error wording is not a structured API; inspect the exit status. Stdout may conta
 partial decoded bytes before a streaming validation failure. File output is
 transactional: a temporary file is renamed only after successful completion, so
 invalid input does not overwrite an existing target. A successful command with
-`-o FILE` replaces that target. There are no checksums or embedded alphabet IDs.
+`-o FILE` replaces that target. Bare values have no checksums or alphabet IDs. `--prefix` and `--checksum` independently enable the [optional envelope](../specs/envelope.md). Wrapped operations buffer input and verify before emitting decoded output; bare operations stream. The CLI subcommand constrains the prefix mode, and an explicit alphabet option must match the prefix.

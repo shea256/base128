@@ -1,6 +1,6 @@
 {
-  "name": "Base128 default Unicode alphabet v4",
-  "version": 4,
+  "name": "Base128 default Unicode alphabet v0.1",
+  "version": "0.1",
   "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω∂∇∏∑√∫",
   "symbols": [
     {

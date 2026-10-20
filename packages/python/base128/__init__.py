@@ -10,3 +10,5 @@ __all__ = [
     "BinaryEncoder", "BinaryDecoder", "encode", "decode",
     "encode_integer", "decode_integer",
 ]
+from .envelope import wrap, unwrap, Unwrapped
+__all__ += ['wrap', 'unwrap', 'Unwrapped']

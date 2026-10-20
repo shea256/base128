@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Base128 — a deterministic, reversible Unicode binary-to-text and integer encoding library." />
   <title>Base128 — Encode beyond Base64</title>
-  <link rel="stylesheet" href="./styles.css?v=alphabet-presets" />
-  <script type="module" src="./app.js?v=alphabet-presets"></script>
+  <link rel="stylesheet" href="./styles.css?v=envelopes-0.1" />
+  <script type="module" src="./app.js?v=envelopes-0.1"></script>
 </head>
 <body>
   <div class="page-shell">
@@ -16,14 +16,14 @@
         <a href="#playground">Playground</a><a href="#alphabet">Alphabet</a><a href="#comparison">Compare</a>
         <a href="#specification">Specification</a>
       </nav>
-      <span class="version">v0.4.0 <span class="indicator"></span></span>
+      <span class="version">v0.1.0 <span class="indicator"></span></span>
     </header>
 
     <main id="top">
       <section class="hero">
         <div class="eyebrow"><span class="small-square"></span> Unicode-native encoding · open source</div>
         <h1>128 symbols.<br/><span class="gradient-text">7 bits each.</span></h1>
-        <p>Encode binary data and arbitrary-precision integers with a precisely defined 128-character Unicode alphabet. Fully reversible, customizable, and prefix-free.</p>
+        <p>Encode binary data and arbitrary-precision integers with a precisely defined 128-character Unicode alphabet. Fully reversible, customizable, and dependency-free.</p>
         <div class="hero-links"><a class="primary-link" href="#playground">Try the playground <span aria-hidden="true">↗</span></a><a class="secondary-link" href="#alphabet">Explore all 128 symbols →</a></div>
         <div class="hero-metrics"><div><strong>128</strong><span>Unicode symbols</span></div><div><strong>7</strong><span>Bits per symbol</span></div><div><strong>0</strong><span>Runtime dependencies</span></div><div><strong>2</strong><span>Encoding primitives</span></div></div>
       </section>
@@ -32,21 +32,24 @@
         <div class="section-head"><div><div class="section-kicker">01 / ENCODE · DECODE</div><h2>Playground</h2><p>Convert text, hexadecimal bytes, or unsigned integers into Base128.</p></div><div class="live-label"><span class="indicator"></span> Runs locally in your browser</div></div>
         <div class="toolbar"><div class="segmented" role="group" aria-label="Conversion direction"><button type="button" id="dir-encode" class="selected" aria-pressed="true">Encode</button><button type="button" id="dir-decode" aria-pressed="false">Decode</button></div><label class="mode-wrapper"><span id="type-label">Input type</span> <select id="input-type"><option value="text">UTF-8 text</option><option value="hex">Binary (hex)</option><option value="integer">Integer</option></select></label></div>
         <div class="alphabet-controls">
-          <label class="mode-wrapper" for="alphabet-preset">Alphabet <select id="alphabet-preset"><option value="default">Default (v4)</option><option value="two-byte">Two-byte (v1)</option><option value="custom">Custom</option></select></label>
+          <label class="mode-wrapper" for="alphabet-preset">Alphabet <select id="alphabet-preset"><option value="default">Default</option><option value="two-byte">Two-byte</option><option value="custom">Custom</option></select></label>
           <label class="alias-option"><input id="accept-aliases" type="checkbox" aria-describedby="alphabet-help" /> Accept both alphabets when decoding</label>
+          <label class="alias-option"><input id="wrap-prefix" type="checkbox" /> Add / require prefix</label>
+          <label class="alias-option"><input id="wrap-checksum" type="checkbox" /> Add / require checksum</label>
+          <p>Wrapper options apply to encoding and decoding. Checksums detect accidental changes, not tampering.</p>
           <p id="alphabet-help">Applies to the converter, file tool, and alphabet explorer. Decoding is strict unless you enable both alphabets.</p>
         </div>
         <div class="converter-grid"><div class="field"><div class="field-label"><label id="input-label" for="payload-input">Input</label><span id="input-hint">Text is encoded to UTF-8 bytes first</span></div><textarea id="payload-input" autocomplete="off" autocapitalize="off" spellcheck="false" rows="7">Hello, Base128!</textarea></div><div class="field"><div class="field-label"><label for="payload-output">Output</label><span id="output-hint">Base128 payload</span></div><textarea id="payload-output" aria-live="polite" rows="7" readonly></textarea></div></div>
         <div class="actions"><button id="swap" class="ghost-btn">⇄ &nbsp;Swap direction</button><div class="action-right"><button class="ghost-btn" id="copy-output">Copy output</button><button class="solid-btn" id="download-output">Download output ↓</button></div></div>
         <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
-        <details class="advanced" id="custom-settings"><summary>Custom alphabet <span class="muted">optional · 128 unique Unicode code points</span></summary><div class="advanced-content"><label for="custom-alphabet">Custom alphabet</label><textarea id="custom-alphabet" rows="3" placeholder="Enter exactly 128 unique Unicode code points"></textarea><p>Typing here selects Custom. Custom alphabets always use strict decoding. For v1, v2, or v3 payloads, supply the original alphabet. Both encoders and decoders must use exactly the same alphabet in the same order. No prefix or alphabet identifier is embedded in the payload.</p><button id="reset-alphabet" class="ghost-btn small">Reset to default</button></div></details>
+        <details class="advanced" id="custom-settings"><summary>Custom alphabet <span class="muted">optional · 128 unique Unicode code points</span></summary><div class="advanced-content"><label for="custom-alphabet">Custom alphabet</label><textarea id="custom-alphabet" rows="3" placeholder="Enter exactly 128 unique Unicode code points"></textarea><p>Typing here selects Custom. Custom alphabets always use strict decoding. Both encoders and decoders must use exactly the same alphabet in the same order. No prefix or alphabet identifier is embedded in the payload.</p><button id="reset-alphabet" class="ghost-btn small">Reset to default</button></div></details>
       </section>
 
-      <section class="panel comparison-section" id="comparison"><div class="section-head"><div><div class="section-kicker">02 / SIZE ANALYSIS</div><h2>Encoding comparison</h2><p>Displayed characters and UTF-8 storage size are not the same thing.</p></div></div><div class="comparison-grid"><div class="stat"><span>Input size</span><strong id="input-bytes">—</strong><small>bytes</small></div><div class="stat"><span>Base128 characters</span><strong id="encoded-chars">—</strong><small>Unicode code points</small></div><div class="stat"><span>Base128 UTF-8 size</span><strong id="encoded-bytes">—</strong><small>bytes</small></div><div class="stat"><span>Base64 characters</span><strong id="base64-chars">—</strong><small>unpadded</small></div></div><div class="comparison-note">Base128 uses fewer displayed characters than Base64, but Unicode characters can occupy multiple UTF-8 bytes. Storage-size advantage is not guaranteed.</div></section>
+      <section class="panel comparison-section" id="comparison"><div class="section-head"><div><div class="section-kicker">02 / SIZE ANALYSIS</div><h2>Encoding comparison</h2><p>Displayed characters and UTF-8 storage size are not the same thing.</p></div></div><div class="comparison-grid"><div class="stat"><span>Input size</span><strong id="input-bytes">—</strong><small>bytes</small></div><div class="stat"><span>Base128 characters</span><strong id="encoded-chars">—</strong><small>Unicode code points</small></div><div class="stat"><span>Base128 UTF-8 size</span><strong id="encoded-bytes">—</strong><small>bytes</small></div><div class="stat"><span>Base64 characters</span><strong id="base64-chars">—</strong><small>unpadded</small></div></div><div class="comparison-note">Bare Base128 generally uses fewer displayed characters than Base64. Optional wrappers add overhead, and Unicode characters can occupy multiple UTF-8 bytes. Storage-size advantage is not guaranteed.</div></section>
 
-      <section class="panel file-section"><div class="section-head"><div><div class="section-kicker">03 / FILE TOOL</div><h2>Encode a file</h2><p>Uses the alphabet and decoding options selected above. Files aren't uploaded.</p></div></div><div class="file-actions"><input id="file-input" type="file" /><label class="mode-wrapper">Operation <select id="file-operation"><option value="encode">Encode to .b128</option><option value="decode">Decode .b128 to bytes</option></select></label><button id="file-run" class="solid-btn">Process and download</button></div><p class="file-note" id="file-status">Browser mode loads the selected file into memory. Use the streaming CLI for large files.</p></section>
+      <section class="panel file-section"><div class="section-head"><div><div class="section-kicker">03 / FILE TOOL</div><h2>Encode a file</h2><p>Uses the alphabet and decoding options selected above. Files aren't uploaded.</p></div></div><div class="file-actions"><input id="file-input" type="file" /><label class="mode-wrapper">Operation <select id="file-operation"><option value="encode">Encode to .b128</option><option value="decode">Decode .b128 to bytes</option></select></label><button id="file-run" class="solid-btn">Process and download</button></div><p class="file-note" id="file-status">Browser mode loads the selected file into memory. Use the CLI without wrapper options to stream large files.</p></section>
 
-      <section class="alphabet-section" id="alphabet"><div class="section-head"><div><div class="section-kicker">04 / SYMBOL REGISTRY</div><h2>The alphabet <span id="alphabet-name">— Default (v4)</span></h2><p id="alphabet-description">Each symbol maps to its zero-based index in the selected alphabet.</p></div><div class="alphabet-count">0 → 127</div></div><div class="legend" id="alphabet-legend"><span><i class="dot ascii"></i>94 ASCII</span><span><i class="dot upper"></i>9 uppercase Greek</span><span><i class="dot lower"></i>19 lowercase Greek</span><span><i class="dot math"></i><span id="suffix-label">6 math symbols</span></span></div><div class="alphabet-grid" id="alphabet-grid"></div><p class="alphabet-note">Select a symbol to copy it. The character index and Unicode code point appear below each glyph.</p></section>
+      <section class="alphabet-section" id="alphabet"><div class="section-head"><div><div class="section-kicker">04 / SYMBOL REGISTRY</div><h2>The alphabet <span id="alphabet-name">— Default</span></h2><p id="alphabet-description">Each symbol maps to its zero-based index in the selected alphabet.</p></div><div class="alphabet-count">0 → 127</div></div><div class="legend" id="alphabet-legend"><span><i class="dot ascii"></i>94 ASCII</span><span><i class="dot upper"></i>9 uppercase Greek</span><span><i class="dot lower"></i>19 lowercase Greek</span><span><i class="dot math"></i><span id="suffix-label">6 math symbols</span></span></div><div class="alphabet-grid" id="alphabet-grid"></div><p class="alphabet-note">Select a symbol to copy it. The character index and Unicode code point appear below each glyph.</p></section>
 
       <section class="panel specification-section" id="specification">
         <div class="developer-intro"><div class="section-kicker">05 / DEVELOPERS</div><h2>Using Base128</h2><p>Encode bytes or integers with either library. Both use the same alphabet and produce identical output. These examples use a repository checkout; see the README for setup.</p></div>
@@ -64,7 +67,7 @@ encoded = encode(raw_bytes)
 recovered = decode(encoded)
 
 number = encode_integer(1000)  # "7β"</code></pre></div>
-        <p class="muted">Project release 0.4.0 · Apache-2.0 · Encodings have no checksums, framing headers, or authentication.</p>
+        <p class="muted">Project release 0.1.0 · Apache-2.0 · Bare encodings have no prefix or checksum. Optional wrappers add metadata and error detection, not authentication.</p>
       </section>
     </main>
     <footer><span class="brand footer-brand">∇ base128<span class="brand-dot">.</span></span><span>Open specification · reproducible outputs · Unicode by design</span></footer>

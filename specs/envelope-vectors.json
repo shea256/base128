@@ -1,0 +1,650 @@
+[
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": ""
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b0·"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "·00000"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b0··r_KYβ"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "00"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b0·00"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "00·}H%-0"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b0·00·=jS√_"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "∫#",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "∫#"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "∫#",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b0·∫#"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "∫#",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "∫#·kΘ1Cu"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "∫#",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b0·∫#·rka\\β"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "aPj)Πy"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b0·aPj)Πy"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "aPj)Πy·^TQR_"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b0·aPj)Πy·GφαΦβ"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b0·|gvCH$Φh!TGpDYβ=ψLiηΠπU"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU·σ7)/W"
+  },
+  {
+    "alphabet": 0,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b0·|gvCH$Φh!TGpDYβ=ψLiηΠπU·~]:w_"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "0"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i0·0"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "0·∂s∇μ8"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i0·0·Πl∂ku"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "127",
+    "payload": "∫",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "∫"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "127",
+    "payload": "∫",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i0·∫"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "127",
+    "payload": "∫",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "∫·ξΓsΔψ"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "127",
+    "payload": "∫",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i0·∫·2QH!κ"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "7β"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i0·7β"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "7β·^SΘcu"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i0·7β·c_**m"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "4000000000000000000"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i0·4000000000000000000"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "4000000000000000000·12}Θβ"
+  },
+  {
+    "alphabet": 0,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i0·4000000000000000000·$ΔφΠ_"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": ""
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b1·"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "·00000"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "",
+    "payload": "",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b1··re`1="
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "00"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b1·00"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "00·}H%-0"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "00",
+    "payload": "00",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b1·00·;σPΨ_"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "÷#",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "÷#"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "÷#",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b1·÷#"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "÷#",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "÷#·o?φ0m"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "ff",
+    "payload": "÷#",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b1·÷#·d#WK#"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "aPj)Πy"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b1·aPj)Πy"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "aPj)Πy·^TQR_"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "48656c6c6f",
+    "payload": "aPj)Πy",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b1·aPj)Πy·α7g^O"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1b1·|gvCH$Φh!TGpDYβ=ψLiηΠπU"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU·σ7)/W"
+  },
+  {
+    "alphabet": 1,
+    "mode": "binary",
+    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
+    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1b1·|gvCH$Φh!TGpDYβ=ψLiηΠπU·bWDΘ8"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "0"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i1·0"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "0·§s©μ8"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "0",
+    "payload": "0",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i1·0·\"0τ_G"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "127",
+    "payload": "÷",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "÷"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "127",
+    "payload": "÷",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i1·÷"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "127",
+    "payload": "÷",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "÷·§2τ5β"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "127",
+    "payload": "÷",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i1·÷·~^@ce"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "7β"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i1·7β"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "7β·^SΘcu"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "1000",
+    "payload": "7β",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i1·7β·&F~°O"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": false,
+    "checksum": false,
+    "wrapped": "4000000000000000000"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": true,
+    "checksum": false,
+    "wrapped": "b128·1i1·4000000000000000000"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": false,
+    "checksum": true,
+    "wrapped": "4000000000000000000·12}Θβ"
+  },
+  {
+    "alphabet": 1,
+    "mode": "integer",
+    "value": "340282366920938463463374607431768211456",
+    "payload": "4000000000000000000",
+    "prefix": true,
+    "checksum": true,
+    "wrapped": "b128·1i1·4000000000000000000·-L©l_"
+  }
+]

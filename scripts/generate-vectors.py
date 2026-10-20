@@ -1,4 +1,4 @@
-"""Generate fixed, independently calculated v4 compatibility vectors."""
+"""Generate fixed, independently calculated v0.1 compatibility vectors."""
 import json
 from pathlib import Path
 
@@ -25,7 +25,7 @@ integer_data = [0, 1, 7, 15, 16, 35, 36, 61, 62, 63, 64, 65, 122, 123, 124, 125,
 reversed_abc = abc[::-1]
 
 out = {
-    "format": "base128-v4-test-vectors",
+    "format": "base128-v0.1-test-vectors",
     "alphabet": abc,
     "binary": [{"hex": value.hex(), "encoded": binary_reference(value, abc)} for value in binary_data],
     "integer": [{"decimal": str(value), "encoded": integer_reference(value, abc)} for value in integer_data],
@@ -36,9 +36,9 @@ out = {
     },
 }
 (ROOT / "specs" / "test-vectors.json").write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-(ROOT / "specs" / "alphabet-v4.json").write_text(json.dumps({
-    "name": "Base128 default Unicode alphabet v4",
-    "version": 4,
+(ROOT / "specs" / "alphabet.json").write_text(json.dumps({
+    "name": "Base128 default Unicode alphabet v0.1",
+    "version": "0.1",
     "alphabet": abc,
     "symbols": [{"index": i, "character": s, "unicode": f"U+{ord(s):04X}"} for i,s in enumerate(abc)],
 }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -1,7 +1,7 @@
 import {
   DEFAULT_ALPHABET, TWO_BYTE_ALPHABET, createAlphabet, encode, decode,
-  encodeInteger, decodeInteger,
-} from './vendor/index.js?v=alphabet-presets';
+  encodeInteger, decodeInteger, wrap, unwrap,
+} from './vendor/index.js?v=envelopes-0.1';
 
 const $ = id => document.getElementById(id);
 const input = $('payload-input');
@@ -10,6 +10,8 @@ const inputType = $('input-type');
 const customAlphabet = $('custom-alphabet');
 const alphabetPreset = $('alphabet-preset');
 const acceptAliases = $('accept-aliases');
+const wrapPrefix = $('wrap-prefix');
+const wrapChecksum = $('wrap-checksum');
 const directionButtons = [$('dir-encode'),$('dir-decode')];
 let direction = 'encode';
 let selectedType = inputType.value;
@@ -35,6 +37,10 @@ function alphabetOption() {
 function decoderOptions(alphabet) {
   return {alphabet,acceptAliases:alphabetPreset.value!=='custom' && acceptAliases.checked};
 }
+function envelopeOptions(alphabet, mode) {
+  return {...decoderOptions(alphabet),mode,prefix:wrapPrefix.checked,checksum:wrapChecksum.checked};
+}
+function hasWrapper() {return wrapPrefix.checked || wrapChecksum.checked;}
 function setMetric(id,value) {$(id).textContent=value;}
 function updateComparison(bytes,encoded) {
   if (!bytes || encoded===undefined) {
@@ -59,13 +65,15 @@ function update() {
     {text:'Decoded UTF-8 text',hex:'Decoded binary (hex)',integer:'Decoded decimal integer'}[inputType.value];
   try {
     const alphabet=alphabetOption();
+    const wrapper=envelopeOptions(alphabet,inputType.value==='integer'?'integer':'binary');
+    const payload=direction==='decode' && hasWrapper() ? unwrap(input.value,wrapper).payload : input.value;
     let result, bytes=null, encoded;
     if (inputType.value==='integer') {
       if (direction==='encode') {
         if (!/^\d+$/.test(input.value.trim())) throw new Error('Enter a nonnegative decimal integer');
         result=encodeInteger(BigInt(input.value.trim()),{alphabet});
       } else {
-        result=String(decodeInteger(input.value,decoderOptions(alphabet)));
+        result=String(decodeInteger(payload,decoderOptions(alphabet)));
       }
     } else if (direction==='encode') {
       bytes=inputType.value==='text' ? new TextEncoder().encode(input.value) : hexToBytes(input.value);
@@ -73,10 +81,14 @@ function update() {
       result=encoded;
     } else {
       encoded=input.value;
-      bytes=decode(encoded,decoderOptions(alphabet));
+      bytes=decode(payload,decoderOptions(alphabet));
       result=inputType.value==='text'
         ? new TextDecoder('utf-8',{fatal:true}).decode(bytes)
         : bytesToHex(bytes);
+    }
+    if (direction==='encode' && hasWrapper()) {
+      result=wrap(result,wrapper);
+      if (inputType.value!=='integer') encoded=result;
     }
     output.value=result;
     lastOutput=result;
@@ -132,6 +144,7 @@ input.addEventListener('input',update);
 customAlphabet.addEventListener('input',()=>{alphabetPreset.value='custom';updateAlphabet();});
 alphabetPreset.addEventListener('change',updateAlphabet);
 acceptAliases.addEventListener('change',update);
+[wrapPrefix,wrapChecksum].forEach(el=>el.addEventListener('change',update));
 inputType.addEventListener('change',setType);
 $('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';alphabetPreset.value='default';updateAlphabet();});
 $('swap').addEventListener('click',()=>{
@@ -161,15 +174,19 @@ $('file-run').addEventListener('click',async()=>{
   try {
     const alphabet=alphabetOption();
     const options=decoderOptions(alphabet);
+    const wrapper=envelopeOptions(alphabet,'binary');
+    const wrapped=hasWrapper();
     const op=$('file-operation').value;
     const bytes=new Uint8Array(await file.arrayBuffer());
     if(op==='encode') {
-      const text=encode(bytes,{alphabet});
+      const payload=encode(bytes,{alphabet});
+      const text=wrapped?wrap(payload,wrapper):payload;
       downloadBytes(new TextEncoder().encode(text),file.name+'.b128','text/plain;charset=utf-8');
       status.textContent=`Encoded ${file.name} (${bytes.length.toLocaleString()} bytes) into ${Array.from(text).length.toLocaleString()} Base128 characters.`;
     } else {
       const utf8=new TextDecoder('utf-8',{fatal:true}).decode(bytes);
-      const restored=decode(utf8,options);
+      const payload=wrapped?unwrap(utf8,wrapper).payload:utf8;
+      const restored=decode(payload,options);
       const name=file.name.endsWith('.b128')?file.name.slice(0,-5):file.name+'.decoded';
       downloadBytes(restored,name||'restored.bin','application/octet-stream');
       status.textContent=`Decoded ${file.name} into ${restored.length.toLocaleString()} bytes.`;
@@ -202,15 +219,17 @@ function renderAlphabet(alphabet) {
 function updateAlphabet() {
   const custom=alphabetPreset.value==='custom';
   acceptAliases.disabled=custom;
+  wrapPrefix.disabled=custom;
   if (custom) {
     acceptAliases.checked=false;
+    wrapPrefix.checked=false;
     $('custom-settings').open=true;
   }
-  $('alphabet-name').textContent='— '+({'default':'Default (v4)','two-byte':'Two-byte (v1)',custom:'Custom'}[alphabetPreset.value]);
+  $('alphabet-name').textContent='— '+({'default':'Default','two-byte':'Two-byte',custom:'Custom'}[alphabetPreset.value]);
   $('alphabet-legend').hidden=custom;
   $('suffix-label').textContent=alphabetPreset.value==='two-byte'?'6 alternative symbols':'6 math symbols';
   $('alphabet-help').textContent=custom
-    ? 'Custom alphabets use strict decoding. Applies to the converter, file tool, and alphabet explorer.'
+    ? 'Custom alphabets use strict decoding; checksums require an alphabet without middle dot. Prefixes require a built-in alphabet. Applies to the converter, file tool, and alphabet explorer.'
     : 'Applies to the converter, file tool, and alphabet explorer. Decoding is strict unless you enable both alphabets.';
   try {
     renderAlphabet(alphabetOption());
