@@ -111,7 +111,7 @@ npm run site
 # Open http://localhost:8080/
 ```
 
-The `website/` directory is a self-contained static site (its `vendor/` directory contains copies of the compiled ESM library). You can serve or deploy it using any static server. The local preview server uses only Node.js built-ins. The website implements live text, hexadecimal byte, and integer conversions; optional custom alphabets; byte-size comparison; a 128-symbol explorer; and browser-local file conversion. Browser file conversion loads the file into memory; use the CLI for large files.
+The `website/` directory is a self-contained static site (its `vendor/` directory contains copies of the compiled ESM library). You can serve or deploy it using any static server. The local preview server uses only Node.js built-ins. The website implements live text, hexadecimal byte, and integer conversions; default, two-byte, and custom alphabets; byte-size comparison; a 128-symbol explorer; and browser-local file conversion. Browser file conversion loads the file into memory; use the CLI for large files.
 
 The default alphabet uses **format v4**. Existing v1, v2, or v3 payloads require their explicit legacy alphabet; see the [migration guide](specs/encoding-v4.md#6-migration-from-earlier-versions). The [spoken alphabet table](specs/spoken-alphabet-v4.md) lists every character and its telephone name.
 
@@ -216,3 +216,9 @@ re-encoding emits only the selected alphabet's canonical spelling.
 
 For text comparison, hashing, or signing, choose one canonical alphabet and
 re-encode alias-decoded values before using their textual representation.
+
+### Website alphabet controls
+
+The website's alphabet selector controls the converter, file tool, and explorer.
+Default v4 and two-byte v1 decoding are strict unless **Accept both alphabets when
+decoding** is checked. Selecting a custom alphabet disables alias acceptance.

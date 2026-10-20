@@ -1,13 +1,15 @@
 import {
-  DEFAULT_ALPHABET, createAlphabet, encode, decode,
+  DEFAULT_ALPHABET, TWO_BYTE_ALPHABET, createAlphabet, encode, decode,
   encodeInteger, decodeInteger,
-} from './vendor/index.js?v=alphabet-v4';
+} from './vendor/index.js?v=alphabet-presets';
 
 const $ = id => document.getElementById(id);
 const input = $('payload-input');
 const output = $('payload-output');
 const inputType = $('input-type');
 const customAlphabet = $('custom-alphabet');
+const alphabetPreset = $('alphabet-preset');
+const acceptAliases = $('accept-aliases');
 const directionButtons = [$('dir-encode'),$('dir-decode')];
 let direction = 'encode';
 let selectedType = inputType.value;
@@ -27,9 +29,11 @@ function hexToBytes(text) {
 function bytesToHex(bytes) {return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');}
 function setFeedback(message,error=false) { const el=$('feedback'); el.textContent=message; el.classList.toggle('error',error); }
 function alphabetOption() {
-  const alphabet=customAlphabet.value;
-  if (!alphabet) return DEFAULT_ALPHABET;
-  return createAlphabet(alphabet);
+  if (alphabetPreset.value==='custom') return createAlphabet(customAlphabet.value);
+  return alphabetPreset.value==='two-byte' ? TWO_BYTE_ALPHABET : DEFAULT_ALPHABET;
+}
+function decoderOptions(alphabet) {
+  return {alphabet,acceptAliases:alphabetPreset.value!=='custom' && acceptAliases.checked};
 }
 function setMetric(id,value) {$(id).textContent=value;}
 function updateComparison(bytes,encoded) {
@@ -48,7 +52,9 @@ function update() {
   $('input-label').textContent=direction==='encode'?'Input':'Base128 input';
   $('input-hint').textContent=direction==='encode'
     ? {text:'Text is converted to UTF-8 bytes',hex:'Two hex digits per byte, e.g. 48 65 6c 6c 6f',integer:'Nonnegative decimal BigInt'}[inputType.value]
-    : 'Paste a Base128 payload using the selected alphabet';
+    : acceptAliases.checked && !acceptAliases.disabled
+      ? 'Paste a Base128 payload using either built-in alphabet'
+      : 'Paste a Base128 payload using the selected alphabet';
   $('output-hint').textContent=direction==='encode'?'Base128 payload':
     {text:'Decoded UTF-8 text',hex:'Decoded binary (hex)',integer:'Decoded decimal integer'}[inputType.value];
   try {
@@ -59,7 +65,7 @@ function update() {
         if (!/^\d+$/.test(input.value.trim())) throw new Error('Enter a nonnegative decimal integer');
         result=encodeInteger(BigInt(input.value.trim()),{alphabet});
       } else {
-        result=String(decodeInteger(input.value,{alphabet}));
+        result=String(decodeInteger(input.value,decoderOptions(alphabet)));
       }
     } else if (direction==='encode') {
       bytes=inputType.value==='text' ? new TextEncoder().encode(input.value) : hexToBytes(input.value);
@@ -67,7 +73,7 @@ function update() {
       result=encoded;
     } else {
       encoded=input.value;
-      bytes=decode(encoded,{alphabet});
+      bytes=decode(encoded,decoderOptions(alphabet));
       result=inputType.value==='text'
         ? new TextDecoder('utf-8',{fatal:true}).decode(bytes)
         : bytesToHex(bytes);
@@ -122,9 +128,12 @@ function setDirection(next) {
 }
 $('dir-encode').addEventListener('click',()=>setDirection('encode'));
 $('dir-decode').addEventListener('click',()=>setDirection('decode'));
-[input,customAlphabet].forEach(el=>el.addEventListener('input',update));
+input.addEventListener('input',update);
+customAlphabet.addEventListener('input',()=>{alphabetPreset.value='custom';updateAlphabet();});
+alphabetPreset.addEventListener('change',updateAlphabet);
+acceptAliases.addEventListener('change',update);
 inputType.addEventListener('change',setType);
-$('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';update();});
+$('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';alphabetPreset.value='default';updateAlphabet();});
 $('swap').addEventListener('click',()=>{
   if (!conversionSucceeded) return;
   const next=direction==='encode'?'decode':'encode';
@@ -151,15 +160,16 @@ $('file-run').addEventListener('click',async()=>{
   if(!file){status.textContent='Choose a file first.';return;}
   try {
     const alphabet=alphabetOption();
-    const bytes=new Uint8Array(await file.arrayBuffer());
+    const options=decoderOptions(alphabet);
     const op=$('file-operation').value;
+    const bytes=new Uint8Array(await file.arrayBuffer());
     if(op==='encode') {
       const text=encode(bytes,{alphabet});
       downloadBytes(new TextEncoder().encode(text),file.name+'.b128','text/plain;charset=utf-8');
       status.textContent=`Encoded ${file.name} (${bytes.length.toLocaleString()} bytes) into ${Array.from(text).length.toLocaleString()} Base128 characters.`;
     } else {
       const utf8=new TextDecoder('utf-8',{fatal:true}).decode(bytes);
-      const restored=decode(utf8,{alphabet});
+      const restored=decode(utf8,options);
       const name=file.name.endsWith('.b128')?file.name.slice(0,-5):file.name+'.decoded';
       downloadBytes(restored,name||'restored.bin','application/octet-stream');
       status.textContent=`Decoded ${file.name} into ${restored.length.toLocaleString()} bytes.`;
@@ -168,22 +178,47 @@ $('file-run').addEventListener('click',async()=>{
 });
 
 // Render the canonical symbol index without normalization or HTML injection.
-const grid=$('alphabet-grid');
-for (let i=0;i<128;i++) {
-  const glyph=DEFAULT_ALPHABET.symbolAt(i);
-  const category=i<94?'ascii':i<103?'upper':i<122?'lower':'math';
-  const cp='U+'+glyph.codePointAt(0).toString(16).toUpperCase().padStart(4,'0');
-  const button=document.createElement('button');
-  button.type='button';button.className=`symbol-cell ${category}`;
-  button.title=`Index ${i} · ${cp} · click to copy`;
-  button.setAttribute('aria-label',`Copy character ${glyph}, index ${i}, ${cp}`);
-  for (const [name,value] of [['glyph',glyph],['number',String(i)],['unicode',cp]]) {
-    const span=document.createElement('span');span.className=name;span.textContent=value;button.append(span);
+function renderAlphabet(alphabet) {
+  const grid=$('alphabet-grid');
+  grid.replaceChildren();
+  for (let i=0;i<128;i++) {
+    const glyph=alphabet.symbolAt(i);
+    const category=alphabetPreset.value==='custom'?'custom':i<94?'ascii':i<103?'upper':i<122?'lower':'math';
+    const cp='U+'+glyph.codePointAt(0).toString(16).toUpperCase().padStart(4,'0');
+    const button=document.createElement('button');
+    button.type='button';button.className=`symbol-cell ${category}`;
+    button.title=`Index ${i} · ${cp} · click to copy`;
+    button.setAttribute('aria-label',`Copy character ${glyph}, index ${i}, ${cp}`);
+    for (const [name,value] of [['glyph',glyph],['number',String(i)],['unicode',cp]]) {
+      const span=document.createElement('span');span.className=name;span.textContent=value;button.append(span);
+    }
+    button.addEventListener('click',async()=>{
+      try {await navigator.clipboard.writeText(glyph);setFeedback(`Copied ${glyph} (${cp}) to clipboard.`);}
+      catch {setFeedback(`Character ${glyph} has index ${i} and code point ${cp}.`,true);}
+    });
+    grid.append(button);
   }
-  button.addEventListener('click',async()=>{
-    try {await navigator.clipboard.writeText(glyph);setFeedback(`Copied ${glyph} (${cp}) to clipboard.`);}
-    catch {setFeedback(`Character ${glyph} has index ${i} and code point ${cp}.`,true);}
-  });
-  grid.append(button);
 }
-update();
+function updateAlphabet() {
+  const custom=alphabetPreset.value==='custom';
+  acceptAliases.disabled=custom;
+  if (custom) {
+    acceptAliases.checked=false;
+    $('custom-settings').open=true;
+  }
+  $('alphabet-name').textContent='— '+({'default':'Default (v4)','two-byte':'Two-byte (v1)',custom:'Custom'}[alphabetPreset.value]);
+  $('alphabet-legend').hidden=custom;
+  $('suffix-label').textContent=alphabetPreset.value==='two-byte'?'6 alternative symbols':'6 math symbols';
+  $('alphabet-help').textContent=custom
+    ? 'Custom alphabets use strict decoding. Applies to the converter, file tool, and alphabet explorer.'
+    : 'Applies to the converter, file tool, and alphabet explorer. Decoding is strict unless you enable both alphabets.';
+  try {
+    renderAlphabet(alphabetOption());
+    $('alphabet-description').textContent='Each symbol maps to its zero-based index in the selected alphabet.';
+  } catch {
+    $('alphabet-grid').replaceChildren();
+    $('alphabet-description').textContent='Enter a valid custom alphabet to view its symbols.';
+  }
+  update();
+}
+updateAlphabet();
