@@ -1,0 +1,87 @@
+{
+  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω§©®°¶÷",
+  "binary": [
+    {
+      "hex": "",
+      "encoded": "",
+      "mixed": ""
+    },
+    {
+      "hex": "00",
+      "encoded": "00",
+      "mixed": "00"
+    },
+    {
+      "hex": "48656c6c6f",
+      "encoded": "aPj)Πy",
+      "mixed": "aPj)Πy"
+    },
+    {
+      "hex": "ffffffffffffff",
+      "encoded": "÷÷÷÷÷÷÷÷",
+      "mixed": "∫÷∫÷∫÷∫÷"
+    },
+    {
+      "hex": "f5efe7dfbf7f00",
+      "encoded": "§©®°°°¶0",
+      "mixed": "∂©∏°∑°√0"
+    }
+  ],
+  "integer": [
+    {
+      "decimal": "0",
+      "encoded": "0",
+      "mixed": "0"
+    },
+    {
+      "decimal": "121",
+      "encoded": "ω",
+      "mixed": "ω"
+    },
+    {
+      "decimal": "122",
+      "encoded": "§",
+      "mixed": "∂"
+    },
+    {
+      "decimal": "123",
+      "encoded": "©",
+      "mixed": "∇"
+    },
+    {
+      "decimal": "124",
+      "encoded": "®",
+      "mixed": "∏"
+    },
+    {
+      "decimal": "125",
+      "encoded": "°",
+      "mixed": "∑"
+    },
+    {
+      "decimal": "126",
+      "encoded": "¶",
+      "mixed": "√"
+    },
+    {
+      "decimal": "127",
+      "encoded": "÷",
+      "mixed": "∫"
+    },
+    {
+      "decimal": "128",
+      "encoded": "10",
+      "mixed": "10"
+    },
+    {
+      "decimal": "15743",
+      "encoded": "§÷",
+      "mixed": "∂÷"
+    },
+    {
+      "decimal": "1180591620717411303423",
+      "encoded": "÷÷÷÷÷÷÷÷÷÷",
+      "mixed": "∫÷∫÷∫÷∫÷∫÷"
+    }
+  ]
+}

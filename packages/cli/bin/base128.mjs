@@ -8,6 +8,7 @@ import {finished} from 'node:stream/promises';
 import {TextDecoder} from 'node:util';
 import {resolve, dirname, basename, join} from 'node:path';
 import {
+  DEFAULT_ALPHABET, TWO_BYTE_ALPHABET,
   BinaryEncoder, BinaryDecoder, createAlphabet, encodeInteger, decodeInteger,
 } from '../../js/dist/index.js';
 
@@ -22,6 +23,9 @@ Usage:
 
 If input-file is omitted, read stdin. If -o is omitted, write stdout.
 Binary output uses raw bytes; encoded output is UTF-8 without a trailing newline.
+--alphabet default|two-byte selects a built-in preset (default: default).
+--accept-aliases accepts both built-in symbol forms on decode, including mixed input.
+--alphabet and --alphabet-file cannot be combined.
 --alphabet-file contains exactly 128 Unicode code points (no terminating newline).
 Text: printf 'hello' | base128 encode
 Integer: base128 integer encode 1000
@@ -33,6 +37,8 @@ function parseOptions(args) {
   const positional=[];
   let outputPath;
   let alphabetFile;
+  let preset;
+  let acceptAliases=false;
   for (let i=0;i<args.length;i++) {
     const arg=args[i];
     if (arg==='-o'||arg==='--output') {
@@ -41,6 +47,11 @@ function parseOptions(args) {
     } else if (arg==='--alphabet-file') {
       if (alphabetFile || !args[i+1]) throw new Error('Expected one path after --alphabet-file');
       alphabetFile=args[++i];
+    } else if (arg==='--alphabet') {
+      if (preset || !['default','two-byte'].includes(args[i+1])) throw new Error('Expected default or two-byte after --alphabet');
+      preset=args[++i];
+    } else if (arg==='--accept-aliases') {
+      acceptAliases=true;
     } else if (arg==='--help'||arg==='-h') {
       process.stdout.write(HELP);
       return null;
@@ -50,7 +61,8 @@ function parseOptions(args) {
       positional.push(arg);
     }
   }
-  return {positional,outputPath,alphabetFile};
+  if (preset && alphabetFile) throw new Error('--alphabet and --alphabet-file cannot be combined');
+  return {positional,outputPath,alphabetFile,preset,acceptAliases};
 }
 
 async function streamWrite(stream,data) {
@@ -79,7 +91,7 @@ async function withOutput(outputPath,action) {
   }
 }
 
-async function binaryCommand(kind,inputPath,outputPath,alphabet) {
+async function binaryCommand(kind,inputPath,outputPath,alphabet,acceptAliases) {
   const input= inputPath && inputPath!=='-' ? createReadStream(inputPath) : process.stdin;
   await withOutput(outputPath,async output=>{
     if (kind==='encode') {
@@ -89,7 +101,7 @@ async function binaryCommand(kind,inputPath,outputPath,alphabet) {
       }
       await streamWrite(output,Buffer.from(encoder.finish(),'utf8'));
     } else {
-      const decoder = new BinaryDecoder({alphabet});
+      const decoder = new BinaryDecoder({alphabet,acceptAliases});
       const utf8 = new TextDecoder('utf-8',{fatal:true});
       for await (const bytes of input) {
         const text=utf8.decode(bytes,{stream:true});
@@ -116,7 +128,9 @@ async function main(argv) {
   }
   const options=parseOptions(args);
   if (!options) return;
-  let alphabet;
+  const {acceptAliases}=options;
+  if (acceptAliases && (subcommand || command)!=='decode') throw new Error('--accept-aliases is only valid for decode');
+  let alphabet=options.preset==='two-byte' ? TWO_BYTE_ALPHABET : DEFAULT_ALPHABET;
   if (options.alphabetFile) {
     alphabet=createAlphabet(await readFile(options.alphabetFile,'utf8'));
   }
@@ -125,11 +139,11 @@ async function main(argv) {
     const value=options.positional[0];
     const output=subcommand==='encode'
       ? encodeInteger(BigInt(value),{alphabet})
-      : String(decodeInteger(value,{alphabet}));
+      : String(decodeInteger(value,{alphabet,acceptAliases}));
     await withOutput(options.outputPath,async sink=>streamWrite(sink,Buffer.from(output,'utf8')));
   } else {
     if (options.positional.length>1) throw new Error('Expected at most one input file');
-    await binaryCommand(command, options.positional[0], options.outputPath, alphabet);
+    await binaryCommand(command, options.positional[0], options.outputPath, alphabet, acceptAliases);
   }
 }
 

@@ -20,7 +20,7 @@ A 128-symbol alphabet provides exactly **7 bits per displayed symbol**. The bina
 - 19 lowercase Greek symbols `αβγδεζηθικλμξπστφψω` (indices 103–121)
 - 6 mathematical symbols `∂∇∏∑√∫` (indices 122–127)
 
-The default alphabet is in [`specs/alphabet-v4.json`](specs/alphabet-v4.json). Other valid ordered sets of exactly 128 distinct Unicode scalar values may be supplied as configuration. No headers, prefixes, checksums, or padding characters are inserted.
+The default alphabet is in [`specs/alphabet-v4.json`](specs/alphabet-v4.json). An optional [two-byte preset and decoder alias mode](#two-byte-alternative-and-decoder-aliases) are also available. Other valid ordered sets of exactly 128 distinct Unicode scalar values may be supplied as configuration. No headers, prefixes, checksums, or padding characters are inserted.
 
 ![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/base128-alphabet-v4.svg)
 
@@ -158,7 +158,7 @@ base128/
 5. Binary streams carry incomplete bit groups across chunks; decoding validates on finalization.
 6. No prefixes, length headers, output padding characters, framing, checksums, or compression.
 7. No external **runtime** dependencies; TypeScript compilation needs a **development** dependency.
-8. Additional predefined alphabets are deferred.
+8. The optional two-byte v1 preset preserves digit values; decoder aliases are opt-in.
 
 ## Package naming
 
@@ -167,3 +167,52 @@ The public project is named **Base128**. The proposed npm name `base128-unicode-
 ## License
 
 Apache License, Version 2.0. See [`LICENSE`](LICENSE). Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Two-byte alternative and decoder aliases
+
+The optional **two-byte v1** preset preserves the first 122 digits of the default
+v4 alphabet and replaces the final six in Unicode code-point order:
+
+| Value | Default v4 | Two-byte v1 | Alternative spoken name |
+| ---: | :---: | :---: | --- |
+| 122 | ∂ | § | Section |
+| 123 | ∇ | © | Copyright |
+| 124 | ∏ | ® | Registered |
+| 125 | ∑ | ° | Degree |
+| 126 | √ | ¶ | Paragraph |
+| 127 | ∫ | ÷ | Division |
+
+Every character in this preset uses at most two UTF-8 bytes. Its ordered mapping
+is fixed in [the specification](specs/alphabet-two-byte-v1.json); the
+[alphabet file](specs/alphabet-two-byte-v1.txt) has no terminating newline.
+The default encoder and its existing outputs are unchanged.
+
+```js
+import {encode, decode, TWO_BYTE_ALPHABET} from './packages/js/dist/index.js';
+const text = encode(bytes, {alphabet: TWO_BYTE_ALPHABET});
+const restored = decode(text, {acceptAliases: true});
+```
+
+```python
+from base128 import encode, decode, TWO_BYTE_ALPHABET
+text = encode(b'Hello', alphabet=TWO_BYTE_ALPHABET)
+restored = decode(text, accept_aliases=True)
+```
+
+```sh
+node packages/cli/bin/base128.mjs encode input.bin --alphabet two-byte -o output.b128
+node packages/cli/bin/base128.mjs decode output.b128 --accept-aliases -o restored.bin
+```
+
+By default, decoding is strict to the selected alphabet. Opt-in `acceptAliases`
+(JavaScript), `accept_aliases` (Python), or `--accept-aliases` (CLI) accepts either
+symbol in each table row, including mixed input. This works for binary, streaming,
+and integer decoders. It is restricted to the exact default v4 and two-byte v1
+layouts, including those supplied as strings; other custom alphabets are rejected
+when alias mode is requested. No alphabet detection or Unicode normalization is
+performed. Length, trailing padding bits, and integer leading-zero checks still
+apply. Alias decoding allows multiple text spellings of the same value;
+re-encoding emits only the selected alphabet's canonical spelling.
+
+For text comparison, hashing, or signing, choose one canonical alphabet and
+re-encode alias-decoded values before using their textual representation.

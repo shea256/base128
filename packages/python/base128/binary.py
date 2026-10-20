@@ -1,6 +1,6 @@
 """Canonical MSB-first 7-bit Base128 binary encoding, including streaming."""
 
-from .alphabet import Alphabet, resolve_alphabet
+from .alphabet import Alphabet, resolve_alphabet, resolve_decoder_index
 
 
 class BinaryEncoder:
@@ -38,8 +38,8 @@ class BinaryEncoder:
 
 
 class BinaryDecoder:
-    def __init__(self, alphabet: Alphabet | str | None = None) -> None:
-        self._alphabet = resolve_alphabet(alphabet)
+    def __init__(self, alphabet: Alphabet | str | None = None, *, accept_aliases: bool = False) -> None:
+        self._index_of = resolve_decoder_index(resolve_alphabet(alphabet), accept_aliases)
         self._buffer = 0
         self._bits = 0
         self._symbols = 0
@@ -53,7 +53,7 @@ class BinaryDecoder:
             raise TypeError("Encoded input must be a string")
         out = bytearray()
         for symbol in text:
-            digit = self._alphabet.index_of(symbol)
+            digit = self._index_of(symbol)
             self._symbols += 1
             self._buffer = (self._buffer << 7) | digit
             self._bits += 7
@@ -79,8 +79,8 @@ def encode(data: bytes | bytearray | memoryview, *, alphabet: Alphabet | str | N
     return encoder.write(data) + encoder.finish()
 
 
-def decode(text: str, *, alphabet: Alphabet | str | None = None) -> bytes:
-    decoder = BinaryDecoder(alphabet)
+def decode(text: str, *, alphabet: Alphabet | str | None = None, accept_aliases: bool = False) -> bytes:
+    decoder = BinaryDecoder(alphabet, accept_aliases=accept_aliases)
     result = decoder.write(text)
     decoder.finish()
     return result

@@ -7,13 +7,69 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'packages' / 'python'))
 from base128 import (
-    Alphabet, DEFAULT_ALPHABET, DEFAULT_ALPHABET_TEXT, create_alphabet,
+    Alphabet, DEFAULT_ALPHABET, DEFAULT_ALPHABET_TEXT, TWO_BYTE_ALPHABET, TWO_BYTE_ALPHABET_TEXT, create_alphabet,
     BinaryEncoder, BinaryDecoder, encode, decode, encode_integer, decode_integer,
 )
 VECTORS = json.loads((ROOT / 'specs' / 'test-vectors.json').read_text(encoding='utf-8'))
 
 
 class Base128Tests(unittest.TestCase):
+    def test_two_byte_and_mixed_aliases(self):
+        spec = json.loads((ROOT / 'specs/alphabet-two-byte-v1.json').read_text())
+        self.assertEqual(TWO_BYTE_ALPHABET_TEXT, spec['alphabet'])
+        self.assertEqual(TWO_BYTE_ALPHABET_TEXT[122:], '§©®°¶÷')
+        self.assertTrue(all(len(c.encode('utf-8')) <= 2 for c in TWO_BYTE_ALPHABET_TEXT))
+        bits = ''.join(f'{i:07b}' for i in range(128))
+        data = bytes(int(bits[i:i+8], 2) for i in range(0, len(bits), 8))
+        self.assertEqual(encode(data), DEFAULT_ALPHABET_TEXT)
+        self.assertEqual(encode(data, alphabet=TWO_BYTE_ALPHABET), TWO_BYTE_ALPHABET_TEXT)
+        self.assertEqual(decode(TWO_BYTE_ALPHABET_TEXT, alphabet=TWO_BYTE_ALPHABET), data)
+        for mask in range(64):
+            mixed = ''.join(TWO_BYTE_ALPHABET_TEXT[i] if i >= 122 and mask & (1 << (i-122)) else c
+                            for i, c in enumerate(DEFAULT_ALPHABET_TEXT))
+            for alphabet in (DEFAULT_ALPHABET, TWO_BYTE_ALPHABET_TEXT):
+                options = dict(alphabet=alphabet, accept_aliases=True)
+                self.assertEqual(decode(mixed, **options), data)
+                decoder = BinaryDecoder(**options)
+                self.assertEqual(b''.join(decoder.write(c) for c in mixed), data)
+                decoder.finish()
+                for i in range(122, 128):
+                    self.assertEqual(decode_integer(mixed[i], **options), i)
+                    self.assertEqual(encode_integer(i, alphabet=TWO_BYTE_ALPHABET), TWO_BYTE_ALPHABET_TEXT[i])
+        for text, options in [(TWO_BYTE_ALPHABET_TEXT, {}),
+                              (DEFAULT_ALPHABET_TEXT, dict(alphabet=TWO_BYTE_ALPHABET)),
+                              ('0÷', dict(accept_aliases=True)), ('§', dict(accept_aliases=True)),
+                              ('', dict(alphabet=DEFAULT_ALPHABET_TEXT[::-1], accept_aliases=True))]:
+            with self.assertRaises(ValueError):
+                decode(text, **options)
+        for text, options in [('§', {}), ('0§', dict(accept_aliases=True)),
+                              ('☃', dict(accept_aliases=True)),
+                              ('0', dict(alphabet=DEFAULT_ALPHABET_TEXT[::-1], accept_aliases=True))]:
+            with self.assertRaises(ValueError):
+                decode_integer(text, **options)
+
+    def test_two_byte_reference_vectors(self):
+        vectors = json.loads((ROOT / 'specs/test-vectors-two-byte-v1.json').read_text())
+        self.assertEqual(vectors['alphabet'], TWO_BYTE_ALPHABET_TEXT)
+        self.assertEqual((ROOT / 'specs/alphabet-two-byte-v1.txt').read_text(), TWO_BYTE_ALPHABET_TEXT)
+        with self.assertRaises(AttributeError):
+            TWO_BYTE_ALPHABET._text = 'changed'
+        for item in vectors['binary']:
+            data = bytes.fromhex(item['hex'])
+            self.assertEqual(encode(data, alphabet=TWO_BYTE_ALPHABET), item['encoded'])
+            decoded = decode(item['mixed'], accept_aliases=True)
+            self.assertEqual(decoded, data)
+            self.assertEqual(encode(decoded, alphabet=TWO_BYTE_ALPHABET), item['encoded'])
+        for item in vectors['integer']:
+            value = int(item['decimal'])
+            self.assertEqual(encode_integer(value, alphabet=TWO_BYTE_ALPHABET), item['encoded'])
+            self.assertEqual(decode_integer(item['mixed'], accept_aliases=True), value)
+            self.assertEqual(decode_integer(item['encoded'], alphabet=TWO_BYTE_ALPHABET), value)
+        for version in (1, 2, 3):
+            legacy = json.loads((ROOT / f'specs/alphabet-v{version}.json').read_text())['alphabet']
+            with self.assertRaises(ValueError):
+                decode('', alphabet=legacy, accept_aliases=True)
+
     def test_alphabet(self):
         self.assertEqual(DEFAULT_ALPHABET_TEXT, VECTORS['alphabet'])
         self.assertEqual(len(DEFAULT_ALPHABET_TEXT), 128)

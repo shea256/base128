@@ -1,4 +1,4 @@
-import { type Options } from "./alphabet.js";
+import { type Options, type DecodeOptions } from "./alphabet.js";
 /** Streaming MSB-first 7-bit byte encoder. No metadata or padding characters. */
 export declare class BinaryEncoder {
     #private;
@@ -9,9 +9,9 @@ export declare class BinaryEncoder {
 /** Streaming decoder. Canonical trailing bits and encoded length checked in finish(). */
 export declare class BinaryDecoder {
     #private;
-    constructor(options?: Options);
+    constructor(options?: DecodeOptions);
     write(text: string): Uint8Array;
     finish(): void;
 }
 export declare function encode(bytes: Uint8Array, options?: Options): string;
-export declare function decode(text: string, options?: Options): Uint8Array;
+export declare function decode(text: string, options?: DecodeOptions): Uint8Array;
