@@ -20,3 +20,9 @@ preset. Pass `alphabet=TWO_BYTE_ALPHABET` to encode or decode. Decoders
 `accept_aliases=True` to accept default and two-byte symbols, even mixed.
 Strict decoding remains the default; alias mode rejects unrelated custom layouts.
 See the root README for the six alias pairs and examples.
+
+Optional `wrap(payload, prefix=True, checksum=True, mode='binary')` and
+`unwrap(text, prefix=True, checksum=True)` support middle-dot envelopes.
+`unwrap` returns an immutable `Unwrapped` object with `payload`, `mode`, and
+`alphabet` attributes after verification. Flags default to false; use
+`mode='integer'` for integer payloads. See the [envelope specification](../../specs/envelope.md).

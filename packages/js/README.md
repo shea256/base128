@@ -27,3 +27,9 @@ Decoders (`decode`, `decodeInteger`, `BinaryDecoder`) additionally accept
 `{acceptAliases: true}` to accept default and two-byte symbols, even mixed.
 Strict decoding remains the default; alias mode rejects unrelated custom layouts.
 See the root README for the six alias pairs and examples.
+
+Optional `wrap(payload, {prefix: true, checksum: true, mode: 'binary'})` and
+`unwrap(text, {prefix: true, checksum: true})` support middle-dot envelopes.
+`unwrap` returns `{payload, mode, alphabet}` and verifies the requested checksum
+before returning. Flags default to false; use `mode: 'integer'` for integer payloads.
+See the [envelope specification](../../specs/envelope.md).

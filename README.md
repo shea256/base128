@@ -14,6 +14,7 @@ A small, dependency-free library for encoding bytes and nonnegative integers wit
 - [Getting started](#getting-started)
 - [Usage](#usage)
 - [Alphabets and decoding](#alphabets-and-decoding)
+- [Optional prefixes and checksums](#optional-prefixes-and-checksums)
 - [How it works](#how-it-works)
 - [Compatibility and limitations](#compatibility-and-limitations)
 - [Development and testing](#development-and-testing)
@@ -111,7 +112,7 @@ node packages/cli/bin/base128.mjs integer decode '7β'  # 1000
 
 Output has **no added terminal newline**, and decoding rejects whitespace. Use `printf` rather than `echo` when piping encoded strings into `decode`.
 
-The CLI streams files. With `-o`, it writes a temporary file and renames it only after successful completion; invalid input cannot overwrite an existing destination. Stdout can contain partial decoded bytes before a validation failure, so consumers must check the exit status. See the [CLI reference](docs/cli.md) for all options and error behavior.
+Bare CLI operations stream files; wrapped operations buffer input. With `-o`, it writes a temporary file and renames it only after successful completion; invalid input cannot overwrite an existing destination. Stdout can contain partial decoded bytes before a validation failure, so consumers must check the exit status. See the [CLI reference](docs/cli.md) for all options and error behavior.
 
 ### Website
 
@@ -122,9 +123,9 @@ npm run site
 # Open http://localhost:8080/
 ```
 
-The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Default, Two-byte, or Custom. Decoding is strict unless **Accept both alphabets when decoding** is checked; custom alphabets disable that option.
+The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Default, Two-byte, or Custom. Decoding is strict unless **Accept both alphabets when decoding** is checked; custom alphabets disable that option. Independent **Add / require prefix** and **Add / require checksum** controls apply to encoding and decoding. The selected mode and alphabet must match a supplied prefix.
 
-The site also compares UTF-8 size and character counts. Files are processed locally in the browser and loaded into memory; use the streaming CLI for large files.
+The site also compares UTF-8 size and character counts. Files are processed locally in the browser and loaded into memory; use the CLI without wrapper options to stream large files.
 
 ## Alphabets and decoding
 
@@ -207,6 +208,62 @@ const restored = decode(text, {alphabet});
 
 Python accepts `alphabet=...` as text or a compiled `create_alphabet(...)` result. The CLI accepts `--alphabet-file FILE`, containing the exact UTF-8 alphabet with no terminating newline. The website accepts custom text under **Custom alphabet**.
 
+## Optional prefixes and checksums
+
+Bare encoding remains the default. Use `wrap` on encoded text to independently
+add a prefix, a checksum, or both:
+
+| Options | Output form |
+| --- | --- |
+| Prefix only | `b128·1b0·payload` |
+| Checksum only | `payload·checksum` |
+| Both | `b128·1b0·payload·checksum` |
+
+The header identifies envelope version `1`, binary (`b`) or integer (`i`) mode,
+and Default (`0`) or Two-byte (`1`) alphabet. Middle dot (`·`, U+00B7) appears in
+neither built-in alphabet. The checksum is four CRC-32 bytes encoded into exactly
+five Base128 symbols using the payload alphabet. It covers the exact UTF-8 header
+and payload text, excluding the final separator and checksum.
+
+```js
+import {encode, decode, wrap, unwrap} from './packages/js/dist/index.js';
+
+const wrapped = wrap(encode(new TextEncoder().encode('Hello')), {
+  prefix: true, checksum: true,
+});
+const result = unwrap(wrapped, {prefix: true, checksum: true});
+const bytes = decode(result.payload, {alphabet: result.alphabet});
+```
+
+```python
+from base128 import encode, decode, wrap, unwrap
+
+wrapped = wrap(encode(b'Hello'), prefix=True, checksum=True)
+result = unwrap(wrapped, prefix=True, checksum=True)
+raw_bytes = decode(result.payload, alphabet=result.alphabet)
+```
+
+```sh
+node packages/cli/bin/base128.mjs encode input.bin --prefix --checksum -o output.b128
+node packages/cli/bin/base128.mjs decode output.b128 --prefix --checksum -o restored.bin
+node packages/cli/bin/base128.mjs integer encode 1000 --prefix --checksum
+```
+
+Use the same wrapper flags when decoding: missing fields are errors, not a reason
+to skip verification. Library `unwrap` infers mode and alphabet from a prefix
+unless you supply constraints. For integers, call `wrap(encoded, {mode: 'integer', ...})`
+in JavaScript or `wrap(encoded, mode='integer', ...)` in Python, then use
+`decodeInteger` / `decode_integer` on the unwrapped payload.
+
+Prefixes support built-in alphabets only. Checksum-only wrappers also support
+custom alphabets that exclude middle dot. Alias decoding is opt-in for the payload;
+checksums are always strict and must be recalculated if the encoded spelling changes.
+These checks detect accidental corruption, not deliberate tampering.
+
+Wrapper helpers operate on complete values, and wrapped CLI operations buffer
+input. See the [envelope specification](specs/envelope.md) for exact grammar,
+checksum parameters, and validation rules.
+
 ## How it works
 
 **Binary encoding** reads bytes in most-significant-bit-first groups of seven, zero-fills the final group if necessary, and maps each group to a symbol. For example, UTF-8 `Hi` becomes `aQW`:
@@ -222,7 +279,7 @@ For `n` bytes, binary encoding emits `ceil(8n / 7)` symbols. Decoding validates 
 ## Compatibility and limitations
 
 - Base128 is **not Base64-compatible** or interchangeable with other projects called “Base128.” The [v0.1 specification](specs/encoding.md) defines this format.
-- No prefixes, framing headers, checksums, authentication, encryption, or compression are included. Zero-filled final bits are part of binary packing; there are no padding characters.
+- Bare encodings have no prefixes or checksums; optional envelopes add these. Neither form includes authentication, encryption, compression, or multi-record framing. Zero-filled final bits are part of binary packing; there are no padding characters.
 - No implicit whitespace trimming, case folding, or Unicode normalization occurs. Preserve exact characters and use strict UTF-8 decoding when textual round-trip accuracy matters.
 - Output is not URL-safe or shell-safe. Escape it for its destination and quote command-line arguments; files and stdin avoid shell interpretation of arbitrary payloads.
 - Some symbols resemble one another. Successful decoding alone does not establish accurate transcription.

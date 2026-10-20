@@ -27,6 +27,8 @@ implementations, a streaming CLI, and a static GitHub Pages playground.
 
 ## Compatibility requirements
 
+- Wrapper rules are in `specs/envelope.md`; preserve explicit shape requirements,
+  checksum verification, and bare-codec defaults.
 - Read `specs/encoding.md` before changing encoding behavior. Published alphabet
   mappings and reference fixtures are immutable once released; changes need a separate version.
 - Default and two-byte are separate fixed alphabets. Strict decoding is the

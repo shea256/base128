@@ -2,6 +2,9 @@
 
 Status: **initial v0.1 format definition** (project release 0.1.0). The base alphabet and algorithms described here are normative. This is an independent encoding format; it does not claim compatibility with any other project called "Base128".
 
+Optional prefixes and checksums are defined separately in [envelope.md](envelope.md).
+This specification describes the bare codec.
+
 ## 1. Alphabet
 
 The default alphabet consists of exactly 128 Unicode scalar values, in this order:
