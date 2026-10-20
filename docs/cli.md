@@ -25,16 +25,16 @@ arguments containing punctuation; use files or stdin for arbitrary payloads.
 
 | Option | Behavior |
 | --- | --- |
-| `--alphabet default` | Default v4 alphabet; also used when omitted |
-| `--alphabet two-byte` | Fixed two-byte v1 alternative |
+| `--alphabet default` | Default alphabet; also used when omitted |
+| `--alphabet two-byte` | Fixed two-byte alternative |
 | `--alphabet-file FILE` | Exactly 128 unique Unicode scalar values, UTF-8, no newline; cannot combine with `--alphabet` |
-| `--accept-aliases` | Decode only: accepts either built-in symbol form, even mixed; rejects unrelated custom/legacy layouts |
+| `--accept-aliases` | Decode only: accepts either built-in symbol form, even mixed; rejects unrelated custom layouts |
 | `-o FILE` | Write output to a file (`-` means stdout) |
 | `--help`, `-h` | Show usage |
 
 Decoding is strict unless `--accept-aliases` is present. All modes enforce binary
 length/padding and integer leading-zero rules as applicable. Alias mode does not
-trim whitespace or detect legacy versions. See the [specification](../specs/encoding-v4.md).
+trim whitespace or detect alphabets. See the [specification](../specs/encoding.md).
 
 ```sh
 printf 'Hello' | node packages/cli/bin/base128.mjs encode

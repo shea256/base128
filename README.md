@@ -4,9 +4,9 @@
 
 A small, dependency-free library for encoding bytes and nonnegative integers with a configurable **128-character Unicode alphabet**. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
 
-**Version:** 0.4.0 · **License:** Apache-2.0 · **Status:** Working implementation / prepublication.
+**Version:** 0.1.0 · **License:** Apache-2.0 · **Status:** Working implementation / prepublication.
 
-**[Try the live playground](https://shea256.github.io/base128/)** · [Encoding specification](specs/encoding-v4.md) · [CLI reference](docs/cli.md)
+**[Try the live playground](https://shea256.github.io/base128/)** · [Encoding specification](specs/encoding.md) · [CLI reference](docs/cli.md)
 
 ## Contents
 
@@ -122,13 +122,13 @@ npm run site
 # Open http://localhost:8080/
 ```
 
-The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Default (v4), Two-byte (v1), or Custom. Decoding is strict unless **Accept both alphabets when decoding** is checked; custom alphabets disable that option.
+The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Default, Two-byte, or Custom. Decoding is strict unless **Accept both alphabets when decoding** is checked; custom alphabets disable that option.
 
 The site also compares UTF-8 size and character counts. Files are processed locally in the browser and loaded into memory; use the streaming CLI for large files.
 
 ## Alphabets and decoding
 
-### Default v4 alphabet
+### Default alphabet
 
 The default alphabet is an immutable, ordered set of 128 distinct Unicode scalar values:
 
@@ -142,15 +142,15 @@ The default alphabet is an immutable, ordered set of 128 distinct Unicode scalar
 | 103–121 | Lowercase Greek `αβγδεζηθικλμξπστφψω` |
 | 122–127 | Mathematical symbols `∂∇∏∑√∫` |
 
-![The complete Base128 v4 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/base128-alphabet-v4.svg)
+![The complete Base128 v0.1 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and mathematical symbols.](docs/images/base128-alphabet.svg)
 
-The [alphabet specification](specs/alphabet-v4.json) fixes every index and code point. The [spoken alphabet table](specs/spoken-alphabet-v4.md) provides proposed telephone names and numeric fallbacks.
+The [alphabet specification](specs/alphabet.json) fixes every index and code point. The [spoken alphabet table](specs/spoken-alphabet.md) provides proposed telephone names and numeric fallbacks.
 
 ### Two-byte alternative and decoder aliases
 
-The **two-byte v1** preset preserves indices 0–121 and replaces the final six symbols in Unicode code-point order:
+The **two-byte** preset preserves indices 0–121 and replaces the final six symbols in Unicode code-point order:
 
-| Value | Default v4 | Two-byte v1 | Alternative spoken name |
+| Value | Default | Two-byte | Alternative spoken name |
 | ---: | :---: | :---: | --- |
 | 122 | ∂ | § | Section |
 | 123 | ∇ | © | Copyright |
@@ -159,7 +159,7 @@ The **two-byte v1** preset preserves indices 0–121 and replaces the final six 
 | 126 | √ | ¶ | Paragraph |
 | 127 | ∫ | ÷ | Division |
 
-Every symbol in this preset occupies at most two UTF-8 bytes. Its fixed mapping is in the [preset specification](specs/alphabet-two-byte-v1.json); a [newline-free alphabet file](specs/alphabet-two-byte-v1.txt) is also available. The default encoder is unchanged.
+Every symbol in this preset occupies at most two UTF-8 bytes. Its fixed mapping is in the [preset specification](specs/alphabet-two-byte.json); a [newline-free alphabet file](specs/alphabet-two-byte.txt) is also available. The default encoder is unchanged.
 
 **Decoding is strict to the selected alphabet by default.** Opt-in aliases accept either symbol in each row, even mixed in one payload. For example, integer strings `∂∇`, `§©`, and `∂©` all represent 15739 in alias mode.
 
@@ -188,7 +188,7 @@ node packages/cli/bin/base128.mjs decode output.b128 --alphabet two-byte -o rest
 node packages/cli/bin/base128.mjs decode output.b128 --accept-aliases -o restored.bin
 ```
 
-Alias options work with binary, streaming, and integer decoders. They are restricted to the exact default v4 and two-byte v1 layouts, including those supplied as strings. Other custom layouts are rejected in alias mode. Length, trailing-padding, and integer leading-zero checks always apply.
+Alias options work with binary, streaming, and integer decoders. They are restricted to the exact default and two-byte layouts, including those supplied as strings. Other custom layouts are rejected in alias mode. Length, trailing-padding, and integer leading-zero checks always apply.
 
 Alias mode allows multiple strings to represent the same value. For text comparison, hashing, or signing, choose one canonical alphabet and re-encode decoded values into that alphabet, or use strict decoding.
 
@@ -221,8 +221,7 @@ For `n` bytes, binary encoding emits `ceil(8n / 7)` symbols. Decoding validates 
 
 ## Compatibility and limitations
 
-- Base128 is **not Base64-compatible** or interchangeable with other projects called “Base128.” The [v4 specification](specs/encoding-v4.md) defines this format.
-- Existing v1, v2, and v3 payloads require their exact legacy alphabet. Do not infer a version from the symbols; see the [migration guide](specs/encoding-v4.md#6-migration-from-earlier-versions). Alias mode does not detect legacy versions.
+- Base128 is **not Base64-compatible** or interchangeable with other projects called “Base128.” The [v0.1 specification](specs/encoding.md) defines this format.
 - No prefixes, framing headers, checksums, authentication, encryption, or compression are included. Zero-filled final bits are part of binary packing; there are no padding characters.
 - No implicit whitespace trimming, case folding, or Unicode normalization occurs. Preserve exact characters and use strict UTF-8 decoding when textual round-trip accuracy matters.
 - Output is not URL-safe or shell-safe. Escape it for its destination and quote command-line arguments; files and stdin avoid shell interpretation of arbitrary payloads.
@@ -246,7 +245,7 @@ npm run test:website
 
 The test runner discovers Python using `python3`, `python`, or Windows `py -3`. Set `PYTHON` to an executable path to override discovery. Run `npm run build` before focused tests when TypeScript or browser vendor inputs change.
 
-The shared [default vectors](specs/test-vectors.json) and [two-byte vectors](specs/test-vectors-two-byte-v1.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
+The shared [default vectors](specs/test-vectors.json) and [two-byte vectors](specs/test-vectors-two-byte.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
 
 Generated `packages/js/dist/` and `website/vendor/` files are tracked; commit rebuilt outputs with their source changes. README figures are generated with `node scripts/build-readme-images.mjs` after building the library. The cover illustration's prompt is in [`docs/images/cover-prompt.txt`](docs/images/cover-prompt.txt).
 

@@ -1,10 +1,10 @@
-# Base128 v2 spoken alphabet
+# Base128 v0.1 spoken alphabet
 
-This table covers every character in the default [Base128 v2 alphabet](alphabet-v2.json), in its canonical order. These are proposed English telephone names for this project, not a change to the encoding or a tested speech standard. Custom alphabets need their own agreed table.
+This table covers every character in the default [Base128 v0.1 alphabet](alphabet.json), in its canonical order. These are proposed English telephone names for this project, not a change to the encoding or a tested speech standard. Custom alphabets need their own agreed table.
 
 ## How to read a payload over the phone
 
-- Both people should have this table and agree to use the default v2 alphabet. Say the full phrase in the **Spoken name** column, including “Latin” or “Greek” and “capital” or “lowercase.” Latin letters use phonetic spelling words: for example, `B` is “Latin capital Bravo.”
+- Both people should have this table and agree to use the default alphabet. Say the full phrase in the **Spoken name** column, including “Latin” or “Greek” and “capital” or “lowercase.” Latin letters use phonetic spelling words: for example, `B` is “Latin capital Bravo.”
 - Pause between characters. Read short groups, then have the listener read each group back. Say “repeat” before repeating a character so the listener does not append a duplicate.
 - For an unfamiliar or easily confused name, use the **Numeric fallback** column. Say “symbol” followed by all three index digits separately, including leading zeros. For example, “symbol zero nine four” means `Γ`. The index is zero-based and is not a Unicode code point or the literal digits to enter.
 - Enter only the corresponding characters. Pauses, spoken names, group separators, and index digits are not part of the payload. Preserve case and use the exact characters from the table rather than typographic substitutions.
@@ -138,12 +138,12 @@ Each full spoken name is unique in this table, but uniqueness on paper does not 
 | 119 | <code>φ</code> | Greek lowercase Phi | symbol one one nine |
 | 120 | <code>ψ</code> | Greek lowercase Psi | symbol one two zero |
 | 121 | <code>ω</code> | Greek lowercase Omega | symbol one two one |
-| 122 | <code>∑</code> | Summation operator | symbol one two two |
-| 123 | <code>∏</code> | Product operator | symbol one two three |
-| 124 | <code>∫</code> | Integral sign | symbol one two four |
-| 125 | <code>∂</code> | Partial derivative sign | symbol one two five |
-| 126 | <code>∇</code> | Nabla sign | symbol one two six |
-| 127 | <code>∞</code> | Infinity sign | symbol one two seven |
+| 122 | <code>∂</code> | Partial derivative sign | symbol one two two |
+| 123 | <code>∇</code> | Nabla sign | symbol one two three |
+| 124 | <code>∏</code> | Product operator | symbol one two four |
+| 125 | <code>∑</code> | Summation operator | symbol one two five |
+| 126 | <code>√</code> | Square root | symbol one two six |
+| 127 | <code>∫</code> | Integral sign | symbol one two seven |
 
 ## Distinctions to preserve
 

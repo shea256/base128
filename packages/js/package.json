@@ -1,6 +1,6 @@
 {
   "name": "base128-unicode-codec",
-  "version": "0.4.0",
+  "version": "0.1.0",
   "description": "Dependency-free Base128 binary and integer encoding with a configurable Unicode alphabet",
   "type": "module",
   "license": "Apache-2.0",

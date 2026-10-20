@@ -1,7 +1,7 @@
 import {
   DEFAULT_ALPHABET, TWO_BYTE_ALPHABET, createAlphabet, encode, decode,
   encodeInteger, decodeInteger,
-} from './vendor/index.js?v=alphabet-presets';
+} from './vendor/index.js?v=initial-0.1';
 
 const $ = id => document.getElementById(id);
 const input = $('payload-input');
@@ -206,7 +206,7 @@ function updateAlphabet() {
     acceptAliases.checked=false;
     $('custom-settings').open=true;
   }
-  $('alphabet-name').textContent='— '+({'default':'Default (v4)','two-byte':'Two-byte (v1)',custom:'Custom'}[alphabetPreset.value]);
+  $('alphabet-name').textContent='— '+({'default':'Default','two-byte':'Two-byte',custom:'Custom'}[alphabetPreset.value]);
   $('alphabet-legend').hidden=custom;
   $('suffix-label').textContent=alphabetPreset.value==='two-byte'?'6 alternative symbols':'6 math symbols';
   $('alphabet-help').textContent=custom

@@ -10,13 +10,13 @@ custom = create_alphabet("... exactly 128 distinct Unicode characters ...")
 # encode(b"Hello", alphabet=custom)
 ```
 
-No runtime dependencies. Exact API and wire format are specified in `../../specs/encoding-v4.md`.
+No runtime dependencies. Exact API and wire format are specified in `../../specs/encoding.md`.
 
 The PyPI package name `unicode-base128` is a proposed, **unverified** publishing name.
 
 `TWO_BYTE_ALPHABET` / `TWO_BYTE_ALPHABET_TEXT` provide the optional fixed two-byte
-v1 preset. Pass `alphabet=TWO_BYTE_ALPHABET` to encode or decode. Decoders
+preset. Pass `alphabet=TWO_BYTE_ALPHABET` to encode or decode. Decoders
 (`decode`, `decode_integer`, `BinaryDecoder`) additionally accept
-`accept_aliases=True` to accept default v4 and two-byte v1 symbols, even mixed.
+`accept_aliases=True` to accept default and two-byte symbols, even mixed.
 Strict decoding remains the default; alias mode rejects unrelated custom layouts.
 See the root README for the six alias pairs and examples.

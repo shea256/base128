@@ -1,4 +1,4 @@
-/** The v4 alphabet is ordered, not normalized, and immutable. */
+/** The v0.1 alphabet is ordered, not normalized, and immutable. */
 export declare const DEFAULT_ALPHABET_TEXT: string;
 /** Two-byte UTF-8 preset, with the final six symbols in code-point order. */
 export declare const TWO_BYTE_ALPHABET_TEXT: string;

@@ -4,7 +4,7 @@ import {resolve, dirname} from 'node:path';
 import {encode} from '../packages/js/dist/index.js';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const alphabet=JSON.parse(await readFile(resolve(root,'specs/alphabet-v4.json'),'utf8'));
+const alphabet=JSON.parse(await readFile(resolve(root,'specs/alphabet.json'),'utf8'));
 const dest=resolve(root,'docs/images');
 await mkdir(dest,{recursive:true});
 const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
@@ -30,7 +30,7 @@ for(const [i,[,label,color]] of groups.entries()) {
   const x=40+(i%4)*267,y=740+Math.floor(i/4)*30;
   chart+=`<circle cx="${x+5}" cy="${y-5}" r="4" fill="${color}"/>`+text(x+18,y,label,15,'#bccbd5');
 }
-await writeFile(resolve(dest,'base128-alphabet-v4.svg'),svg(750,'Base128 v4 alphabet chart','All 128 symbols in canonical order, with indices and seven color-coded character groups. Mathematical symbols at indices 122 through 127 are ∂ ∇ ∏ ∑ √ ∫.',chart+'</g>'));
+await writeFile(resolve(dest,'base128-alphabet.svg'),svg(750,'Base128 v0.1 alphabet chart','All 128 symbols in canonical order, with indices and seven color-coded character groups. Mathematical symbols at indices 122 through 127 are ∂ ∇ ∏ ∑ √ ∫.',chart+'</g>'));
 
 const bytes=new TextEncoder().encode('Hi');
 const bits=Array.from(bytes,b=>b.toString(2).padStart(8,'0')).join('');
@@ -50,7 +50,7 @@ for(const [i,chunk] of chunks.entries()) {
  diagram+=`<text x="${x+95}" y="320" font-size="26" fill="#dce7ed" text-anchor="middle" font-family="Menlo, Consolas, monospace"><tspan>${chunk}</tspan><tspan fill="#edcf82">${'0'.repeat(7-chunk.length)}</tspan></text>`;
  diagram+=text(x+95,348,`index ${indices[i]}`,15,'#9aaebd','text-anchor="middle"');
 }
-diagram+=text(630,398,'↓  Look up each index in the v4 alphabet',16,'#9aaebd','text-anchor="middle"');
+diagram+=text(630,398,'↓  Look up each index in the v0.1 alphabet',16,'#9aaebd','text-anchor="middle"');
 diagram+=text(40,457,'Base128 symbols',14,'#8cbde3')+text(40,486,'Payload: '+symbols.join(''),18,'#dce7ed');
 for(const [i,symbol] of symbols.entries()) {
  const x=314+i*220;diagram+=box(x,420,190,82,'#14261f','#365e4a')+text(x+95,475,symbol,42,'#9ee8b0','text-anchor="middle" font-family="Menlo, Consolas, monospace"');
@@ -58,4 +58,4 @@ for(const [i,symbol] of symbols.entries()) {
 diagram+=text(40,550,'Gold bits are zero-filled tail bits, not extra input bytes. No padding character is added.',16,'#edcf82');
 diagram+=text(40,579,'Seven bits per symbol describes information content; a Unicode symbol may use multiple UTF-8 bytes.',15,'#9aaebd');
 await writeFile(resolve(dest,'how-base128-encodes-bytes.svg'),svg(560,'How Base128 Encodes Bytes','The UTF-8 bytes for Hi are 01001000 and 01101001. Regrouped and zero-filled: 0100100, 0011010, 0100000. Indices 36, 26, 32 map to a, Q, W. The payload is aQW.',diagram+'</g>'));
-console.log('Generated base128-alphabet-v4.svg and how-base128-encodes-bytes.svg from the v4 alphabet.');
+console.log('Generated base128-alphabet.svg and how-base128-encodes-bytes.svg from the v0.1 alphabet.');

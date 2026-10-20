@@ -15,7 +15,7 @@ VECTORS = json.loads((ROOT / 'specs' / 'test-vectors.json').read_text(encoding='
 
 class Base128Tests(unittest.TestCase):
     def test_two_byte_and_mixed_aliases(self):
-        spec = json.loads((ROOT / 'specs/alphabet-two-byte-v1.json').read_text())
+        spec = json.loads((ROOT / 'specs/alphabet-two-byte.json').read_text())
         self.assertEqual(TWO_BYTE_ALPHABET_TEXT, spec['alphabet'])
         self.assertEqual(TWO_BYTE_ALPHABET_TEXT[122:], '§©®°¶÷')
         self.assertTrue(all(len(c.encode('utf-8')) <= 2 for c in TWO_BYTE_ALPHABET_TEXT))
@@ -49,9 +49,9 @@ class Base128Tests(unittest.TestCase):
                 decode_integer(text, **options)
 
     def test_two_byte_reference_vectors(self):
-        vectors = json.loads((ROOT / 'specs/test-vectors-two-byte-v1.json').read_text())
+        vectors = json.loads((ROOT / 'specs/test-vectors-two-byte.json').read_text())
         self.assertEqual(vectors['alphabet'], TWO_BYTE_ALPHABET_TEXT)
-        self.assertEqual((ROOT / 'specs/alphabet-two-byte-v1.txt').read_text(), TWO_BYTE_ALPHABET_TEXT)
+        self.assertEqual((ROOT / 'specs/alphabet-two-byte.txt').read_text(), TWO_BYTE_ALPHABET_TEXT)
         with self.assertRaises(AttributeError):
             TWO_BYTE_ALPHABET._text = 'changed'
         for item in vectors['binary']:
@@ -65,10 +65,6 @@ class Base128Tests(unittest.TestCase):
             self.assertEqual(encode_integer(value, alphabet=TWO_BYTE_ALPHABET), item['encoded'])
             self.assertEqual(decode_integer(item['mixed'], accept_aliases=True), value)
             self.assertEqual(decode_integer(item['encoded'], alphabet=TWO_BYTE_ALPHABET), value)
-        for version in (1, 2, 3):
-            legacy = json.loads((ROOT / f'specs/alphabet-v{version}.json').read_text())['alphabet']
-            with self.assertRaises(ValueError):
-                decode('', alphabet=legacy, accept_aliases=True)
 
     def test_alphabet(self):
         self.assertEqual(DEFAULT_ALPHABET_TEXT, VECTORS['alphabet'])
@@ -90,18 +86,6 @@ class Base128Tests(unittest.TestCase):
                 self.assertEqual(encode_integer(int(item['decimal'])), item['encoded'])
                 self.assertEqual(decode_integer(item['encoded']), int(item['decimal']))
 
-    def test_legacy_alphabet(self):
-        legacy = json.loads((ROOT / 'specs' / 'test-vectors-v1.json').read_text())
-        alphabet = legacy['alphabet']
-        for item in legacy['binary']:
-            data = bytes.fromhex(item['hex'])
-            self.assertEqual(encode(data, alphabet=alphabet), item['encoded'])
-            self.assertEqual(decode(item['encoded'], alphabet=alphabet), data)
-        for item in legacy['integer']:
-            value = int(item['decimal'])
-            self.assertEqual(encode_integer(value, alphabet=alphabet), item['encoded'])
-            self.assertEqual(decode_integer(item['encoded'], alphabet=alphabet), value)
-
     def test_custom_vectors(self):
         alphabet = create_alphabet(VECTORS['custom']['alphabet'])
         for item in VECTORS['custom']['binary']:
@@ -113,24 +97,12 @@ class Base128Tests(unittest.TestCase):
             self.assertEqual(encode_integer(int(item['decimal']), alphabet=alphabet), item['encoded'])
             self.assertEqual(decode_integer(item['encoded'], alphabet=alphabet), int(item['decimal']))
 
-    def test_math_order_and_legacy_compatibility(self):
+    def test_math_order(self):
         self.assertEqual(DEFAULT_ALPHABET_TEXT[122:], '∂∇∏∑√∫')
         self.assertEqual(list(DEFAULT_ALPHABET_TEXT[122:]), sorted(DEFAULT_ALPHABET_TEXT[122:]))
         for index, symbol in enumerate('∂∇∏∑√∫', 122):
             self.assertEqual(encode_integer(index), symbol)
             self.assertEqual(decode_integer(symbol), index)
-        for version in [2, 3]:
-            legacy = json.loads((ROOT / 'specs' / f'test-vectors-v{version}.json').read_text())
-            alphabet = legacy['alphabet']
-            self.assertEqual(DEFAULT_ALPHABET_TEXT[:122], alphabet[:122])
-            for item in legacy['binary']:
-                data = bytes.fromhex(item['hex'])
-                self.assertEqual(decode(item['encoded'], alphabet=alphabet), data)
-                self.assertEqual(encode(data, alphabet=alphabet), item['encoded'])
-            for item in legacy['integer']:
-                value = int(item['decimal'])
-                self.assertEqual(decode_integer(item['encoded'], alphabet=alphabet), value)
-                self.assertEqual(encode_integer(value, alphabet=alphabet), item['encoded'])
 
     def test_round_trip_and_streaming(self):
         rng = random.Random(20261013)
