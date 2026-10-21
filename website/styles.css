@@ -11,3 +11,13 @@
 .alphabet-controls p{flex-basis:100%;margin:0;font-size:12px;color:var(--muted)}
 #alphabet-name{color:var(--muted);font-size:18px;letter-spacing:normal}
 [hidden]{display:none!important}
+
+/* Encoded values wrap by character; plain text retains natural word wrapping.
+   These are visual soft wraps: copying/downloading preserves the original value. */
+.converter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.field{min-width:0}
+textarea.encoded-value{word-break:break-all;white-space:pre-wrap;overflow-wrap:anywhere}
+.decoder-options{flex-basis:100%}
+.decoder-options p{margin:6px 0 0;font-size:12px;color:var(--muted)}
+.file-section .decoder-options{margin-top:14px}
+@media(max-width:650px){.converter-grid{grid-template-columns:minmax(0,1fr)}}

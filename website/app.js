@@ -1,7 +1,7 @@
 import {
   DEFAULT_ALPHABET, MATH_ALPHABET, createAlphabet, encode, decode,
   encodeInteger, decodeInteger, wrap, unwrap,
-} from './vendor/index.js?v=compact-headers-0.1';
+} from './vendor/index.js?v=playground-wrap-0.1';
 
 const $ = id => document.getElementById(id);
 const input = $('payload-input');
@@ -10,6 +10,7 @@ const inputType = $('input-type');
 const customAlphabet = $('custom-alphabet');
 const alphabetPreset = $('alphabet-preset');
 const acceptAliases = $('accept-aliases');
+const fileAcceptAliases = $('file-accept-aliases');
 const wrapPrefix = $('wrap-prefix');
 const wrapChecksum = $('wrap-checksum');
 const directionButtons = [$('dir-encode'),$('dir-decode')];
@@ -34,11 +35,11 @@ function alphabetOption() {
   if (alphabetPreset.value==='custom') return createAlphabet(customAlphabet.value);
   return alphabetPreset.value==='math' ? MATH_ALPHABET : DEFAULT_ALPHABET;
 }
-function decoderOptions(alphabet) {
-  return {alphabet,acceptAliases:alphabetPreset.value!=='custom' && acceptAliases.checked};
+function decoderOptions(alphabet, aliases = acceptAliases.checked) {
+  return {alphabet,acceptAliases:alphabetPreset.value!=='custom' && aliases};
 }
-function envelopeOptions(alphabet, mode) {
-  return {...decoderOptions(alphabet),mode,prefix:wrapPrefix.checked,checksum:wrapChecksum.checked};
+function envelopeOptions(alphabet, mode, aliases = acceptAliases.checked) {
+  return {...decoderOptions(alphabet, aliases),mode,prefix:wrapPrefix.checked,checksum:wrapChecksum.checked};
 }
 function hasWrapper() {return wrapPrefix.checked || wrapChecksum.checked;}
 function setMetric(id,value) {$(id).textContent=value;}
@@ -53,7 +54,19 @@ function updateComparison(bytes,encoded) {
   // Base64 uses ceil(8n / 6) characters when unpadded.
   setMetric('base64-chars',Math.ceil(bytes.length*8/6).toLocaleString());
 }
+function updateDecoderControls() {
+  const custom=alphabetPreset.value==='custom';
+  $('decoder-options').hidden=direction!=='decode' || custom;
+  $('file-decoder-options').hidden=$('file-operation').value!=='decode' || custom;
+  const other=alphabetPreset.value==='math'?'Compact':'Math';
+  const help=`Also accepts equivalent payload symbols from ${other}. Headers and checksums stay strict.`;
+  $('alias-help').textContent=help;
+  $('file-alias-help').textContent=help;
+}
 function update() {
+  updateDecoderControls();
+  input.classList.toggle('encoded-value',direction==='decode' || inputType.value!=='text');
+  output.classList.toggle('encoded-value',direction==='encode' || inputType.value!=='text');
   $('type-label').textContent=direction==='encode'?'Input type':'Output type';
   $('input-label').textContent=direction==='encode'?'Input':'Base128 input';
   $('input-hint').textContent=direction==='encode'
@@ -144,6 +157,7 @@ input.addEventListener('input',update);
 customAlphabet.addEventListener('input',()=>{alphabetPreset.value='custom';updateAlphabet();});
 alphabetPreset.addEventListener('change',updateAlphabet);
 acceptAliases.addEventListener('change',update);
+$('file-operation').addEventListener('change',updateDecoderControls);
 [wrapPrefix,wrapChecksum].forEach(el=>el.addEventListener('change',update));
 inputType.addEventListener('change',setType);
 $('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';alphabetPreset.value='compact';updateAlphabet();});
@@ -173,8 +187,8 @@ $('file-run').addEventListener('click',async()=>{
   if(!file){status.textContent='Choose a file first.';return;}
   try {
     const alphabet=alphabetOption();
-    const options=decoderOptions(alphabet);
-    const wrapper=envelopeOptions(alphabet,'binary');
+    const options=decoderOptions(alphabet,fileAcceptAliases.checked);
+    const wrapper=envelopeOptions(alphabet,'binary',fileAcceptAliases.checked);
     const wrapped=hasWrapper();
     const op=$('file-operation').value;
     const bytes=new Uint8Array(await file.arrayBuffer());
@@ -219,9 +233,11 @@ function renderAlphabet(alphabet) {
 function updateAlphabet() {
   const custom=alphabetPreset.value==='custom';
   acceptAliases.disabled=custom;
+  fileAcceptAliases.disabled=custom;
   wrapPrefix.disabled=custom;
   if (custom) {
     acceptAliases.checked=false;
+    fileAcceptAliases.checked=false;
     wrapPrefix.checked=false;
     $('custom-settings').open=true;
   }
@@ -230,7 +246,7 @@ function updateAlphabet() {
   $('suffix-label').textContent=alphabetPreset.value==='math'?'6 math symbols':'6 compact symbols';
   $('alphabet-help').textContent=custom
     ? 'Custom alphabets use strict decoding; checksums require an alphabet without middle dot. Prefixes require a built-in alphabet. Applies to the converter, file tool, and alphabet explorer.'
-    : 'Applies to the converter, file tool, and alphabet explorer. Decoding is strict unless you enable both alphabets.';
+    : 'Alphabet selection applies to the converter, file tool, and alphabet explorer.';
   try {
     renderAlphabet(alphabetOption());
     $('alphabet-description').textContent='Each symbol maps to its zero-based index in the selected alphabet.';
