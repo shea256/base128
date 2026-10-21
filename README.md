@@ -147,51 +147,13 @@ The Compact alphabet is an immutable, ordered set of 128 distinct Unicode scalar
 
 The [alphabet specification](specs/alphabet.json) fixes every index and code point. The [spoken alphabet table](specs/spoken-alphabet.md) provides proposed telephone names and numeric fallbacks.
 
-### Math alternative and decoder aliases
+### Alternative alphabets
 
-The **Math** preset preserves indices 0–121 and replaces the final six symbols in Unicode code-point order:
+Compact is the default. Math is an optional built-in alphabet with the same first 122 symbols and a different six-symbol suffix. Both use the same encoding algorithms.
 
-| Value | Compact | Math | Math spoken name |
-| ---: | :---: | :---: | --- |
-| 122 | ¥ | ∂ | Partial |
-| 123 | § | ∇ | Nabla |
-| 124 | © | ∏ | Product |
-| 125 | ® | ∑ | Summation |
-| 126 | ¶ | √ | Square root |
-| 127 | ÷ | ∫ | Integral |
+Select an alphabet with `{alphabet: MATH_ALPHABET}` in JavaScript, `alphabet=MATH_ALPHABET` in Python, or `--alphabet math` in the CLI. Both libraries export `COMPACT_ALPHABET` and `MATH_ALPHABET`; `DEFAULT_ALPHABET` aliases Compact. Use the same alphabet when encoding and decoding.
 
-Math uses three UTF-8 bytes for its final six symbols; Compact uses two. Its fixed mapping is in the [preset specification](specs/alphabet-math.json); a [newline-free alphabet file](specs/alphabet-math.txt) is also available. `COMPACT_ALPHABET` and `MATH_ALPHABET` select the named layouts; `DEFAULT_ALPHABET` is an alias for Compact.
-
-**Decoding is strict to the selected alphabet by default.** Opt-in aliases accept either symbol in each row, even mixed in one payload. For example, integer strings `¥§`, `∂∇`, and `¥∇` all represent 15739 in alias mode.
-
-```js
-import {encode, decode, MATH_ALPHABET} from './packages/js/dist/index.js';
-
-const bytes = Uint8Array.of(255);
-const text = encode(bytes, {alphabet: MATH_ALPHABET}); // "∫#"
-const strict = decode(text, {alphabet: MATH_ALPHABET});
-const tolerant = decode(text, {acceptAliases: true});
-```
-
-```python
-from base128 import encode, decode, MATH_ALPHABET
-
-text = encode(bytes([255]), alphabet=MATH_ALPHABET)  # "∫#"
-strict = decode(text, alphabet=MATH_ALPHABET)
-tolerant = decode(text, accept_aliases=True)
-```
-
-```sh
-node packages/cli/bin/base128.mjs encode input.bin --alphabet math -o output.b128
-# Strict: accept only the selected alphabet
-node packages/cli/bin/base128.mjs decode output.b128 --alphabet math -o restored.bin
-# Tolerant: accept either built-in form, including mixed input
-node packages/cli/bin/base128.mjs decode output.b128 --accept-aliases -o restored.bin
-```
-
-Alias options work with binary, streaming, and integer decoders. They are restricted to the exact Compact and Math layouts, including those supplied as strings. Other custom layouts are rejected in alias mode. Length, trailing-padding, and integer leading-zero checks always apply.
-
-Alias mode allows multiple strings to represent the same value. For text comparison, hashing, or signing, choose one canonical alphabet and re-encode decoded values into that alphabet, or use strict decoding.
+See the [alphabet mappings](specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the symbol comparison and [spoken tables](specs/spoken-alphabet.md) for reading names.
 
 ### Custom alphabets
 
@@ -207,6 +169,21 @@ const restored = decode(text, {alphabet});
 ```
 
 Python accepts `alphabet=...` as text or a compiled `create_alphabet(...)` result. The CLI accepts `--alphabet-file FILE`, containing the exact UTF-8 alphabet with no terminating newline. The website accepts custom text under **Custom alphabet**.
+
+### Decoder aliases
+
+**Decoding is strict to the selected alphabet by default.** Opt-in alias decoding accepts corresponding Compact and Math symbols, including mixed spellings in one payload:
+
+| Interface | Enable aliases |
+| --- | --- |
+| JavaScript | `{acceptAliases: true}` |
+| Python | `accept_aliases=True` |
+| CLI | `--accept-aliases` |
+| Website | **Accept both alphabets when decoding** |
+
+Aliases work with binary, streaming, and integer decoders using either exact built-in layout. Unrelated custom alphabets are rejected in alias mode. Aliases do not detect alphabets, normalize text, or relax length, padding, and integer leading-zero checks. Envelope headers and checksums always use strict spelling.
+
+Alias mode allows multiple strings to represent the same value. For text comparison, hashing, or signing, choose one canonical alphabet and re-encode decoded values into it, or use strict decoding. See the [alias specification](specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the exact mapping and rules.
 
 ## Optional prefixes and checksums
 

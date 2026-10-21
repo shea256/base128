@@ -19,7 +19,7 @@ preset. Pass `alphabet=MATH_ALPHABET` to encode or decode. Decoders
 (`decode`, `decode_integer`, `BinaryDecoder`) additionally accept
 `accept_aliases=True` to accept Compact and Math symbols, even mixed.
 Strict decoding remains the default; alias mode rejects unrelated custom layouts.
-See the root README for the six alias pairs and examples.
+See the [alphabet specification](../../specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the six alias pairs and rules.
 
 Optional `wrap(payload, prefix=True, checksum=True, mode='binary')` and
 `unwrap(text, prefix=True, checksum=True)` support middle-dot envelopes.
