@@ -123,7 +123,7 @@ npm run site
 # Open http://localhost:8080/
 ```
 
-The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Compact, Math, or Custom. Decoding is strict unless **Accept both alphabets when decoding** is checked; custom alphabets disable that option. Independent **Add / require prefix** and **Add / require checksum** controls apply to encoding and decoding. The selected mode and alphabet must match a supplied prefix.
+The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Compact, Math, or Custom. Decoding is strict unless **Allow alternate payload symbols** is checked in Decode mode; the file tool has its own decoding option. Custom alphabets use strict decoding. Independent **Add / require prefix** and **Add / require checksum** controls apply to encoding and decoding. The selected mode and alphabet must match a supplied prefix.
 
 The site also compares UTF-8 size and character counts. Files are processed locally in the browser and loaded into memory; use the CLI without wrapper options to stream large files.
 
@@ -179,7 +179,7 @@ Python accepts `alphabet=...` as text or a compiled `create_alphabet(...)` resul
 | JavaScript | `{acceptAliases: true}` |
 | Python | `accept_aliases=True` |
 | CLI | `--accept-aliases` |
-| Website | **Accept both alphabets when decoding** |
+| Website | **Allow alternate payload symbols** (Decode mode) |
 
 Aliases work with binary, streaming, and integer decoders using either exact built-in layout. Unrelated custom alphabets are rejected in alias mode. Aliases do not detect alphabets, normalize text, or relax length, padding, and integer leading-zero checks. Envelope headers and checksums always use strict spelling.
 
