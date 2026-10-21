@@ -1,5 +1,5 @@
 import {
-  type Alphabet, type DecodeOptions, DEFAULT_ALPHABET, TWO_BYTE_ALPHABET, resolveAlphabet,
+  Alphabet, type DecodeOptions, COMPACT_ALPHABET, MATH_ALPHABET, resolveAlphabet,
 } from './alphabet.js';
 import {encode, decode} from './binary.js';
 import {decodeInteger} from './integer.js';
@@ -16,6 +16,28 @@ export interface Unwrapped {
   alphabet: Alphabet;
 }
 const SEPARATOR = '·';
+// Fixed wire alphabet: never infer it from the payload or DEFAULT_ALPHABET.
+const HEADER_ALPHABET = new Alphabet(
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' +
+  Array.from({length:94}, (_, i) => String.fromCharCode(i + 33)).filter(c => !/[0-9A-Za-z]/.test(c)).join('') +
+  'ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷'
+);
+
+function parseHeader(text: string): {mode: EnvelopeMode; alphabetId: number} {
+  const symbols = Array.from(text);
+  if (!symbols.length) throw new RangeError('Missing envelope version');
+  const version = HEADER_ALPHABET.indexOf(symbols[0]!);
+  if (version === 127) throw new RangeError('Reserved envelope version escape');
+  if (version !== 0) throw new RangeError('Unsupported envelope version');
+  if (symbols.length < 2) throw new RangeError('Missing envelope configuration');
+  const config = HEADER_ALPHABET.indexOf(symbols[1]!);
+  const mode = config & 7;
+  let alphabetId = config >>> 3;
+  if (symbols.length !== (alphabetId === 15 ? 3 : 2)) throw new RangeError('Invalid envelope header length');
+  if (alphabetId === 15) alphabetId = 15 + HEADER_ALPHABET.indexOf(symbols[2]!);
+  if (mode > 1) throw new RangeError('Unassigned envelope mode');
+  return {mode: mode === 0 ? 'binary' : 'integer', alphabetId};
+}
 
 /** CRC-32/ISO-HDLC over UTF-8 text, returned as four big-endian bytes. */
 function checksumBytes(text: string): Uint8Array {
@@ -44,9 +66,9 @@ function validate(payload: string, mode: EnvelopeMode, alphabet: Alphabet, accep
   if (mode === 'binary') decode(payload, {alphabet, acceptAliases});
   else decodeInteger(payload, {alphabet, acceptAliases});
 }
-function alphabetId(alphabet: Alphabet): string {
-  if (alphabet.text === DEFAULT_ALPHABET.text) return '0';
-  if (alphabet.text === TWO_BYTE_ALPHABET.text) return '1';
+function alphabetId(alphabet: Alphabet): number {
+  if (alphabet.text === COMPACT_ALPHABET.text) return 0;
+  if (alphabet.text === MATH_ALPHABET.text) return 1;
   throw new RangeError('Prefixes require a built-in alphabet');
 }
 
@@ -58,7 +80,7 @@ export function wrap(payload: string, options: EnvelopeOptions = {}): string {
   const mode = options.mode ?? 'binary';
   checkAlphabet(alphabet, options);
   validate(payload, mode, alphabet, options.acceptAliases);
-  const body = options.prefix ? `b128·1${mode === 'binary' ? 'b' : 'i'}${alphabetId(alphabet)}·${payload}` : payload;
+  const body = options.prefix ? `b128·0${HEADER_ALPHABET.symbolAt((alphabetId(alphabet) << 3) | (mode === 'binary' ? 0 : 1))}·${payload}` : payload;
   return options.checksum ? `${body}·${encode(checksumBytes(body), {alphabet})}` : body;
 }
 
@@ -78,12 +100,10 @@ export function unwrap(text: string, options: EnvelopeOptions = {}): Unwrapped {
   if (fields.length !== expected) throw new RangeError('Invalid envelope field count');
   if (options.prefix) {
     if (fields[0] !== 'b128') throw new RangeError('Invalid envelope identifier');
-    const header = /^([1-9][0-9]*)([bi])(0|[1-9][0-9]*)$/.exec(fields[1]!);
-    if (!header) throw new RangeError('Invalid envelope header');
-    if (header[1] !== '1') throw new RangeError('Unsupported envelope version');
-    if (header[3] !== '0' && header[3] !== '1') throw new RangeError('Unknown envelope alphabet');
-    const declared = header[3] === '0' ? DEFAULT_ALPHABET : TWO_BYTE_ALPHABET;
-    const declaredMode = header[2] === 'b' ? 'binary' : 'integer';
+    const header = parseHeader(fields[1]!);
+    if (header.alphabetId > 1) throw new RangeError(`Unassigned envelope alphabet ${header.alphabetId}`);
+    const declared = header.alphabetId === 0 ? COMPACT_ALPHABET : MATH_ALPHABET;
+    const declaredMode = header.mode;
     if (options.alphabet !== undefined && alphabet.text !== declared.text) throw new RangeError('Envelope alphabet does not match selected alphabet');
     if (options.mode !== undefined && options.mode !== declaredMode) throw new RangeError('Envelope mode does not match selected mode');
     alphabet = declared;

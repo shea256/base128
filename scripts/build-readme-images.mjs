@@ -16,7 +16,7 @@ const svg=(height,title,description,body)=>`<svg xmlns="http://www.w3.org/2000/s
 <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif">${body}</g></svg>\n`;
 const groups=[
   [10,'Digits','#9ee8b0'],[36,'Uppercase Latin','#82d6c9'],[62,'Lowercase Latin','#8cbde3'],
-  [94,'Punctuation','#a9b7c6'],[103,'Uppercase Greek','#c6b3ed'],[122,'Lowercase Greek','#e5b59c'],[128,'Math','#edcf82'],
+  [94,'Punctuation','#a9b7c6'],[103,'Uppercase Greek','#c6b3ed'],[122,'Lowercase Greek','#e5b59c'],[128,'Compact','#edcf82'],
 ];
 let chart=text(40,52,'Base128 Alphabet',28)+'<g transform="translate(0,-50)">';
 for(const [i,symbol] of alphabet.symbols.entries()) {
@@ -30,7 +30,7 @@ for(const [i,[,label,color]] of groups.entries()) {
   const x=40+(i%4)*267,y=740+Math.floor(i/4)*30;
   chart+=`<circle cx="${x+5}" cy="${y-5}" r="4" fill="${color}"/>`+text(x+18,y,label,15,'#bccbd5');
 }
-await writeFile(resolve(dest,'base128-alphabet.svg'),svg(750,'Base128 v0.1 alphabet chart','All 128 symbols in canonical order, with indices and seven color-coded character groups. Mathematical symbols at indices 122 through 127 are ∂ ∇ ∏ ∑ √ ∫.',chart+'</g>'));
+await writeFile(resolve(dest,'base128-alphabet.svg'),svg(750,'Base128 v0.1 alphabet chart','All 128 symbols in canonical order, with indices and seven color-coded character groups. Compact symbols at indices 122 through 127 are ¥ § © ® ¶ ÷.',chart+'</g>'));
 
 const bytes=new TextEncoder().encode('Hi');
 const bits=Array.from(bytes,b=>b.toString(2).padStart(8,'0')).join('');

@@ -5,7 +5,7 @@ import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 alphabets = [json.loads((ROOT / 'specs' / name).read_text())['alphabet']
-             for name in ('alphabet.json', 'alphabet-two-byte.json')]
+             for name in ('alphabet.json', 'alphabet-math.json')]
 
 
 def binary(data, alphabet):
@@ -30,7 +30,7 @@ for identifier, alphabet in enumerate(alphabets):
     for mode, value in cases:
         payload = binary(bytes.fromhex(value), alphabet) if mode == 'binary' else integer(int(value), alphabet)
         for prefix, checksum in [(False, False), (True, False), (False, True), (True, True)]:
-            body = f'b128·1{"b" if mode == "binary" else "i"}{identifier}·{payload}' if prefix else payload
+            body = f'b128·0{alphabets[0][(identifier << 3) | (0 if mode == "binary" else 1)]}·{payload}' if prefix else payload
             crc = zlib.crc32(body.encode('utf-8')).to_bytes(4, 'big')
             wrapped = body + '·' + binary(crc, alphabet) if checksum else body
             vectors.append(dict(alphabet=identifier, mode=mode, value=value, payload=payload,

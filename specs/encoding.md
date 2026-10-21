@@ -7,7 +7,7 @@ This specification describes the bare codec.
 
 ## 1. Alphabet
 
-The default alphabet consists of exactly 128 Unicode scalar values, in this order:
+The default Compact alphabet consists of exactly 128 Unicode scalar values, in this order:
 
 1. ASCII digits `0–9` (indices 0–9).
 2. ASCII uppercase letters `A–Z` (indices 10–35).
@@ -15,33 +15,33 @@ The default alphabet consists of exactly 128 Unicode scalar values, in this orde
 4. The remaining 32 printable, non-space ASCII characters, in ascending code-point order (indices 62–93).
 5. `ΓΔΘΛΞΠΦΨΩ` (9 symbols, indices 94–102).
 6. `αβγδεζηθικλμξπστφψω` (19 symbols, indices 103–121).
-7. `∂∇∏∑√∫` (6 symbols in ascending Unicode code-point order, indices 122–127).
+7. `¥§©®¶÷` (6 symbols in ascending Unicode code-point order, indices 122–127).
 
 The full ordered alphabet and the index-to-code-point mapping are in [`alphabet.json`](alphabet.json). That file is authoritative for interoperability. The alphabet has 128 unique code points; Unicode scalar values are compared exactly (case-sensitive, no Unicode normalization).
 
 Custom alphabets are allowed as caller-supplied configuration. A custom alphabet must contain exactly 128 **distinct Unicode scalar values**. Each code point is one digit, even if Unicode grapheme-cluster segmentation might combine it with an adjacent code point. Unpaired UTF-16 surrogates are invalid. Encoders and decoders must agree on the exact alphabet and order. The payload carries no alphabet identifier.
 
-### 1.1 Optional two-byte preset and alias decoding
+### 1.1 Optional math preset and alias decoding
 
-The optional [`alphabet-two-byte.json`](alphabet-two-byte.json)
+The optional [`alphabet-math.json`](alphabet-math.json)
 preset retains default indices 0–121 and assigns these final six values:
 
-| Index | Default | Two-byte |
+| Index | Compact | Math |
 | ---: | :---: | :---: |
-| 122 | ∂ | § |
-| 123 | ∇ | © |
-| 124 | ∏ | ® |
-| 125 | ∑ | ° |
-| 126 | √ | ¶ |
-| 127 | ∫ | ÷ |
+| 122 | ¥ | ∂ |
+| 123 | § | ∇ |
+| 124 | © | ∏ |
+| 125 | ® | ∑ |
+| 126 | ¶ | √ |
+| 127 | ÷ | ∫ |
 
-The preset has exactly 128 unique scalar values, each encoded in at most two
-UTF-8 bytes. It uses the same binary and integer algorithms. The default
-alphabet and all strict decoding rules remain unchanged.
+Both alphabets have 128 unique scalar values. Compact uses at most two UTF-8
+bytes per symbol; Math uses three bytes for its final six symbols. They use the
+same binary and integer algorithms and strict decoding rules.
 
 An explicitly enabled alias decoder may accept both characters in each row,
 including mixed spellings in a single payload. All other characters retain their
-v0.1 indices. Alias mode is supported only with the exact default or two-byte
+v0.1 indices. Alias mode is supported only with the exact Compact or Math
 layout, whether supplied as a compiled alphabet or text; requesting it with any
 other layout is an error. It does not detect alphabets or normalize Unicode.
 
@@ -52,10 +52,10 @@ alias-containing input need not round-trip to the identical text. Applications
 comparing, hashing, or signing encoded text should first establish a canonical
 spelling, or use strict decoding. The payload carries no preset or alias-mode flag.
 
-[`test-vectors-two-byte.json`](test-vectors-two-byte.json) supplies independent
+[`test-vectors-math.json`](test-vectors-math.json) supplies independent
 binary and integer examples, including mixed spellings. Spoken names for the six
-alternative symbols are Section, Copyright, Registered, Degree, Paragraph, and
-Division; other names follow [`spoken-alphabet.md`](spoken-alphabet.md).
+Math symbols are Partial, Nabla, Product, Summation, Square root, and
+Integral; other names follow [`spoken-alphabet.md`](spoken-alphabet.md).
 
 ## 2. Binary-to-text encoding
 
@@ -105,6 +105,6 @@ There is **no separate text encoding mode** in v0.1. Convert a string to UTF-8 b
 
 - Invalid alphabets, unexpected input types, invalid symbols, impossible binary lengths, nonzero binary final padding, negative integer inputs, and nonminimal integer numerals are errors.
 - No implicit whitespace trimming or character-case conversion. Unicode normalization, if desired, must happen at the application layer before encoding.
-- There is no checksum, cryptographic authentication, or confidentiality. Consider a separate application-layer checksum and/or digital signature if typing errors or tampering matter.
+- Bare encoding has no checksum, cryptographic authentication, or confidentiality. Optional envelopes add CRC-32 error detection, not authentication.
 - Cross-language interoperability uses [`test-vectors.json`](test-vectors.json), including a reversed custom alphabet.
 - In UTF-8, Greek and math symbols require multiple bytes. Fewer *displayed characters* than Base64 does not imply fewer bytes of storage/transmission.

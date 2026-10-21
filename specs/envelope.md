@@ -1,6 +1,6 @@
-# Base128 optional envelope — version 1
+# Base128 optional envelope — version 0
 
-Envelope version 1 is an optional container in the initial Base128 v0.1 release.
+Envelope version 0 is an optional container in the initial Base128 v0.1 release.
 It does not change the bare binary or integer encodings in [encoding.md](encoding.md).
 The envelope version is independent of the package version.
 
@@ -24,22 +24,48 @@ and no normalization, alternate separators, or case folding is performed.
 
 ## Prefix
 
-The identifier is exactly `b128`. The header is a positive decimal envelope
-version, one mode letter, and a nonnegative decimal alphabet ID. Numbers have no
-leading zeros (except the alphabet ID `0`). Its grammar is
-`([1-9][0-9]*)([bi])(0|[1-9][0-9]*)` with ASCII digits and letters.
+The identifier is exactly `b128`. The header is a sequence of Base128 symbols,
+not decimal text. It uses a **fixed header alphabet** equal to the Compact mapping
+in [alphabet.json](alphabet.json), independently of the selected payload alphabet.
+Header decoding is always strict: payload alias options do not apply to it.
+This mapping is fixed across versions, even if the library default ever changes.
 
-Currently supported:
+The first symbol is the format version. Value `0` selects the first format,
+introduced in package release 0.1.0; package releases and format versions are
+independent. Values 1–126 are unassigned. Value 127 (`÷`) is reserved for a future
+version-extension mechanism; it is rejected, with no extension syntax defined yet.
 
-- Version: `1`.
-- Mode: `b` for binary bytes, `i` for nonnegative integers.
-- Alphabet ID: `0` for Default, `1` for Two-byte.
+Version 0 defines the second symbol as `aaaa mmm`: four high bits for alphabet,
+three low bits for mode. Its value is `(alphabet << 3) | mode`.
 
-Thus `1b0` means version 1, binary, Default. Unknown versions, modes, and IDs are
-errors; multi-digit fields are syntactically possible but are not assigned here.
+- Mode 0: binary bytes; mode 1: nonnegative integer. Modes 2–7 are unassigned.
+- Alphabet 0: Compact; alphabet 1: Math. All other IDs are unassigned.
+- Alphabet field values 0–14 encode the ID directly and require exactly two header symbols.
+- Alphabet field 15 is an escape and requires exactly one more header symbol.
+  The third symbol's value plus 15 is the alphabet ID (15–142).
+  This is the only representation of those IDs; no recursive escape exists.
+
+The extended ID syntax is defined now, but no extended alphabet IDs are assigned.
+A decoder parses the header and rejects unassigned versions, modes, or alphabet IDs.
+It rejects missing or extra header symbols, invalid characters, and alternate
+spellings. Character counts are Unicode code points, not UTF-8 byte counts.
+Custom alphabets are not automatically assigned IDs.
+
+| Mode | Alphabet | Configuration bits | Header | Prefix |
+| --- | --- | --- | --- | --- |
+| Binary | Compact | `0000 000` | `00` | `b128·00·` |
+| Integer | Compact | `0000 001` | `01` | `b128·01·` |
+| Binary | Math | `0001 000` | `08` | `b128·08·` |
+| Integer | Math | `0001 001` | `09` | `b128·09·` |
+
+For syntax examples, `0κ` denotes binary/alphabet 14; `0ψ0` denotes
+binary/alphabet 15; `0ψ÷` denotes binary/alphabet 142. These are rejected today
+because their alphabet IDs are unassigned.
+
 The header's alphabet and mode govern the payload. Explicit caller constraints
 must match the header; omitted constraints are inferred. Without a prefix, mode
-and alphabet come from caller configuration (defaulting to binary and Default).
+and alphabet come from caller configuration (defaulting to binary and Compact).
+Future versions define their own configuration layout and length rules.
 
 Only the exact two built-in layouts can be prefixed, including when supplied as
 text. A checksum-only envelope may use an arbitrary configured alphabet, provided
@@ -76,11 +102,10 @@ HASH160 of UTF-8 `hello` is the 20 bytes
 `b6a9c8c230722b7c748331a8b450f05566dc7d0f`. With both options enabled:
 
 ```text
-b128·1b0·|gvCH$Φh!TGpDYβ=ψLiηΠπU·~]:w_
+b128·00·|gvCH$Φh!TGpDYβ=ψLiηΠπU·v=rZκ
 ```
 
-The CRC is `bb5a6bab`, encoded as `~]:w_`. A colon inside the checksum is ordinary
-payload-alphabet data, not a separator. See [envelope-vectors.json](envelope-vectors.json)
+The checksum is `v=rZκ`. See [envelope-vectors.json](envelope-vectors.json)
 for independently generated examples across both modes, both alphabets, and all
 four option combinations.
 

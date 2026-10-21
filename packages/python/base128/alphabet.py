@@ -2,16 +2,16 @@
 
 from types import MappingProxyType
 
-DEFAULT_ALPHABET_TEXT = (
+COMPACT_ALPHABET_TEXT = (
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     + "".join(chr(i) for i in range(33, 127) if not chr(i).isalnum())
     + "ΓΔΘΛΞΠΦΨΩ"
     + "αβγδεζηθικλμξπστφψω"
-    + "∂∇∏∑√∫"
+    + "¥§©®¶÷"
 )
 
 
-TWO_BYTE_ALPHABET_TEXT = DEFAULT_ALPHABET_TEXT[:122] + "§©®°¶÷"
+MATH_ALPHABET_TEXT = COMPACT_ALPHABET_TEXT[:122] + "∂∇∏∑√∫"
 
 
 class Alphabet:
@@ -58,8 +58,10 @@ class Alphabet:
             raise ValueError(f"Invalid Base128 character {symbol!r}") from exc
 
 
-DEFAULT_ALPHABET = Alphabet(DEFAULT_ALPHABET_TEXT)
-TWO_BYTE_ALPHABET = Alphabet(TWO_BYTE_ALPHABET_TEXT)
+DEFAULT_ALPHABET_TEXT = COMPACT_ALPHABET_TEXT
+COMPACT_ALPHABET = Alphabet(COMPACT_ALPHABET_TEXT)
+DEFAULT_ALPHABET = COMPACT_ALPHABET
+MATH_ALPHABET = Alphabet(MATH_ALPHABET_TEXT)
 
 
 def create_alphabet(text: str) -> Alphabet:
@@ -78,9 +80,9 @@ def resolve_decoder_index(alphabet: Alphabet, accept_aliases: bool = False):
     """Accept both built-in layouts only when explicitly requested."""
     if not accept_aliases:
         return alphabet.index_of
-    if alphabet.text not in (DEFAULT_ALPHABET_TEXT, TWO_BYTE_ALPHABET_TEXT):
-        raise ValueError("Alias decoding requires the default or two-byte alphabet")
-    aliases = {c: i for text in (DEFAULT_ALPHABET_TEXT, TWO_BYTE_ALPHABET_TEXT)
+    if alphabet.text not in (COMPACT_ALPHABET_TEXT, MATH_ALPHABET_TEXT):
+        raise ValueError("Alias decoding requires the compact or math alphabet")
+    aliases = {c: i for text in (COMPACT_ALPHABET_TEXT, MATH_ALPHABET_TEXT)
                for i, c in enumerate(text)}
 
     def index_of(symbol: str) -> int:

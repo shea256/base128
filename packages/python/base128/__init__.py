@@ -1,12 +1,12 @@
 """Dependency-free Unicode Base128 binary and integer encoders."""
 
-from .alphabet import Alphabet, DEFAULT_ALPHABET, DEFAULT_ALPHABET_TEXT, TWO_BYTE_ALPHABET, TWO_BYTE_ALPHABET_TEXT, create_alphabet
+from .alphabet import Alphabet, DEFAULT_ALPHABET, DEFAULT_ALPHABET_TEXT, COMPACT_ALPHABET, COMPACT_ALPHABET_TEXT, MATH_ALPHABET, MATH_ALPHABET_TEXT, create_alphabet
 from .binary import BinaryDecoder, BinaryEncoder, decode, encode
 from .integer import decode_integer, encode_integer
 
 __all__ = [
     "Alphabet", "DEFAULT_ALPHABET", "DEFAULT_ALPHABET_TEXT", "create_alphabet",
-    "TWO_BYTE_ALPHABET", "TWO_BYTE_ALPHABET_TEXT",
+    "COMPACT_ALPHABET", "COMPACT_ALPHABET_TEXT", "MATH_ALPHABET", "MATH_ALPHABET_TEXT",
     "BinaryEncoder", "BinaryDecoder", "encode", "decode",
     "encode_integer", "decode_integer",
 ]

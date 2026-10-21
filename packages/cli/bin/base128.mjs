@@ -8,7 +8,7 @@ import {finished} from 'node:stream/promises';
 import {TextDecoder} from 'node:util';
 import {resolve, dirname, basename, join} from 'node:path';
 import {
-  DEFAULT_ALPHABET, TWO_BYTE_ALPHABET,
+  DEFAULT_ALPHABET, MATH_ALPHABET,
   BinaryEncoder, BinaryDecoder, createAlphabet, encode, decode, encodeInteger, decodeInteger, wrap, unwrap,
 } from '../../js/dist/index.js';
 
@@ -27,7 +27,7 @@ Binary output uses raw bytes; encoded output is UTF-8 without a trailing newline
 --checksum adds/requires a middle dot and a five-symbol CRC-32 suffix.
 Combine --prefix and --checksum for both. Wrapped file operations buffer input.
 A prefix supplies its alphabet unless --alphabet or --alphabet-file explicitly constrains it.
---alphabet default|two-byte selects a built-in preset (default: default).
+--alphabet compact|math selects a built-in preset (default: compact).
 --accept-aliases accepts both built-in symbol forms on decode, including mixed input.
 --alphabet and --alphabet-file cannot be combined.
 --alphabet-file contains exactly 128 Unicode code points (no terminating newline).
@@ -53,7 +53,7 @@ function parseOptions(args) {
       if (alphabetFile || !args[i+1]) throw new Error('Expected one path after --alphabet-file');
       alphabetFile=args[++i];
     } else if (arg==='--alphabet') {
-      if (preset || !['default','two-byte'].includes(args[i+1])) throw new Error('Expected default or two-byte after --alphabet');
+      if (preset || !['compact','math'].includes(args[i+1])) throw new Error('Expected compact or math after --alphabet');
       preset=args[++i];
     } else if (arg==='--prefix') {
       prefix=true;
@@ -155,7 +155,7 @@ async function main(argv) {
   if (!options) return;
   const {acceptAliases}=options;
   if (acceptAliases && (subcommand || command)!=='decode') throw new Error('--accept-aliases is only valid for decode');
-  let alphabet=options.preset==='two-byte' ? TWO_BYTE_ALPHABET : DEFAULT_ALPHABET;
+  let alphabet=options.preset==='math' ? MATH_ALPHABET : DEFAULT_ALPHABET;
   if (options.alphabetFile) {
     alphabet=createAlphabet(await readFile(options.alphabetFile,'utf8'));
   }
