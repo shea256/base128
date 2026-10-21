@@ -1,6 +1,6 @@
 # Base128
 
-![Base128 — Compact alphabet symbols](docs/images/base128-cover-compact.png)
+![Base128 — 0 A a ! Γ α ¥, one symbol from each Compact alphabet block](docs/images/base128-cover-compact.png)
 
 A small, dependency-free library for encoding bytes and nonnegative integers with a configurable **128-character Unicode alphabet**. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
 
