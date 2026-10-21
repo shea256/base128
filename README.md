@@ -1,6 +1,6 @@
 # Base128
 
-![Base128](docs/images/base128-cover-clean.png)
+![Base128 — Compact alphabet symbols](docs/images/base128-cover-compact.png)
 
 A small, dependency-free library for encoding bytes and nonnegative integers with a configurable **128-character Unicode alphabet**. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
 
@@ -143,13 +143,13 @@ The Compact alphabet is an immutable, ordered set of 128 distinct Unicode scalar
 | 103–121 | Lowercase Greek `αβγδεζηθικλμξπστφψω` |
 | 122–127 | Compact symbols `¥§©®¶÷` |
 
-![The complete Base128 v0.1 alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and Compact symbols.](docs/images/base128-alphabet.svg)
+![The complete Base128 v0.1 Compact alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and Compact symbols.](docs/images/base128-alphabet.svg)
 
 The [alphabet specification](specs/alphabet.json) fixes every index and code point. The [spoken alphabet table](specs/spoken-alphabet.md) provides proposed telephone names and numeric fallbacks.
 
 ### Math alternative and decoder aliases
 
-The **math** preset preserves indices 0–121 and replaces the final six symbols in Unicode code-point order:
+The **Math** preset preserves indices 0–121 and replaces the final six symbols in Unicode code-point order:
 
 | Value | Compact | Math | Math spoken name |
 | ---: | :---: | :---: | --- |
@@ -227,8 +227,9 @@ are `00` (Compact binary), `01` (Compact integer), `08` (Math binary), and `09`
 only IDs 0 and 1 are currently assigned. Version 127 is reserved and rejected.
 Middle dot (`·`, U+00B7) appears in
 neither built-in alphabet. The checksum is four CRC-32 bytes encoded into exactly
-five Base128 symbols using the payload alphabet. It covers the exact UTF-8 header
-and payload text, excluding the final separator and checksum.
+five Base128 symbols using the payload alphabet. It covers the exact UTF-8 text before the checksum separator, including the
+`b128` identifier, header, and intervening separators when a prefix is present.
+Without a prefix, it covers only the payload.
 
 ```js
 import {encode, decode, wrap, unwrap} from './packages/js/dist/index.js';

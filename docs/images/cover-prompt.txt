@@ -6,3 +6,6 @@ Generated with the built-in image_gen tool.
 
 Final edit using the built-in image_gen tool:
 Edit this README cover image. Remove the entire small tagline "128 symbols. 7 bits each." underneath Base128 and fill that area seamlessly with the existing dark background. Preserve the large Base128 project name, the six character tiles, their glyphs, composition, lighting, dimensions, and colors. Do not add any replacement tagline, caption, headline, or additional text.
+
+Compact update (built-in image_gen edit; base128-cover-compact.png):
+Edit this existing README cover banner with only two glyph replacements: replace the square-root glyph on the bottom middle tile with the section sign § (U+00A7), and replace the integral glyph on the bottom right tile with the division sign ÷ (U+00F7). Keep the bottom left β, top row 0 A a, large Base128 title, 3:1 wide composition, black stone tiles, mint engraving, dark background, lighting, and all layout unchanged. No tagline or added text. Render the section sign and division sign precisely and clearly. This updates the illustration to the project's Compact default alphabet.
