@@ -1,8 +1,8 @@
 {
-  "name": "Base128 two-byte alphabet v0.1",
+  "name": "Base128 Math alphabet v0.1",
   "version": "0.1",
   "base_alphabet": "alphabet.json",
-  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω§©®°¶÷",
+  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω∂∇∏∑√∫",
   "symbols": [
     {
       "index": 0,
@@ -616,33 +616,33 @@
     },
     {
       "index": 122,
-      "character": "§",
-      "unicode": "U+00A7"
+      "character": "∂",
+      "unicode": "U+2202"
     },
     {
       "index": 123,
-      "character": "©",
-      "unicode": "U+00A9"
+      "character": "∇",
+      "unicode": "U+2207"
     },
     {
       "index": 124,
-      "character": "®",
-      "unicode": "U+00AE"
+      "character": "∏",
+      "unicode": "U+220F"
     },
     {
       "index": 125,
-      "character": "°",
-      "unicode": "U+00B0"
+      "character": "∑",
+      "unicode": "U+2211"
     },
     {
       "index": 126,
-      "character": "¶",
-      "unicode": "U+00B6"
+      "character": "√",
+      "unicode": "U+221A"
     },
     {
       "index": 127,
-      "character": "÷",
-      "unicode": "U+00F7"
+      "character": "∫",
+      "unicode": "U+222B"
     }
   ]
 }

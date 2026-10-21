@@ -22,22 +22,22 @@ test('website presets, strict and mixed decode, custom reset, explorer, and file
   for(const id of ['dir-encode','dir-decode']) get(id).id=id;
   get('input-type').value='integer';
   get('payload-input').value='122';
-  get('alphabet-preset').value='default';
+  get('alphabet-preset').value='compact';
   globalThis.document={getElementById:get,createElement:()=>new Element(),body:new Element()};
   const {DEFAULT_ALPHABET_TEXT}=await import('../vendor/index.js');
   await import('../app.js');
-  assert.equal(get('payload-output').value,'∂');
+  assert.equal(get('payload-output').value,'¥');
   assert.equal(get('alphabet-grid').children.length,128);
   const glyph=i=>get('alphabet-grid').children[i].children[0].textContent;
-  assert.equal(glyph(122),'∂');
-  get('alphabet-preset').value='two-byte';
+  assert.equal(glyph(122),'¥');
+  get('alphabet-preset').value='math';
   await get('alphabet-preset').fire('change');
-  assert.equal(get('payload-output').value,'§');
-  assert.equal(glyph(122),'§');
-  assert.equal(glyph(127),'÷');
+  assert.equal(get('payload-output').value,'∂');
+  assert.equal(glyph(122),'∂');
+  assert.equal(glyph(127),'∫');
   await get('dir-decode').fire('click');
   assert.equal(get('payload-output').value,'122');
-  get('payload-input').value='∂©';
+  get('payload-input').value='¥∇';
   await get('payload-input').fire('input');
   assert.equal(get('payload-output').value,'');
   assert.match(get('feedback').textContent,/Invalid/);
@@ -47,10 +47,10 @@ test('website presets, strict and mixed decode, custom reset, explorer, and file
   // Binary decoder must use the same alias option, and preserve padding checks.
   get('input-type').value='hex';
   await get('input-type').fire('change');
-  get('payload-input').value='∫÷'.repeat(4);
+  get('payload-input').value='÷∫'.repeat(4);
   await get('payload-input').fire('input');
   assert.equal(get('payload-output').value,'ff'.repeat(7));
-  get('payload-input').value='0÷';
+  get('payload-input').value='0∫';
   await get('payload-input').fire('input');
   assert.match(get('feedback').textContent,/padding/);
   // Custom alphabets disable aliases and render their actual indices.
@@ -59,19 +59,19 @@ test('website presets, strict and mixed decode, custom reset, explorer, and file
   assert.equal(get('alphabet-preset').value,'custom');
   assert.equal(get('accept-aliases').disabled,true);
   assert.equal(get('accept-aliases').checked,false);
-  assert.equal(glyph(0),'∫');
+  assert.equal(glyph(0),'÷');
   get('custom-alphabet').value='bad';
   await get('custom-alphabet').fire('input');
   assert.equal(get('alphabet-grid').children.length,0);
   assert.equal(get('download-output').disabled,true);
   await get('reset-alphabet').fire('click');
-  assert.equal(get('alphabet-preset').value,'default');
+  assert.equal(get('alphabet-preset').value,'compact');
   assert.equal(get('accept-aliases').disabled,false);
-  assert.equal(glyph(122),'∂');
+  assert.equal(glyph(122),'¥');
   // File decoding follows the shared preset/alias controls.
-  get('alphabet-preset').value='two-byte';
+  get('alphabet-preset').value='math';
   await get('alphabet-preset').fire('change');
-  const bytes=new TextEncoder().encode('∫÷'.repeat(4));
+  const bytes=new TextEncoder().encode('÷∫'.repeat(4));
   get('file-input').files=[{name:'mixed.b128',arrayBuffer:async()=>bytes.buffer}];
   get('file-operation').value='decode';
   await get('file-run').fire('click');
@@ -93,7 +93,7 @@ test('website presets, strict and mixed decode, custom reset, explorer, and file
     get('wrap-checksum').checked=true;
     await get('wrap-checksum').fire('change');
     const envelope=get('payload-output').value;
-    assert.ok(envelope.startsWith('b128·1i1·÷·'));
+    assert.ok(envelope.startsWith('b128·09·∫·'));
     await get('dir-decode').fire('click');
     assert.equal(get('payload-output').value,'127');
     get('payload-input').value=envelope.slice(0,-1)+(envelope.endsWith('0')?'1':'0');

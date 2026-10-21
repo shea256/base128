@@ -1,16 +1,31 @@
-# Base128 v0.1 spoken alphabet
+# Base128 v0.1 spoken alphabets
 
-This table covers every character in the default [Base128 v0.1 alphabet](alphabet.json), in its canonical order. These are proposed English telephone names for this project, not a change to the encoding or a tested speech standard. Custom alphabets need their own agreed table.
+Compact is the default alphabet; Math shares indices 0–121 and has six different
+symbols at indices 122–127. These are proposed English reading names, not a tested
+speech standard. Custom alphabets need their own agreed table.
 
-## How to read a payload over the phone
+## How to read a payload aloud
 
-- Both people should have this table and agree to use the default alphabet. Say the full phrase in the **Spoken name** column, including “Latin” or “Greek” and “capital” or “lowercase.” Latin letters use phonetic spelling words: for example, `B` is “Latin capital Bravo.”
-- Pause between characters. Read short groups, then have the listener read each group back. Say “repeat” before repeating a character so the listener does not append a duplicate.
-- For an unfamiliar or easily confused name, use the **Numeric fallback** column. Say “symbol” followed by all three index digits separately, including leading zeros. For example, “symbol zero nine four” means `Γ`. The index is zero-based and is not a Unicode code point or the literal digits to enter.
-- Enter only the corresponding characters. Pauses, spoken names, group separators, and index digits are not part of the payload. Preserve case and use the exact characters from the table rather than typographic substitutions.
-- Confirm the total character count and read back the complete payload. Base128 has no checksum; successful decoding alone does not establish that a transcription is correct.
+- Agree on Compact or Math. Use the main table for Compact; substitute the six
+  Math rows below when reading Math. Say “capital” before every uppercase letter;
+  an unqualified letter name means lowercase. Read digits individually.
+- Latin letters use their ordinary English names (for example, “capital bee” for
+  `B`, “bee” for `b`). If audio is unclear, use phonetic spelling words such as
+  “Bravo.” In that convention include “Latin” or “Greek”: phonetic Alfa and Delta
+  otherwise overlap with Greek Alpha and Delta.
+- Pause between characters and read short groups back. Say “repeat” before
+  repeating a character so the listener does not append a duplicate.
+- For uncertainty, say “symbol” followed by all three index digits separately,
+  including leading zeros. For example, “symbol zero nine four” means `Γ`.
+  Numeric fallbacks refer to the agreed alphabet; they are not literal input.
+- Preserve exact case and characters. Spoken names and pauses are not payload data.
+- Confirm the character count and read back the value. Bare encoding has no
+  checksum. If the value has an optional checksum, verify it with the decoder;
+  CRC-32 detects accidental changes, not deliberate tampering.
 
-Each full spoken name is unique in this table, but uniqueness on paper does not guarantee reliable recognition over a phone connection. In particular, Greek Eta/Theta/Zeta and Pi/Phi/Psi/Xi can be confused across accents or pronunciation conventions. Use their numeric fallbacks whenever there is uncertainty. Telephone reliability should be checked with actual callers before relying on the names alone.
+Ordinary Latin letter names can sound alike. Greek Eta/Theta/Zeta and Pi/Phi/Psi/Xi
+can also be confused across accents or pronunciation conventions. Use spelling
+words or numeric fallbacks when needed; “capital” resolves case, not every sound.
 
 ## Character table
 
@@ -26,58 +41,58 @@ Each full spoken name is unique in this table, but uniqueness on paper does not 
 | 7 | <code>7</code> | Digit seven | symbol zero zero seven |
 | 8 | <code>8</code> | Digit eight | symbol zero zero eight |
 | 9 | <code>9</code> | Digit nine | symbol zero zero nine |
-| 10 | <code>A</code> | Latin capital Alfa | symbol zero one zero |
-| 11 | <code>B</code> | Latin capital Bravo | symbol zero one one |
-| 12 | <code>C</code> | Latin capital Charlie | symbol zero one two |
-| 13 | <code>D</code> | Latin capital Delta | symbol zero one three |
-| 14 | <code>E</code> | Latin capital Echo | symbol zero one four |
-| 15 | <code>F</code> | Latin capital Foxtrot | symbol zero one five |
-| 16 | <code>G</code> | Latin capital Golf | symbol zero one six |
-| 17 | <code>H</code> | Latin capital Hotel | symbol zero one seven |
-| 18 | <code>I</code> | Latin capital India | symbol zero one eight |
-| 19 | <code>J</code> | Latin capital Juliett | symbol zero one nine |
-| 20 | <code>K</code> | Latin capital Kilo | symbol zero two zero |
-| 21 | <code>L</code> | Latin capital Lima | symbol zero two one |
-| 22 | <code>M</code> | Latin capital Mike | symbol zero two two |
-| 23 | <code>N</code> | Latin capital November | symbol zero two three |
-| 24 | <code>O</code> | Latin capital Oscar | symbol zero two four |
-| 25 | <code>P</code> | Latin capital Papa | symbol zero two five |
-| 26 | <code>Q</code> | Latin capital Quebec | symbol zero two six |
-| 27 | <code>R</code> | Latin capital Romeo | symbol zero two seven |
-| 28 | <code>S</code> | Latin capital Sierra | symbol zero two eight |
-| 29 | <code>T</code> | Latin capital Tango | symbol zero two nine |
-| 30 | <code>U</code> | Latin capital Uniform | symbol zero three zero |
-| 31 | <code>V</code> | Latin capital Victor | symbol zero three one |
-| 32 | <code>W</code> | Latin capital Whiskey | symbol zero three two |
-| 33 | <code>X</code> | Latin capital X-ray | symbol zero three three |
-| 34 | <code>Y</code> | Latin capital Yankee | symbol zero three four |
-| 35 | <code>Z</code> | Latin capital Zulu | symbol zero three five |
-| 36 | <code>a</code> | Latin lowercase Alfa | symbol zero three six |
-| 37 | <code>b</code> | Latin lowercase Bravo | symbol zero three seven |
-| 38 | <code>c</code> | Latin lowercase Charlie | symbol zero three eight |
-| 39 | <code>d</code> | Latin lowercase Delta | symbol zero three nine |
-| 40 | <code>e</code> | Latin lowercase Echo | symbol zero four zero |
-| 41 | <code>f</code> | Latin lowercase Foxtrot | symbol zero four one |
-| 42 | <code>g</code> | Latin lowercase Golf | symbol zero four two |
-| 43 | <code>h</code> | Latin lowercase Hotel | symbol zero four three |
-| 44 | <code>i</code> | Latin lowercase India | symbol zero four four |
-| 45 | <code>j</code> | Latin lowercase Juliett | symbol zero four five |
-| 46 | <code>k</code> | Latin lowercase Kilo | symbol zero four six |
-| 47 | <code>l</code> | Latin lowercase Lima | symbol zero four seven |
-| 48 | <code>m</code> | Latin lowercase Mike | symbol zero four eight |
-| 49 | <code>n</code> | Latin lowercase November | symbol zero four nine |
-| 50 | <code>o</code> | Latin lowercase Oscar | symbol zero five zero |
-| 51 | <code>p</code> | Latin lowercase Papa | symbol zero five one |
-| 52 | <code>q</code> | Latin lowercase Quebec | symbol zero five two |
-| 53 | <code>r</code> | Latin lowercase Romeo | symbol zero five three |
-| 54 | <code>s</code> | Latin lowercase Sierra | symbol zero five four |
-| 55 | <code>t</code> | Latin lowercase Tango | symbol zero five five |
-| 56 | <code>u</code> | Latin lowercase Uniform | symbol zero five six |
-| 57 | <code>v</code> | Latin lowercase Victor | symbol zero five seven |
-| 58 | <code>w</code> | Latin lowercase Whiskey | symbol zero five eight |
-| 59 | <code>x</code> | Latin lowercase X-ray | symbol zero five nine |
-| 60 | <code>y</code> | Latin lowercase Yankee | symbol zero six zero |
-| 61 | <code>z</code> | Latin lowercase Zulu | symbol zero six one |
+| 10 | <code>A</code> | Capital A | symbol zero one zero |
+| 11 | <code>B</code> | Capital B | symbol zero one one |
+| 12 | <code>C</code> | Capital C | symbol zero one two |
+| 13 | <code>D</code> | Capital D | symbol zero one three |
+| 14 | <code>E</code> | Capital E | symbol zero one four |
+| 15 | <code>F</code> | Capital F | symbol zero one five |
+| 16 | <code>G</code> | Capital G | symbol zero one six |
+| 17 | <code>H</code> | Capital H | symbol zero one seven |
+| 18 | <code>I</code> | Capital I | symbol zero one eight |
+| 19 | <code>J</code> | Capital J | symbol zero one nine |
+| 20 | <code>K</code> | Capital K | symbol zero two zero |
+| 21 | <code>L</code> | Capital L | symbol zero two one |
+| 22 | <code>M</code> | Capital M | symbol zero two two |
+| 23 | <code>N</code> | Capital N | symbol zero two three |
+| 24 | <code>O</code> | Capital O | symbol zero two four |
+| 25 | <code>P</code> | Capital P | symbol zero two five |
+| 26 | <code>Q</code> | Capital Q | symbol zero two six |
+| 27 | <code>R</code> | Capital R | symbol zero two seven |
+| 28 | <code>S</code> | Capital S | symbol zero two eight |
+| 29 | <code>T</code> | Capital T | symbol zero two nine |
+| 30 | <code>U</code> | Capital U | symbol zero three zero |
+| 31 | <code>V</code> | Capital V | symbol zero three one |
+| 32 | <code>W</code> | Capital W | symbol zero three two |
+| 33 | <code>X</code> | Capital X | symbol zero three three |
+| 34 | <code>Y</code> | Capital Y | symbol zero three four |
+| 35 | <code>Z</code> | Capital Z | symbol zero three five |
+| 36 | <code>a</code> | a | symbol zero three six |
+| 37 | <code>b</code> | b | symbol zero three seven |
+| 38 | <code>c</code> | c | symbol zero three eight |
+| 39 | <code>d</code> | d | symbol zero three nine |
+| 40 | <code>e</code> | e | symbol zero four zero |
+| 41 | <code>f</code> | f | symbol zero four one |
+| 42 | <code>g</code> | g | symbol zero four two |
+| 43 | <code>h</code> | h | symbol zero four three |
+| 44 | <code>i</code> | i | symbol zero four four |
+| 45 | <code>j</code> | j | symbol zero four five |
+| 46 | <code>k</code> | k | symbol zero four six |
+| 47 | <code>l</code> | l | symbol zero four seven |
+| 48 | <code>m</code> | m | symbol zero four eight |
+| 49 | <code>n</code> | n | symbol zero four nine |
+| 50 | <code>o</code> | o | symbol zero five zero |
+| 51 | <code>p</code> | p | symbol zero five one |
+| 52 | <code>q</code> | q | symbol zero five two |
+| 53 | <code>r</code> | r | symbol zero five three |
+| 54 | <code>s</code> | s | symbol zero five four |
+| 55 | <code>t</code> | t | symbol zero five five |
+| 56 | <code>u</code> | u | symbol zero five six |
+| 57 | <code>v</code> | v | symbol zero five seven |
+| 58 | <code>w</code> | w | symbol zero five eight |
+| 59 | <code>x</code> | x | symbol zero five nine |
+| 60 | <code>y</code> | y | symbol zero six zero |
+| 61 | <code>z</code> | z | symbol zero six one |
 | 62 | <code>!</code> | Exclamation mark | symbol zero six two |
 | 63 | <code>"</code> | Double quote | symbol zero six three |
 | 64 | <code>#</code> | Number sign | symbol zero six four |
@@ -110,51 +125,82 @@ Each full spoken name is unique in this table, but uniqueness on paper does not 
 | 91 | <code>&#124;</code> | Vertical bar | symbol zero nine one |
 | 92 | <code>}</code> | Right curly brace | symbol zero nine two |
 | 93 | <code>~</code> | Tilde | symbol zero nine three |
-| 94 | <code>Γ</code> | Greek capital Gamma | symbol zero nine four |
-| 95 | <code>Δ</code> | Greek capital Delta | symbol zero nine five |
-| 96 | <code>Θ</code> | Greek capital Theta | symbol zero nine six |
-| 97 | <code>Λ</code> | Greek capital Lambda | symbol zero nine seven |
-| 98 | <code>Ξ</code> | Greek capital Xi | symbol zero nine eight |
-| 99 | <code>Π</code> | Greek capital Pi | symbol zero nine nine |
-| 100 | <code>Φ</code> | Greek capital Phi | symbol one zero zero |
-| 101 | <code>Ψ</code> | Greek capital Psi | symbol one zero one |
-| 102 | <code>Ω</code> | Greek capital Omega | symbol one zero two |
-| 103 | <code>α</code> | Greek lowercase Alpha | symbol one zero three |
-| 104 | <code>β</code> | Greek lowercase Beta | symbol one zero four |
-| 105 | <code>γ</code> | Greek lowercase Gamma | symbol one zero five |
-| 106 | <code>δ</code> | Greek lowercase Delta | symbol one zero six |
-| 107 | <code>ε</code> | Greek lowercase Epsilon | symbol one zero seven |
-| 108 | <code>ζ</code> | Greek lowercase Zeta | symbol one zero eight |
-| 109 | <code>η</code> | Greek lowercase Eta | symbol one zero nine |
-| 110 | <code>θ</code> | Greek lowercase Theta | symbol one one zero |
-| 111 | <code>ι</code> | Greek lowercase Iota | symbol one one one |
-| 112 | <code>κ</code> | Greek lowercase Kappa | symbol one one two |
-| 113 | <code>λ</code> | Greek lowercase Lambda | symbol one one three |
-| 114 | <code>μ</code> | Greek lowercase Mu | symbol one one four |
-| 115 | <code>ξ</code> | Greek lowercase Xi | symbol one one five |
-| 116 | <code>π</code> | Greek lowercase Pi | symbol one one six |
-| 117 | <code>σ</code> | Greek lowercase Sigma | symbol one one seven |
-| 118 | <code>τ</code> | Greek lowercase Tau | symbol one one eight |
-| 119 | <code>φ</code> | Greek lowercase Phi | symbol one one nine |
-| 120 | <code>ψ</code> | Greek lowercase Psi | symbol one two zero |
-| 121 | <code>ω</code> | Greek lowercase Omega | symbol one two one |
-| 122 | <code>∂</code> | Partial derivative sign | symbol one two two |
-| 123 | <code>∇</code> | Nabla sign | symbol one two three |
-| 124 | <code>∏</code> | Product operator | symbol one two four |
-| 125 | <code>∑</code> | Summation operator | symbol one two five |
-| 126 | <code>√</code> | Square root | symbol one two six |
-| 127 | <code>∫</code> | Integral sign | symbol one two seven |
+| 94 | <code>Γ</code> | Capital Gamma | symbol zero nine four |
+| 95 | <code>Δ</code> | Capital Delta | symbol zero nine five |
+| 96 | <code>Θ</code> | Capital Theta | symbol zero nine six |
+| 97 | <code>Λ</code> | Capital Lambda | symbol zero nine seven |
+| 98 | <code>Ξ</code> | Capital Xi | symbol zero nine eight |
+| 99 | <code>Π</code> | Capital Pi | symbol zero nine nine |
+| 100 | <code>Φ</code> | Capital Phi | symbol one zero zero |
+| 101 | <code>Ψ</code> | Capital Psi | symbol one zero one |
+| 102 | <code>Ω</code> | Capital Omega | symbol one zero two |
+| 103 | <code>α</code> | Alpha | symbol one zero three |
+| 104 | <code>β</code> | Beta | symbol one zero four |
+| 105 | <code>γ</code> | Gamma | symbol one zero five |
+| 106 | <code>δ</code> | Delta | symbol one zero six |
+| 107 | <code>ε</code> | Epsilon | symbol one zero seven |
+| 108 | <code>ζ</code> | Zeta | symbol one zero eight |
+| 109 | <code>η</code> | Eta | symbol one zero nine |
+| 110 | <code>θ</code> | Theta | symbol one one zero |
+| 111 | <code>ι</code> | Iota | symbol one one one |
+| 112 | <code>κ</code> | Kappa | symbol one one two |
+| 113 | <code>λ</code> | Lambda | symbol one one three |
+| 114 | <code>μ</code> | Mu | symbol one one four |
+| 115 | <code>ξ</code> | Xi | symbol one one five |
+| 116 | <code>π</code> | Pi | symbol one one six |
+| 117 | <code>σ</code> | Sigma | symbol one one seven |
+| 118 | <code>τ</code> | Tau | symbol one one eight |
+| 119 | <code>φ</code> | Phi | symbol one one nine |
+| 120 | <code>ψ</code> | Psi | symbol one two zero |
+| 121 | <code>ω</code> | Omega | symbol one two one |
+| 122 | <code>¥</code> | Yen | symbol one two two |
+| 123 | <code>§</code> | Section | symbol one two three |
+| 124 | <code>©</code> | Copyright | symbol one two four |
+| 125 | <code>®</code> | Registered | symbol one two five |
+| 126 | <code>¶</code> | Paragraph | symbol one two six |
+| 127 | <code>÷</code> | Division sign | symbol one two seven |
+
+
+## Math suffix
+
+Use these rows instead of Compact indices 122–127. The other 122 rows are identical.
+
+| Index | Character | Spoken name | Numeric fallback |
+| ---: | :---: | --- | --- |
+| 122 | `∂` | Partial | symbol one two two |
+| 123 | `∇` | Nabla | symbol one two three |
+| 124 | `∏` | Product | symbol one two four |
+| 125 | `∑` | Summation | symbol one two five |
+| 126 | `√` | Square root | symbol one two six |
+| 127 | `∫` | Integral | symbol one two seven |
 
 ## Distinctions to preserve
 
-- `0` is “Digit zero”; `O` is “Latin capital Oscar”; `o` is “Latin lowercase Oscar.” Never use “oh” for zero.
-- `1`, `I`, and `l` are “Digit one,” “Latin capital India,” and “Latin lowercase Lima.”
-- `A` and `α` are “Latin capital Alfa” and “Greek lowercase Alpha.” The script and case words are essential.
-- `Π` and `∏` are “Greek capital Pi” and “Product operator.” Likewise, `σ` is “Greek lowercase Sigma” and `∑` is “Summation operator.” Do not call the operators simply “pi” or “sigma.”
-- `Δ`, `∂`, and `∇` are “Greek capital Delta,” “Partial derivative sign,” and “Nabla sign.” Avoid the ambiguous shorthand “delta” or “del” for the mathematical signs.
-- `/` and `\` are “Forward slash” and “Backslash.” Never say only “slash.”
-- Parentheses, square brackets, and curly braces always include both their side and their shape in the spoken name.
-- Apostrophe, double quote, and backtick are three different characters. “Quote” alone is insufficient. Curly quotes are not in the alphabet.
-- `-` is the ASCII hyphen, not a Unicode minus sign or a long dash. `~` is the ASCII tilde, not a combining accent.
+- Say “zero” for `0`, never “oh”; “oh” means lowercase `o`, “capital oh” means `O`.
+- `Π` is “capital pi”; `∏` is “product.” `σ` is “sigma”; `∑` is “summation.”
+- `Δ` is “capital delta”; `∂` is “partial”; `∇` is “nabla.” Avoid “del.”
+- `/`, `\`, and `÷` are “forward slash,” “backslash,” and “division sign.”
+- Parentheses, square brackets, and curly braces include both side and shape.
+- `'`, `"`, and the backtick are “apostrophe,” “double quote,” and “backtick.”
+  “Quote” alone is insufficient. Curly quotes are not in either alphabet.
+- `-` is the ASCII hyphen; `~` is the ASCII tilde.
 
-For example, the valid integer payload `7β` (decimal 1000) is spoken as “Digit seven; Greek lowercase Beta,” or “symbol zero zero seven; symbol one zero four.”
+For example, the integer payload `7β` (decimal 1000) is “seven; beta,” or
+“symbol zero zero seven; symbol one zero four,” in either alphabet.
+
+## Reading a full envelope
+
+Middle dot (`·`, U+00B7) is a **separator, not one of the 128 payload symbols**.
+Say “middle dot” only when reading the full wrapped value. Say “period” for the
+payload character `.`. See [envelope.md](envelope.md) for the wire format.
+
+For `b128·00·payload·checksum`, read the literal identifier as
+“bee, one, two, eight,” then “middle dot,” the two header symbols as “zero, zero,”
+another “middle dot,” the payload symbols, another “middle dot,” and the five
+checksum symbols. Placeholder words here are not literal encoded data.
+
+Read header symbols with the fixed Compact table, even for a Math payload.
+Read payload and checksum symbols with the alphabet selected by the header.
+For alphabet escapes, read all three header symbols in order. A checksum-only
+value has only the payload, one middle dot, and checksum. A prefix-only value
+ends with the payload.

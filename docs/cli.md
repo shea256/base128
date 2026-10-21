@@ -25,8 +25,8 @@ arguments containing punctuation; use files or stdin for arbitrary payloads.
 
 | Option | Behavior |
 | --- | --- |
-| `--alphabet default` | Default alphabet; also used when omitted |
-| `--alphabet two-byte` | Fixed two-byte alternative |
+| `--alphabet compact` | Compact alphabet; also used when omitted |
+| `--alphabet math` | Math alphabet |
 | `--alphabet-file FILE` | Exactly 128 unique Unicode scalar values, UTF-8, no newline; cannot combine with `--alphabet` |
 | `--prefix` | Encode: add the metadata prefix. Decode: require it and infer its alphabet unless explicitly constrained. |
 | `--checksum` | Encode: append CRC-32 in five Base128 symbols. Decode: require and verify it. |
@@ -40,8 +40,8 @@ trim whitespace or detect alphabets. See the [specification](../specs/encoding.m
 
 ```sh
 printf 'Hello' | node packages/cli/bin/base128.mjs encode
-node packages/cli/bin/base128.mjs encode input.bin --alphabet two-byte -o output.b128
-node packages/cli/bin/base128.mjs decode output.b128 --alphabet two-byte -o restored.bin
+node packages/cli/bin/base128.mjs encode input.bin --alphabet math -o output.b128
+node packages/cli/bin/base128.mjs decode output.b128 --alphabet math -o restored.bin
 node packages/cli/bin/base128.mjs decode output.b128 --accept-aliases -o restored.bin
 node packages/cli/bin/base128.mjs integer encode 1000
 node packages/cli/bin/base128.mjs integer decode '7β'

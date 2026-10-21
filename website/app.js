@@ -1,7 +1,7 @@
 import {
-  DEFAULT_ALPHABET, TWO_BYTE_ALPHABET, createAlphabet, encode, decode,
+  DEFAULT_ALPHABET, MATH_ALPHABET, createAlphabet, encode, decode,
   encodeInteger, decodeInteger, wrap, unwrap,
-} from './vendor/index.js?v=envelopes-0.1';
+} from './vendor/index.js?v=compact-headers-0.1';
 
 const $ = id => document.getElementById(id);
 const input = $('payload-input');
@@ -32,7 +32,7 @@ function bytesToHex(bytes) {return Array.from(bytes,b=>b.toString(16).padStart(2
 function setFeedback(message,error=false) { const el=$('feedback'); el.textContent=message; el.classList.toggle('error',error); }
 function alphabetOption() {
   if (alphabetPreset.value==='custom') return createAlphabet(customAlphabet.value);
-  return alphabetPreset.value==='two-byte' ? TWO_BYTE_ALPHABET : DEFAULT_ALPHABET;
+  return alphabetPreset.value==='math' ? MATH_ALPHABET : DEFAULT_ALPHABET;
 }
 function decoderOptions(alphabet) {
   return {alphabet,acceptAliases:alphabetPreset.value!=='custom' && acceptAliases.checked};
@@ -146,7 +146,7 @@ alphabetPreset.addEventListener('change',updateAlphabet);
 acceptAliases.addEventListener('change',update);
 [wrapPrefix,wrapChecksum].forEach(el=>el.addEventListener('change',update));
 inputType.addEventListener('change',setType);
-$('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';alphabetPreset.value='default';updateAlphabet();});
+$('reset-alphabet').addEventListener('click',()=>{customAlphabet.value='';alphabetPreset.value='compact';updateAlphabet();});
 $('swap').addEventListener('click',()=>{
   if (!conversionSucceeded) return;
   const next=direction==='encode'?'decode':'encode';
@@ -225,9 +225,9 @@ function updateAlphabet() {
     wrapPrefix.checked=false;
     $('custom-settings').open=true;
   }
-  $('alphabet-name').textContent='— '+({'default':'Default','two-byte':'Two-byte',custom:'Custom'}[alphabetPreset.value]);
+  $('alphabet-name').textContent='— '+({'compact':'Compact','math':'Math',custom:'Custom'}[alphabetPreset.value]);
   $('alphabet-legend').hidden=custom;
-  $('suffix-label').textContent=alphabetPreset.value==='two-byte'?'6 alternative symbols':'6 math symbols';
+  $('suffix-label').textContent=alphabetPreset.value==='math'?'6 math symbols':'6 compact symbols';
   $('alphabet-help').textContent=custom
     ? 'Custom alphabets use strict decoding; checksums require an alphabet without middle dot. Prefixes require a built-in alphabet. Applies to the converter, file tool, and alphabet explorer.'
     : 'Applies to the converter, file tool, and alphabet explorer. Decoding is strict unless you enable both alphabets.';

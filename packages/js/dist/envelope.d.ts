@@ -1,4 +1,4 @@
-import { type Alphabet, type DecodeOptions } from './alphabet.js';
+import { Alphabet, type DecodeOptions } from './alphabet.js';
 export type EnvelopeMode = 'binary' | 'integer';
 export interface EnvelopeOptions extends DecodeOptions {
     mode?: EnvelopeMode;

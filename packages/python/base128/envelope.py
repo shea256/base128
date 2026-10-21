@@ -2,9 +2,38 @@
 from dataclasses import dataclass
 import zlib
 
-from .alphabet import Alphabet, DEFAULT_ALPHABET, TWO_BYTE_ALPHABET, resolve_alphabet
+from .alphabet import Alphabet, COMPACT_ALPHABET, MATH_ALPHABET, resolve_alphabet
 from .binary import encode, decode
 from .integer import decode_integer
+
+
+# Fixed wire alphabet, independent of the configured payload alphabet.
+_HEADER_ALPHABET = Alphabet(
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    + ''.join(chr(i) for i in range(33, 127) if not chr(i).isalnum())
+    + 'ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷'
+)
+
+
+def _parse_header(text):
+    if not text:
+        raise ValueError('Missing envelope version')
+    version = _HEADER_ALPHABET.index_of(text[0])
+    if version == 127:
+        raise ValueError('Reserved envelope version escape')
+    if version != 0:
+        raise ValueError('Unsupported envelope version')
+    if len(text) < 2:
+        raise ValueError('Missing envelope configuration')
+    config = _HEADER_ALPHABET.index_of(text[1])
+    mode, identifier = config & 7, config >> 3
+    if len(text) != (3 if identifier == 15 else 2):
+        raise ValueError('Invalid envelope header length')
+    if identifier == 15:
+        identifier = 15 + _HEADER_ALPHABET.index_of(text[2])
+    if mode > 1:
+        raise ValueError('Unassigned envelope mode')
+    return ('binary' if mode == 0 else 'integer'), identifier
 
 
 @dataclass(frozen=True)
@@ -49,13 +78,14 @@ def wrap(payload: str, *, mode: str = 'binary', alphabet: Alphabet | str | None 
     _validate(payload, mode, abc, accept_aliases)
     body = payload
     if prefix:
-        if abc.text == DEFAULT_ALPHABET.text:
-            identifier = '0'
-        elif abc.text == TWO_BYTE_ALPHABET.text:
-            identifier = '1'
+        if abc.text == COMPACT_ALPHABET.text:
+            identifier = 0
+        elif abc.text == MATH_ALPHABET.text:
+            identifier = 1
         else:
             raise ValueError('Prefixes require a built-in alphabet')
-        body = f'b128·1{"b" if mode == "binary" else "i"}{identifier}·{payload}'
+        config = (identifier << 3) | (0 if mode == "binary" else 1)
+        body = f'b128·0{_HEADER_ALPHABET.symbol_at(config)}·{payload}'
     return body + '·' + encode(_checksum(body), alphabet=abc) if checksum else body
 
 
@@ -75,18 +105,12 @@ def unwrap(text: str, *, mode: str | None = None, alphabet: Alphabet | str | Non
     if len(fields) != 1 + (2 if prefix else 0) + (1 if checksum else 0):
         raise ValueError('Invalid envelope field count')
     if prefix:
-        import re
         if fields[0] != 'b128':
             raise ValueError('Invalid envelope identifier')
-        header = re.fullmatch(r'([1-9][0-9]*)([bi])(0|[1-9][0-9]*)', fields[1])
-        if not header:
-            raise ValueError('Invalid envelope header')
-        if header[1] != '1':
-            raise ValueError('Unsupported envelope version')
-        if header[3] not in ('0', '1'):
-            raise ValueError('Unknown envelope alphabet')
-        declared = DEFAULT_ALPHABET if header[3] == '0' else TWO_BYTE_ALPHABET
-        declared_mode = 'binary' if header[2] == 'b' else 'integer'
+        declared_mode, identifier = _parse_header(fields[1])
+        if identifier > 1:
+            raise ValueError(f'Unassigned envelope alphabet {identifier}')
+        declared = COMPACT_ALPHABET if identifier == 0 else MATH_ALPHABET
         if alphabet is not None and abc.text != declared.text:
             raise ValueError('Envelope alphabet does not match selected alphabet')
         if mode is not None and mode != declared_mode:

@@ -1,7 +1,7 @@
 {
-  "name": "Base128 default Unicode alphabet v0.1",
+  "name": "Base128 Compact Unicode alphabet v0.1",
   "version": "0.1",
-  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω∂∇∏∑√∫",
+  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷",
   "symbols": [
     {
       "index": 0,
@@ -615,33 +615,33 @@
     },
     {
       "index": 122,
-      "character": "∂",
-      "unicode": "U+2202"
+      "character": "¥",
+      "unicode": "U+00A5"
     },
     {
       "index": 123,
-      "character": "∇",
-      "unicode": "U+2207"
+      "character": "§",
+      "unicode": "U+00A7"
     },
     {
       "index": 124,
-      "character": "∏",
-      "unicode": "U+220F"
+      "character": "©",
+      "unicode": "U+00A9"
     },
     {
       "index": 125,
-      "character": "∑",
-      "unicode": "U+2211"
+      "character": "®",
+      "unicode": "U+00AE"
     },
     {
       "index": 126,
-      "character": "√",
-      "unicode": "U+221A"
+      "character": "¶",
+      "unicode": "U+00B6"
     },
     {
       "index": 127,
-      "character": "∫",
-      "unicode": "U+222B"
+      "character": "÷",
+      "unicode": "U+00F7"
     }
   ]
 }

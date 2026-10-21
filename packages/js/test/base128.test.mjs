@@ -3,19 +3,21 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {randomBytes} from 'node:crypto';
 import {
-  Alphabet, DEFAULT_ALPHABET, DEFAULT_ALPHABET_TEXT, createAlphabet,
+  COMPACT_ALPHABET, COMPACT_ALPHABET_TEXT, Alphabet, DEFAULT_ALPHABET, DEFAULT_ALPHABET_TEXT, createAlphabet,
   BinaryEncoder, BinaryDecoder, encode, decode, encodeInteger, decodeInteger,
 } from '../dist/index.js';
 const fixtures = JSON.parse(readFileSync(new URL('../../../specs/test-vectors.json', import.meta.url), 'utf8'));
 
 test('v0.1 alphabet is exact, unique, and immutable', () => {
+  assert.equal(DEFAULT_ALPHABET, COMPACT_ALPHABET);
+  assert.equal(DEFAULT_ALPHABET_TEXT, COMPACT_ALPHABET_TEXT);
   assert.equal(Array.from(DEFAULT_ALPHABET_TEXT).length, 128);
   assert.equal(new Set(Array.from(DEFAULT_ALPHABET_TEXT)).size, 128);
   assert.equal(DEFAULT_ALPHABET.text, fixtures.alphabet);
   assert.equal(DEFAULT_ALPHABET.symbolAt(0), '0');
-  assert.equal(DEFAULT_ALPHABET.symbolAt(127), '∫');
+  assert.equal(DEFAULT_ALPHABET.symbolAt(127), '÷');
   assert.ok(Object.isFrozen(DEFAULT_ALPHABET));
-  assert.equal(DEFAULT_ALPHABET.indexOf('∇'), 123);
+  assert.equal(DEFAULT_ALPHABET.indexOf('§'), 123);
 });
 
 test('independent reference vectors (binary and integer)', () => {
@@ -103,7 +105,7 @@ test('strict input and integer validation', () => {
 });
 
 test('supplementary Unicode symbols and UTF-16 split across decoder chunks', () => {
-  const custom = createAlphabet(DEFAULT_ALPHABET_TEXT.replace('∫', '🧪'));
+  const custom = createAlphabet(DEFAULT_ALPHABET_TEXT.replace('÷', '🧪'));
   assert.equal(Array.from(custom.text).length, 128);
   const bytes = Uint8Array.from([254, 17, 99]);
   const encoded = encode(bytes, {alphabet: custom});
@@ -118,26 +120,26 @@ test('supplementary Unicode symbols and UTF-16 split across decoder chunks', () 
 
 
 test('default digit boundaries', () => {
-  for (const [value, text] of [[0n,'0'],[15n,'F'],[16n,'G'],[35n,'Z'],[36n,'a'],[61n,'z'],[62n,'!'],[122n,'∂'],[123n,'∇'],[124n,'∏'],[125n,'∑'],[126n,'√'],[127n,'∫'],[128n,'10'],[129n,'11']]) {
+  for (const [value, text] of [[0n,'0'],[15n,'F'],[16n,'G'],[35n,'Z'],[36n,'a'],[61n,'z'],[62n,'!'],[122n,'¥'],[123n,'§'],[124n,'©'],[125n,'®'],[126n,'¶'],[127n,'÷'],[128n,'10'],[129n,'11']]) {
     assert.equal(encodeInteger(value), text);
     assert.equal(decodeInteger(text), value);
   }
 });
 
-test('two-byte preset and mixed aliases preserve every digit in both decoder modes', async () => {
-  const {TWO_BYTE_ALPHABET, TWO_BYTE_ALPHABET_TEXT} = await import('../dist/index.js');
-  const spec = JSON.parse(readFileSync(new URL('../../../specs/alphabet-two-byte.json', import.meta.url), 'utf8'));
-  assert.equal(TWO_BYTE_ALPHABET_TEXT, spec.alphabet);
-  assert.equal(TWO_BYTE_ALPHABET_TEXT.slice(122), '§©®°¶÷');
-  for (const c of TWO_BYTE_ALPHABET_TEXT) assert.ok(Buffer.byteLength(c) <= 2);
+test('math preset and mixed aliases preserve every digit in both decoder modes', async () => {
+  const {MATH_ALPHABET, MATH_ALPHABET_TEXT} = await import('../dist/index.js');
+  const spec = JSON.parse(readFileSync(new URL('../../../specs/alphabet-math.json', import.meta.url), 'utf8'));
+  assert.equal(MATH_ALPHABET_TEXT, spec.alphabet);
+  assert.equal(MATH_ALPHABET_TEXT.slice(122), '∂∇∏∑√∫');
+  for (const c of DEFAULT_ALPHABET_TEXT) assert.ok(Buffer.byteLength(c) <= 2);
   const bits = Array.from({length:128}, (_,i) => i.toString(2).padStart(7,'0')).join('');
   const bytes = Uint8Array.from(bits.match(/.{8}/g).map(b => parseInt(b,2)));
   assert.equal(encode(bytes), DEFAULT_ALPHABET_TEXT);
-  assert.equal(encode(bytes, {alphabet:TWO_BYTE_ALPHABET}), TWO_BYTE_ALPHABET_TEXT);
-  assert.deepEqual(decode(TWO_BYTE_ALPHABET_TEXT, {alphabet:TWO_BYTE_ALPHABET}), bytes);
+  assert.equal(encode(bytes, {alphabet:MATH_ALPHABET}), MATH_ALPHABET_TEXT);
+  assert.deepEqual(decode(MATH_ALPHABET_TEXT, {alphabet:MATH_ALPHABET}), bytes);
   for (let mask=0; mask<64; mask++) {
-    const mixed = Array.from(DEFAULT_ALPHABET_TEXT, (c,i) => i>=122 && mask & (1 << (i-122)) ? TWO_BYTE_ALPHABET.symbolAt(i) : c).join('');
-    for (const alphabet of [DEFAULT_ALPHABET, TWO_BYTE_ALPHABET_TEXT]) {
+    const mixed = Array.from(DEFAULT_ALPHABET_TEXT, (c,i) => i>=122 && mask & (1 << (i-122)) ? MATH_ALPHABET.symbolAt(i) : c).join('');
+    for (const alphabet of [DEFAULT_ALPHABET, MATH_ALPHABET_TEXT]) {
       const options = {alphabet,acceptAliases:true};
       assert.deepEqual(decode(mixed, options), bytes);
       const decoder = new BinaryDecoder(options);
@@ -147,34 +149,34 @@ test('two-byte preset and mixed aliases preserve every digit in both decoder mod
       for (let i=122;i<128;i++) assert.equal(decodeInteger(Array.from(mixed)[i],options),BigInt(i));
     }
   }
-  assert.throws(()=>decode(TWO_BYTE_ALPHABET_TEXT), /Invalid/);
-  assert.throws(()=>decode(DEFAULT_ALPHABET_TEXT,{alphabet:TWO_BYTE_ALPHABET}), /Invalid/);
-  assert.throws(()=>decodeInteger('§'), /Invalid/);
-  assert.throws(()=>decodeInteger('0§',{acceptAliases:true}), /leading zero/);
-  assert.throws(()=>decode('0÷',{acceptAliases:true}), /padding/);
-  assert.throws(()=>decode('§',{acceptAliases:true}), /length/);
+  assert.throws(()=>decode(MATH_ALPHABET_TEXT), /Invalid/);
+  assert.throws(()=>decode(DEFAULT_ALPHABET_TEXT,{alphabet:MATH_ALPHABET}), /Invalid/);
+  assert.throws(()=>decodeInteger('∂'), /Invalid/);
+  assert.throws(()=>decodeInteger('0∂',{acceptAliases:true}), /leading zero/);
+  assert.throws(()=>decode('0∫',{acceptAliases:true}), /padding/);
+  assert.throws(()=>decode('∂',{acceptAliases:true}), /length/);
   assert.throws(()=>decodeInteger('☃',{acceptAliases:true}), /Invalid/);
   const reversed=Array.from(DEFAULT_ALPHABET_TEXT).reverse().join('');
   assert.throws(()=>decode('',{alphabet:reversed,acceptAliases:true}), /requires/);
   assert.throws(()=>decodeInteger('0',{alphabet:reversed,acceptAliases:true}), /requires/);
 });
 
-test('two-byte reference vectors, canonicalization, and alphabet file', async () => {
-  const {TWO_BYTE_ALPHABET, TWO_BYTE_ALPHABET_TEXT} = await import('../dist/index.js');
-  const vectors = JSON.parse(readFileSync(new URL('../../../specs/test-vectors-two-byte.json', import.meta.url), 'utf8'));
-  assert.equal(vectors.alphabet,TWO_BYTE_ALPHABET_TEXT);
-  assert.equal(readFileSync(new URL('../../../specs/alphabet-two-byte.txt', import.meta.url),'utf8'),TWO_BYTE_ALPHABET_TEXT);
-  assert.ok(Object.isFrozen(TWO_BYTE_ALPHABET));
+test('math reference vectors, canonicalization, and alphabet file', async () => {
+  const {MATH_ALPHABET, MATH_ALPHABET_TEXT} = await import('../dist/index.js');
+  const vectors = JSON.parse(readFileSync(new URL('../../../specs/test-vectors-math.json', import.meta.url), 'utf8'));
+  assert.equal(vectors.alphabet,MATH_ALPHABET_TEXT);
+  assert.equal(readFileSync(new URL('../../../specs/alphabet-math.txt', import.meta.url),'utf8'),MATH_ALPHABET_TEXT);
+  assert.ok(Object.isFrozen(MATH_ALPHABET));
   for (const {hex,encoded,mixed} of vectors.binary) {
     const bytes=Uint8Array.from(Buffer.from(hex,'hex'));
-    assert.equal(encode(bytes,{alphabet:TWO_BYTE_ALPHABET}),encoded);
+    assert.equal(encode(bytes,{alphabet:MATH_ALPHABET}),encoded);
     assert.deepEqual(decode(mixed,{acceptAliases:true}),bytes);
-    assert.equal(encode(decode(mixed,{acceptAliases:true}),{alphabet:TWO_BYTE_ALPHABET}),encoded);
+    assert.equal(encode(decode(mixed,{acceptAliases:true}),{alphabet:MATH_ALPHABET}),encoded);
   }
   for (const {decimal,encoded,mixed} of vectors.integer) {
-    assert.equal(encodeInteger(BigInt(decimal),{alphabet:TWO_BYTE_ALPHABET}),encoded);
+    assert.equal(encodeInteger(BigInt(decimal),{alphabet:MATH_ALPHABET}),encoded);
     assert.equal(decodeInteger(mixed,{acceptAliases:true}),BigInt(decimal));
-    assert.equal(decodeInteger(encoded,{alphabet:TWO_BYTE_ALPHABET}),BigInt(decimal));
+    assert.equal(decodeInteger(encoded,{alphabet:MATH_ALPHABET}),BigInt(decimal));
   }
 
 });

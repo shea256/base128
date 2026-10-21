@@ -31,7 +31,7 @@ implementations, a streaming CLI, and a static GitHub Pages playground.
   checksum verification, and bare-codec defaults.
 - Read `specs/encoding.md` before changing encoding behavior. Published alphabet
   mappings and reference fixtures are immutable once released; changes need a separate version.
-- Default and two-byte are separate fixed alphabets. Strict decoding is the
+- Compact (default) and Math are separate fixed alphabets. Strict decoding is the
   default. Opt-in aliases are permitted only for these exact compatible layouts.
 - Preserve binary length/padding validation, integer minimality, Unicode scalar
   validation, and arbitrary custom-alphabet behavior in both implementations.
