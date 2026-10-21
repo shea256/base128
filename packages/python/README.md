@@ -1,13 +1,13 @@
 # Base128 Python
 
 ```python
-from base128 import encode, decode, encode_integer, decode_integer, create_alphabet
+from base128 import encode, decode, encode_integer, decode_integer, create_alphabet, COMPACT_ALPHABET_TEXT
 
 assert decode(encode(b"Hello")) == b"Hello"
 assert decode_integer(encode_integer(1000)) == 1000
 
-custom = create_alphabet("... exactly 128 distinct Unicode characters ...")
-# encode(b"Hello", alphabet=custom)
+custom = create_alphabet(COMPACT_ALPHABET_TEXT[::-1])
+assert decode(encode(b"Hello", alphabet=custom), alphabet=custom) == b"Hello"
 ```
 
 No runtime dependencies. Exact API and wire format are specified in `../../specs/encoding.md`.

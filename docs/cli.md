@@ -47,6 +47,19 @@ node packages/cli/bin/base128.mjs integer encode 1000
 node packages/cli/bin/base128.mjs integer decode '7β'
 ```
 
+For a value with both prefix and checksum, use the same flags in both directions:
+
+```sh
+printf 'Hello' | node packages/cli/bin/base128.mjs encode --prefix --checksum > hello.b128
+node packages/cli/bin/base128.mjs decode hello.b128 --prefix --checksum
+```
+
+The fixed header alphabet is Compact. Format version 0 uses `00` for Compact
+binary, `01` for Compact integer, `08` for Math binary, and `09` for Math integer.
+The `encode`/`decode` commands select binary mode; `integer encode`/`integer decode`
+select integer mode. A mismatched prefix mode is an error. With a prefix, omitting
+`--alphabet` lets decoding use the declared alphabet; without a prefix it uses Compact.
+
 Success exits 0; failures exit 1 and report `base128: ...` on stderr. Human-readable
 error wording is not a structured API; inspect the exit status. Stdout may contain
 partial decoded bytes before a streaming validation failure. File output is
