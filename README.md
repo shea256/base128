@@ -312,6 +312,8 @@ The test runner discovers Python using `python3`, `python`, or Windows `py -3`. 
 
 CI runs once per pull-request update and on pushes to `master`; new commits cancel superseded CI runs. All four Node/Python combinations and Rust run in parallel, with five-minute job limits and cached npm downloads. Rust CI separately runs Cargo tests, formatting, and Clippy. Its conformance tests consume the same codec and envelope fixtures as the other libraries.
 
+A separate Lean job checks binary and integer round-trip/canonicality proofs and compares an executable specification with all three libraries. This proves properties of the model, not the production implementations. See [Lean verification](verification/README.md) for proof coverage, limitations, and `python3 scripts/check-lean.py` instructions. The job has a ten-minute limit for the initial toolchain download.
+
 The shared [default vectors](specs/test-vectors.json) and [math vectors](specs/test-vectors-math.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
 
 Generated `packages/js/dist/` and `website/vendor/` files are tracked; commit rebuilt outputs with their source changes. README figures are generated with `node scripts/build-readme-images.mjs` after building the library. The cover illustration's prompt is in [`docs/images/cover-prompt.txt`](docs/images/cover-prompt.txt).
@@ -329,6 +331,7 @@ base128/
 │   └── cli/                # Node.js streaming CLI
 ├── website/                # Static playground, explorer, and interaction tests
 ├── specs/                  # Versioned specifications, alphabets, and vectors
+├── verification/           # Lean proofs, executable reference, and conformance adapter
 ├── scripts/                # Builds, interpreter discovery, and interoperability checks
 ├── docs/                   # CLI reference and README images
 ├── AGENTS.md               # Agent setup, generated files, and compatibility rules

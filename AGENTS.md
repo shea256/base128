@@ -20,6 +20,12 @@ Rust changes also require `cargo test --manifest-path packages/rust/Cargo.toml -
 `cargo clippy --manifest-path packages/rust/Cargo.toml --all-targets -- -D warnings`.
 Rust uses the shared codec and envelope fixtures. It has no runtime dependencies.
 
+Lean verification changes require `python3 scripts/check-lean.py` with Lake, Cargo,
+a supported Node runtime, and Python on PATH. See `verification/README.md` for the
+pinned toolchain, theorem audit, and scope. Do not use `sorry`, extra axioms, or
+`native_decide` to bypass proofs. Keep independent fixtures unchanged. Production
+implementation conformance is tested; do not describe production code as proved.
+
 ## Source and generated files
 
 - JS source: `packages/js/src`; Python: `packages/python/base128`; Rust: `packages/rust/src`.
