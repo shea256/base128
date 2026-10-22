@@ -308,13 +308,13 @@ cargo test --manifest-path packages/rust/Cargo.toml --locked  # Rust (separate t
 
 The test runner discovers Python using `python3`, `python`, or Windows `py -3`. Set `PYTHON` to an executable path to override discovery. Run `npm run build` before focused tests when TypeScript or browser vendor inputs change.
 
-Rust CI separately runs Cargo tests, formatting, and Clippy. Its conformance tests consume the same codec and envelope fixtures as the other libraries.
+CI runs once per pull-request update and on pushes to `master`; new commits cancel superseded CI runs. All four Node/Python combinations and Rust run in parallel, with five-minute job limits and cached npm downloads. Rust CI separately runs Cargo tests, formatting, and Clippy. Its conformance tests consume the same codec and envelope fixtures as the other libraries.
 
 The shared [default vectors](specs/test-vectors.json) and [math vectors](specs/test-vectors-math.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
 
 Generated `packages/js/dist/` and `website/vendor/` files are tracked; commit rebuilt outputs with their source changes. README figures are generated with `node scripts/build-readme-images.mjs` after building the library. The cover illustration's prompt is in [`docs/images/cover-prompt.txt`](docs/images/cover-prompt.txt).
 
-GitHub Actions [builds, tests, and deploys](.github/workflows/pages.yml) the static website on pushes to `master`; the workflow can also be dispatched manually. GitHub Pages must use **GitHub Actions** as its publishing source. PR branches do not update the live site.
+GitHub Actions [builds, tests, and deploys](.github/workflows/pages.yml) the static website on pushes to `master` that change website files, the JavaScript package, browser build script, root package manifests, or the deployment workflow. Documentation-only and Rust-only changes do not redeploy the site; the workflow can also be dispatched manually. GitHub Pages must use **GitHub Actions** as its publishing source. PR branches do not update the live site.
 
 ## Repository and contributing
 
