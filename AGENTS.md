@@ -1,6 +1,6 @@
 # Working in Base128
 
-Base128 is a dependency-free codec with matching JavaScript/TypeScript and Python
+Base128 is a dependency-free codec with matching JavaScript/TypeScript, Python, and Rust
 implementations, a streaming CLI, and a static GitHub Pages playground.
 
 ## Setup and validation
@@ -15,9 +15,14 @@ implementations, a streaming CLI, and a static GitHub Pages playground.
   Run `npm run build` first when TypeScript or browser vendor inputs changed.
 - Preview with `npm run site` (default port 8080; override with `PORT`).
 
+Rust changes also require `cargo test --manifest-path packages/rust/Cargo.toml --locked`,
+`cargo fmt --manifest-path packages/rust/Cargo.toml -- --check`, and
+`cargo clippy --manifest-path packages/rust/Cargo.toml --all-targets -- -D warnings`.
+Rust uses the shared codec and envelope fixtures. It has no runtime dependencies.
+
 ## Source and generated files
 
-- JS source: `packages/js/src`; Python: `packages/python/base128`.
+- JS source: `packages/js/src`; Python: `packages/python/base128`; Rust: `packages/rust/src`.
 - CLI: `packages/cli/bin/base128.mjs`; UI: `website/index.html`, `app.js`, `styles.css`.
 - `npm run build` regenerates tracked `packages/js/dist` and `website/vendor`.
   Commit generated changes with their sources; do not edit generated files directly.
@@ -34,10 +39,10 @@ implementations, a streaming CLI, and a static GitHub Pages playground.
 - Compact (default) and Math are separate fixed alphabets. Strict decoding is the
   default. Opt-in aliases are permitted only for these exact compatible layouts.
 - Preserve binary length/padding validation, integer minimality, Unicode scalar
-  validation, and arbitrary custom-alphabet behavior in both implementations.
+  validation, and arbitrary custom-alphabet behavior in all three implementations.
 - Do not introduce implicit trimming, normalization, case folding, or alphabet
   detection. Binary and integer modes are not interchangeable.
-- Add shared independent vectors when formats or mappings change, and test both
+- Add shared independent vectors when formats or mappings change, and test all three
   language implementations. Never regenerate reference fixtures merely to fit new behavior.
 
 ## Documentation and delivery

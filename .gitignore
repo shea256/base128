@@ -8,3 +8,5 @@ __pycache__/
 .env
 *.log
 .tmp/
+
+/packages/rust/target/
