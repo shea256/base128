@@ -1,0 +1,12 @@
+[package]
+name = "base128-unicode-codec"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Canonical Unicode Base128 binary and integer encoding with optional envelopes"
+repository = "https://github.com/shea256/base128"
+readme = "README.md"
+publish = false
+
+[dev-dependencies]
+serde_json = "1"

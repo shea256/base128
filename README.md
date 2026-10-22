@@ -2,7 +2,7 @@
 
 ![Base128 — 0 A a ! Γ α ¥, one symbol from each Compact alphabet block](docs/images/base128-cover-compact.png)
 
-A small, dependency-free library for encoding bytes and nonnegative integers with a configurable **128-character Unicode alphabet**. Includes JavaScript/TypeScript, Python, a streaming CLI, and a browser playground.
+A small, dependency-free library for encoding bytes and nonnegative integers with a configurable **128-character Unicode alphabet**. Includes JavaScript/TypeScript, Python, Rust, a streaming CLI, and a browser playground.
 
 **Version:** 0.1.0 · **License:** Apache-2.0 · **Status:** Working implementation / prepublication.
 
@@ -23,7 +23,7 @@ A small, dependency-free library for encoding bytes and nonnegative integers wit
 
 ## Why Base128?
 
-Each Base128 symbol carries **7 bits**, compared with Base64's 6 bits per symbol. This usually means fewer displayed characters for the same bytes. The format has a fixed, documented mapping, supports custom alphabets, and produces matching output in JavaScript and Python without runtime dependencies.
+Each Base128 symbol carries **7 bits**, compared with Base64's 6 bits per symbol. This usually means fewer displayed characters for the same bytes. The format has a fixed, documented mapping, supports custom alphabets, and produces matching output in JavaScript, Python, and Rust without runtime dependencies.
 
 Fewer characters does **not** necessarily mean smaller storage: Unicode symbols can occupy multiple UTF-8 bytes. The playground compares both character counts and byte sizes. The default Compact alphabet limits every symbol to at most two UTF-8 bytes; Math is an optional alternative.
 
@@ -31,7 +31,7 @@ Base128 is useful when you want this specific Unicode representation. It is not 
 
 ## Getting started
 
-Use a repository checkout. The manifest names `base128-unicode-codec` (npm) and `unicode-base128` (PyPI) are provisional and do not establish registry availability. The CLI package is private; the examples below do not require a published package.
+Use a repository checkout. The manifest names `base128-unicode-codec` (npm), `unicode-base128` (PyPI), and `base128-unicode-codec` (Rust) are provisional and do not establish registry availability. The CLI package is private; the examples below do not require a published package.
 
 Run commands from the repository root. Shell examples use a POSIX-compatible shell.
 
@@ -39,6 +39,7 @@ Run commands from the repository root. Shell examples use a POSIX-compatible she
 | --- | --- | --- |
 | JavaScript / TypeScript | Node.js 20+ | `packages/js/dist/index.js` (ESM and `.d.ts` declarations) |
 | Python | Python 3.10+ | `packages/python/base128` |
+| Rust | Stable Rust toolchain | `packages/rust` (local Cargo path dependency) |
 | CLI | Node.js 20+ | `node packages/cli/bin/base128.mjs` |
 | Website | A modern browser; Node.js for local preview | [Live playground](https://shea256.github.io/base128/) or `npm run site` |
 
@@ -94,6 +95,26 @@ PY
 ```
 
 Python integer conversion uses arbitrary-precision `int`. See the [Python package README](packages/python/README.md).
+
+### Rust
+
+Add a local dependency to your application's `Cargo.toml`:
+
+```toml
+[dependencies]
+base128-unicode-codec = { path = "/path/to/base128/packages/rust" }
+```
+
+```rust
+use base128_unicode_codec::{encode, decode, encode_integer, decode_integer};
+
+let encoded = encode("Hello, 世界!".as_bytes());
+assert_eq!(decode(&encoded).unwrap(), "Hello, 世界!".as_bytes());
+assert_eq!(encode_integer(1000), "7β");
+assert_eq!(decode_integer("7β").unwrap(), 1000);
+```
+
+Integer helpers use `u128`; `encode_integer_decimal` and `decode_integer_decimal` support arbitrary-size values through decimal strings. See the [Rust package README](packages/rust/README.md) for streaming, alphabets, aliases, and envelopes.
 
 ### CLI
 
@@ -151,7 +172,7 @@ The [alphabet specification](specs/alphabet.json) fixes every index and code poi
 
 Compact is the default. Math is an optional built-in alphabet with the same first 122 symbols and a different six-symbol suffix. Both use the same encoding algorithms.
 
-Select an alphabet with `{alphabet: MATH_ALPHABET}` in JavaScript, `alphabet=MATH_ALPHABET` in Python, or `--alphabet math` in the CLI. Both libraries export `COMPACT_ALPHABET` and `MATH_ALPHABET`; `DEFAULT_ALPHABET` aliases Compact. Use the same alphabet when encoding and decoding.
+Select an alphabet with `{alphabet: MATH_ALPHABET}` in JavaScript, `alphabet=MATH_ALPHABET` in Python, or `--alphabet math` in the CLI. The JavaScript and Python libraries export `COMPACT_ALPHABET` and `MATH_ALPHABET`; `DEFAULT_ALPHABET` aliases Compact. Rust provides `compact_alphabet()` and `math_alphabet()`, used with `encode_with_alphabet` and `DecodeOptions`. Use the same alphabet when encoding and decoding.
 
 See the [alphabet mappings](specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the symbol comparison and [spoken tables](specs/spoken-alphabet.md) for reading names.
 
@@ -178,6 +199,7 @@ Python accepts `alphabet=...` as text or a compiled `create_alphabet(...)` resul
 | --- | --- |
 | JavaScript | `{acceptAliases: true}` |
 | Python | `accept_aliases=True` |
+| Rust | `DecodeOptions { accept_aliases: true, ..Default::default() }` |
 | CLI | `--accept-aliases` |
 | Website | **Allow alternate payload symbols** (Decode mode) |
 
@@ -281,9 +303,12 @@ npm run test:python
 npm run test:integration
 npm run test:cli
 npm run test:website
+cargo test --manifest-path packages/rust/Cargo.toml --locked  # Rust (separate toolchain)
 ```
 
 The test runner discovers Python using `python3`, `python`, or Windows `py -3`. Set `PYTHON` to an executable path to override discovery. Run `npm run build` before focused tests when TypeScript or browser vendor inputs change.
+
+Rust CI separately runs Cargo tests, formatting, and Clippy. Its conformance tests consume the same codec and envelope fixtures as the other libraries.
 
 The shared [default vectors](specs/test-vectors.json) and [math vectors](specs/test-vectors-math.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
 
@@ -298,6 +323,7 @@ base128/
 ├── packages/
 │   ├── js/                 # TypeScript source, compiled ESM + declarations
 │   ├── python/             # Python stdlib-only package
+│   ├── rust/               # Rust crate, no runtime dependencies
 │   └── cli/                # Node.js streaming CLI
 ├── website/                # Static playground, explorer, and interaction tests
 ├── specs/                  # Versioned specifications, alphabets, and vectors
@@ -307,7 +333,7 @@ base128/
 └── .github/workflows/      # CI and GitHub Pages deployment
 ```
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution requirements and [AGENTS.md](AGENTS.md) for agent and maintainer guidance. Published alphabet mappings are immutable; format changes need a separately documented version. Keep both language implementations and their tests aligned.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution requirements and [AGENTS.md](AGENTS.md) for agent and maintainer guidance. Published alphabet mappings are immutable; format changes need a separately documented version. Keep all three language implementations and their tests aligned.
 
 ## License
 
