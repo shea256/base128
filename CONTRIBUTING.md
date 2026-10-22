@@ -5,7 +5,7 @@ Thanks for contributing. Please keep published encoding formats **backward-compa
 ## Pull request checklist
 
 1. Update or add tests for any behavioral change.
-2. Run `npm test` (Node.js 20+, Python 3.10+; TypeScript compiler from `npm install`).
+2. Run `npm test` (a patched Node.js release (22.23.4+ on 22.x, 24.22.1+ on 24.x, or 26.12.1+ on 26.x), Python 3.10+; TypeScript compiler from `npm install`).
 3. If changing the specification, update `specs/encoding.md` and/or `specs/envelope.md`, test vectors, and all three language implementations as appropriate.
 4. Avoid runtime dependencies unless their benefit clearly outweighs additional complexity.
 5. Write changes in an idiomatic style for each language; preserve TypeScript strict type-checking.

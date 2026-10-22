@@ -33,14 +33,16 @@ Base128 is useful when you want this specific Unicode representation. It is not 
 
 Use a repository checkout. The manifest names `base128-unicode-codec` (npm), `unicode-base128` (PyPI), and `base128-unicode-codec` (Rust) are provisional and do not establish registry availability. The CLI package is private; the examples below do not require a published package.
 
+Use Node.js **22.23.4+ on 22.x, 24.22.1+ on 24.x, or 26.12.1+ on 26.x**. These minimums include the [October 21, 2026 security fixes](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases), including CVE-2026-111497. Node 20 and older patch releases are no longer supported. `.nvmrc` selects 24.22.1 for local development; run `nvm install` and `nvm use` if using nvm. CI tests patched Node 22/24 and fetches the latest matching patch; Pages builds use patched Node 24. Package engine declarations communicate these requirements but do not upgrade an installed runtime.
+
 Run commands from the repository root. Shell examples use a POSIX-compatible shell.
 
 | Interface | Requirement | Checkout entry point |
 | --- | --- | --- |
-| JavaScript / TypeScript | Node.js 20+ | `packages/js/dist/index.js` (ESM and `.d.ts` declarations) |
+| JavaScript / TypeScript | Supported patched Node.js | `packages/js/dist/index.js` (ESM and `.d.ts` declarations) |
 | Python | Python 3.10+ | `packages/python/base128` |
 | Rust | Stable Rust toolchain | `packages/rust` (local Cargo path dependency) |
-| CLI | Node.js 20+ | `node packages/cli/bin/base128.mjs` |
+| CLI | Supported patched Node.js | `node packages/cli/bin/base128.mjs` |
 | Website | A modern browser; Node.js for local preview | [Live playground](https://shea256.github.io/base128/) or `npm run site` |
 
 Compiled JavaScript and browser vendor files are tracked, so the CLI and site can run directly from a checkout. To install development dependencies and rebuild:
@@ -292,7 +294,7 @@ For `n` bytes, binary encoding emits `ceil(8n / 7)` symbols. Decoding validates 
 
 ## Development and testing
 
-From the repository root, with Node.js 20+ and Python 3.10+:
+From the repository root, with a supported patched Node.js runtime and Python 3.10+:
 
 ```sh
 npm ci

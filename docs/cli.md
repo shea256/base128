@@ -1,6 +1,6 @@
 # CLI reference
 
-Run from a built checkout with Node.js 20+:
+Run from a built checkout with a patched Node.js release (22.23.4+ on 22.x, 24.22.1+ on 24.x, or 26.12.1+ on 26.x):
 
 ```sh
 npm ci
