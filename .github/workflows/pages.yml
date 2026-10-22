@@ -3,6 +3,13 @@ name: Deploy website
 on:
   push:
     branches: [master]
+    paths:
+      - 'website/**'
+      - 'packages/js/**'
+      - 'scripts/build-website.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,11 +22,13 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '^24.22.1'
+          check-latest: true
           cache: npm
       - uses: actions/setup-python@v5
         with:
@@ -39,6 +48,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       pages: write
       id-token: write

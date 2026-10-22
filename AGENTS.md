@@ -5,7 +5,7 @@ implementations, a streaming CLI, and a static GitHub Pages playground.
 
 ## Setup and validation
 
-- Use Node.js 20+ and Python 3.10+. Run `npm ci` from the repository root.
+- Use a patched Node.js release (22.23.4+ on 22.x, 24.22.1+ on 24.x, or 26.12.1+ on 26.x) and Python 3.10+. Run `npm ci` from the repository root.
 - Run `npm test` before submitting behavior changes. It builds the JS library and
   browser modules, then tests JS, Python, cross-language interoperability, CLI, and website interactions.
 - Python discovery tries `python3`, `python`, then Windows `py -3`. Set `PYTHON` to

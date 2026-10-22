@@ -33,14 +33,16 @@ Base128 is useful when you want this specific Unicode representation. It is not 
 
 Use a repository checkout. The manifest names `base128-unicode-codec` (npm), `unicode-base128` (PyPI), and `base128-unicode-codec` (Rust) are provisional and do not establish registry availability. The CLI package is private; the examples below do not require a published package.
 
+Use Node.js **22.23.4+ on 22.x, 24.22.1+ on 24.x, or 26.12.1+ on 26.x**. These minimums include the [October 21, 2026 security fixes](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases), including CVE-2026-111497. Node 20 and older patch releases are no longer supported. `.nvmrc` selects 24.22.1 for local development; run `nvm install` and `nvm use` if using nvm. CI tests patched Node 22/24 and fetches the latest matching patch; Pages builds use patched Node 24. Package engine declarations communicate these requirements but do not upgrade an installed runtime.
+
 Run commands from the repository root. Shell examples use a POSIX-compatible shell.
 
 | Interface | Requirement | Checkout entry point |
 | --- | --- | --- |
-| JavaScript / TypeScript | Node.js 20+ | `packages/js/dist/index.js` (ESM and `.d.ts` declarations) |
+| JavaScript / TypeScript | Supported patched Node.js | `packages/js/dist/index.js` (ESM and `.d.ts` declarations) |
 | Python | Python 3.10+ | `packages/python/base128` |
 | Rust | Stable Rust toolchain | `packages/rust` (local Cargo path dependency) |
-| CLI | Node.js 20+ | `node packages/cli/bin/base128.mjs` |
+| CLI | Supported patched Node.js | `node packages/cli/bin/base128.mjs` |
 | Website | A modern browser; Node.js for local preview | [Live playground](https://shea256.github.io/base128/) or `npm run site` |
 
 Compiled JavaScript and browser vendor files are tracked, so the CLI and site can run directly from a checkout. To install development dependencies and rebuild:
@@ -292,7 +294,7 @@ For `n` bytes, binary encoding emits `ceil(8n / 7)` symbols. Decoding validates 
 
 ## Development and testing
 
-From the repository root, with Node.js 20+ and Python 3.10+:
+From the repository root, with a supported patched Node.js runtime and Python 3.10+:
 
 ```sh
 npm ci
@@ -308,13 +310,13 @@ cargo test --manifest-path packages/rust/Cargo.toml --locked  # Rust (separate t
 
 The test runner discovers Python using `python3`, `python`, or Windows `py -3`. Set `PYTHON` to an executable path to override discovery. Run `npm run build` before focused tests when TypeScript or browser vendor inputs change.
 
-Rust CI separately runs Cargo tests, formatting, and Clippy. Its conformance tests consume the same codec and envelope fixtures as the other libraries.
+CI runs once per pull-request update and on pushes to `master`; new commits cancel superseded CI runs. All four Node/Python combinations and Rust run in parallel, with five-minute job limits and cached npm downloads. Rust CI separately runs Cargo tests, formatting, and Clippy. Its conformance tests consume the same codec and envelope fixtures as the other libraries.
 
 The shared [default vectors](specs/test-vectors.json) and [math vectors](specs/test-vectors-math.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
 
 Generated `packages/js/dist/` and `website/vendor/` files are tracked; commit rebuilt outputs with their source changes. README figures are generated with `node scripts/build-readme-images.mjs` after building the library. The cover illustration's prompt is in [`docs/images/cover-prompt.txt`](docs/images/cover-prompt.txt).
 
-GitHub Actions [builds, tests, and deploys](.github/workflows/pages.yml) the static website on pushes to `master`; the workflow can also be dispatched manually. GitHub Pages must use **GitHub Actions** as its publishing source. PR branches do not update the live site.
+GitHub Actions [builds, tests, and deploys](.github/workflows/pages.yml) the static website on pushes to `master` that change website files, the JavaScript package, browser build script, root package manifests, or the deployment workflow. Documentation-only and Rust-only changes do not redeploy the site; the workflow can also be dispatched manually. GitHub Pages must use **GitHub Actions** as its publishing source. PR branches do not update the live site.
 
 ## Repository and contributing
 

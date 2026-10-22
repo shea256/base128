@@ -18,5 +18,5 @@
     "cli": "node packages/cli/bin/base128.mjs"
   },
   "devDependencies": {"typescript": "^5.8.3"},
-  "engines": {"node": ">=20"}
+  "engines": {"node": "^22.23.4 || ^24.22.1 || ^26.12.1"}
 }
