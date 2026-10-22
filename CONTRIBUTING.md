@@ -21,3 +21,8 @@ Rust changes also require `cargo test --manifest-path packages/rust/Cargo.toml -
 `cargo fmt --manifest-path packages/rust/Cargo.toml -- --check`, and
 `cargo clippy --manifest-path packages/rust/Cargo.toml --all-targets -- -D warnings`.
 Rust uses the shared codec and envelope fixtures. It has no runtime dependencies.
+
+For codec/specification changes, also run `python3 scripts/check-lean.py` with the
+Lean and Rust toolchains installed. See [verification scope](verification/README.md).
+Update proofs and conformance cases as needed; never weaken proofs or regenerate
+independent fixtures simply to make a changed implementation pass.

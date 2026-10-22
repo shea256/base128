@@ -40,3 +40,28 @@ jobs:
       - run: cargo +stable fmt --manifest-path packages/rust/Cargo.toml -- --check
       - run: cargo +stable test --manifest-path packages/rust/Cargo.toml --locked
       - run: cargo +stable clippy --manifest-path packages/rust/Cargo.toml --all-targets --locked -- -D warnings
+  lean:
+    runs-on: ubuntu-latest
+    # The first run downloads a pinned Lean toolchain; proofs need no Mathlib.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '^24.22.1'
+          check-latest: true
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: rustup toolchain install stable --profile minimal
+      - run: rustup default stable
+      - run: npm ci --no-audit --no-fund
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: verification/lean
+          auto-config: false
+          build: true
+          use-github-cache: false
+      - name: Audit proofs and compare all three implementations
+        run: python scripts/check-lean.py

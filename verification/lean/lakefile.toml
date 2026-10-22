@@ -1,0 +1,13 @@
+name = "base128-verification"
+version = "0.1.0"
+defaultTargets = ["Base128", "base128_reference"]
+
+[[lean_lib]]
+name = "Base128"
+
+[[lean_exe]]
+name = "base128_reference"
+root = "Main"
+
+[leanOptions]
+warningAsError = true
