@@ -20,6 +20,12 @@ Rust changes also require `cargo test --manifest-path packages/rust/Cargo.toml -
 `cargo clippy --manifest-path packages/rust/Cargo.toml --all-targets -- -D warnings`.
 Rust uses the shared codec and envelope fixtures. It has no runtime dependencies.
 
+Rust numeric binary-core and Verus verification changes also require
+`python3 scripts/check-verus.py --check-mutations` with the pinned verifier; see
+`verification/verus/README.md`. Keep production-body linkage and `--no-cheating`.
+The pilot proves helper contracts under preconditions, not the public streaming
+callers or end-to-end refinement to Lean.
+
 Lean verification changes require `python3 scripts/check-lean.py` with Lake, Cargo,
 a supported Node runtime, and Python on PATH. See `verification/README.md` for the
 pinned toolchain, theorem audit, and scope. Do not use `sorry`, extra axioms, or

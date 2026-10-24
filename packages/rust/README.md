@@ -88,6 +88,13 @@ cargo doc --manifest-path packages/rust/Cargo.toml --no-deps
 
 Tests consume the shared Compact, Math, custom-alphabet, and envelope reference vectors; `serde_json` is a development dependency only. The repository's CLI remains Node.js-based and can be used independently of the Rust library.
 
+The [Verus pilot](../../verification/verus/README.md) checks the production numeric
+streaming helpers under explicit state invariants. Run
+`python3 scripts/check-verus.py --check-mutations` from the repository root after
+installing the pinned verifier. This is not yet a proof of the public streaming
+callers or the entire library. The independent Lean conformance check remains
+`python3 scripts/check-lean.py`.
+
 ## License
 
 Apache-2.0; see [LICENSE](../../LICENSE).

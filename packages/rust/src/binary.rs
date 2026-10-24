@@ -1,3 +1,6 @@
+use crate::binary_core::{
+    decode_step, encode_step, encode_tail, next_symbol_count, valid_length, valid_padding,
+};
 use crate::{compact_alphabet, Alphabet, DecodeOptions, Error};
 use std::collections::HashMap;
 
@@ -28,15 +31,12 @@ impl BinaryEncoder {
         }
         let mut out = String::new();
         for &byte in bytes {
-            self.buffer = (self.buffer << 8) | u16::from(byte);
-            self.bits += 8;
-            while self.bits >= 7 {
-                self.bits -= 7;
-                out.push(
-                    self.alphabet
-                        .digit(((self.buffer >> self.bits) & 127) as u8),
-                );
-                self.buffer &= (1 << self.bits) - 1;
+            let (buffer, bits, first, second) = encode_step(self.buffer, self.bits, byte);
+            self.buffer = buffer;
+            self.bits = bits;
+            out.push(self.alphabet.digit(first));
+            if let Some(digit) = second {
+                out.push(self.alphabet.digit(digit));
             }
         }
         Ok(out)
@@ -46,12 +46,9 @@ impl BinaryEncoder {
             return Err(Error::Finalized);
         }
         self.finished = true;
-        Ok(if self.bits == 0 {
-            String::new()
-        } else {
-            self.alphabet
-                .digit((self.buffer << (7 - self.bits)) as u8)
-                .to_string()
+        Ok(match encode_tail(self.buffer, self.bits) {
+            None => String::new(),
+            Some(digit) => self.alphabet.digit(digit).to_string(),
         })
     }
 }
@@ -89,13 +86,12 @@ impl BinaryDecoder {
                     return Err(Error::InvalidSymbol(c));
                 }
             };
-            self.symbols_mod8 = (self.symbols_mod8 + 1) % 8;
-            self.buffer = (self.buffer << 7) | u16::from(digit);
-            self.bits += 7;
-            if self.bits >= 8 {
-                self.bits -= 8;
-                out.push((self.buffer >> self.bits) as u8);
-                self.buffer &= (1 << self.bits) - 1;
+            self.symbols_mod8 = next_symbol_count(self.symbols_mod8);
+            let (buffer, bits, byte) = decode_step(self.buffer, self.bits, digit);
+            self.buffer = buffer;
+            self.bits = bits;
+            if let Some(byte) = byte {
+                out.push(byte);
             }
         }
         Ok(out)
@@ -105,10 +101,10 @@ impl BinaryDecoder {
             return Err(Error::Finalized);
         }
         self.finished = true;
-        if self.symbols_mod8 == 1 {
+        if !valid_length(self.symbols_mod8) {
             return Err(Error::InvalidLength);
         }
-        if self.buffer != 0 {
+        if !valid_padding(self.buffer) {
             return Err(Error::NonzeroPadding);
         }
         Ok(())
