@@ -40,6 +40,28 @@ jobs:
       - run: cargo +stable fmt --manifest-path packages/rust/Cargo.toml -- --check
       - run: cargo +stable test --manifest-path packages/rust/Cargo.toml --locked
       - run: cargo +stable clippy --manifest-path packages/rust/Cargo.toml --all-targets --locked -- -D warnings
+  verus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned Verus and its Rust toolchain
+        shell: bash
+        run: |
+          rustup toolchain install "$(cat verification/verus/rust-version.txt)" --profile minimal
+          version=$(cat verification/verus/version.txt)
+          archive="verus-${version}-x86-linux.zip"
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/$archive" \
+            "https://github.com/verus-lang/verus/releases/download/release/$version/$archive"
+          cd "$RUNNER_TEMP"
+          sha256sum --check --ignore-missing "$GITHUB_WORKSPACE/verification/verus/SHA256SUMS"
+          unzip -q "$archive"
+          echo "$RUNNER_TEMP/verus-x86-linux" >> "$GITHUB_PATH"
+      - name: Verify production numeric bodies and reject mutations
+        run: python scripts/check-verus.py --check-mutations
   lean:
     runs-on: ubuntu-latest
     # The first run downloads a pinned Lean toolchain; proofs need no Mathlib.

@@ -26,3 +26,8 @@ For codec/specification changes, also run `python3 scripts/check-lean.py` with t
 Lean and Rust toolchains installed. See [verification scope](verification/README.md).
 Update proofs and conformance cases as needed; never weaken proofs or regenerate
 independent fixtures simply to make a changed implementation pass.
+
+Changes to the Rust numeric binary core or its Verus contracts also require
+`python3 scripts/check-verus.py --check-mutations` with the pinned verifier. See
+[Verus verification](verification/verus/README.md) for installation and the exact
+proof boundary. Keep the production body linkage and `--no-cheating` check intact.

@@ -13,6 +13,7 @@
 
 mod alphabet;
 mod binary;
+mod binary_core;
 mod envelope;
 mod integer;
 pub use alphabet::*;

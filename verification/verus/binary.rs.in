@@ -1,0 +1,129 @@
+use vstd::prelude::*;
+
+verus! {
+
+/* @signature encode_step */
+    requires bits <= 6, buffer < (1u16 << bits),
+    ensures
+        result.1 <= 6,
+        result.0 < (1u16 << result.1),
+        result.2 < 128,
+        result.3.is_some() == (bits == 6),
+        match result.3 {
+            Some(second) => second < 128 && result.0 == 0 && result.1 == 0
+                && buffer as int * 256 + byte as int == result.2 as int * 128 + second as int,
+            None => result.1 == bits + 1
+                && buffer as int * 256 + byte as int
+                    == result.2 as int * (1u16 << result.1) as int + result.0 as int,
+        },
+{
+    proof {
+        assert((1u16 << ((bits + 1) as u8)) > 0) by(bit_vector)
+            requires bits <= 6;
+        assert(
+            ((buffer << 8) | byte as u16) as u32 == buffer as u32 * 256 + byte as u32
+            && (((buffer << 8) | byte as u16) >> ((bits + 1) as u8)) < 128
+        ) by(bit_vector) requires bits <= 6, buffer < (1u16 << bits);
+        let combined = (buffer << 8) | byte as u16;
+        if bits == 6 {
+            assert(combined as u32 == (combined >> 7) as u32 * 128 + (combined & 127) as u32
+                && (combined & 127) < 128) by(bit_vector);
+        } else {
+            assert(
+                (combined & (((1u16 << ((bits + 1) as u8)) - 1) as u16)) < (1u16 << ((bits + 1) as u8))
+                && combined as u32 == (combined >> ((bits + 1) as u8)) as u32
+                    * (1u16 << ((bits + 1) as u8)) as u32
+                    + (combined & (((1u16 << ((bits + 1) as u8)) - 1) as u16)) as u32
+            ) by(bit_vector) requires bits < 6;
+        }
+        assert((1u16 << 0u8) == 1) by(bit_vector);
+    }
+    /* @body encode_step */
+}
+
+/* @signature encode_tail */
+    requires bits <= 6, buffer < (1u16 << bits),
+    ensures
+        result.is_none() == (bits == 0),
+        match result {
+            Some(digit) => digit < 128
+                && digit as int == buffer as int * (1u16 << ((7 - bits) as u8)) as int,
+            None => buffer == 0,
+        },
+{
+    proof {
+        assert(bits == 0 ==> buffer == 0) by(bit_vector)
+            requires buffer < (1u16 << bits);
+        if bits > 0 {
+            assert((buffer << ((7 - bits) as u8)) < 128
+                && (buffer << ((7 - bits) as u8)) as u32
+                    == buffer as u32 * (1u16 << ((7 - bits) as u8)) as u32
+            ) by(bit_vector) requires 1 <= bits <= 6, buffer < (1u16 << bits);
+        }
+    }
+    /* @body encode_tail */
+}
+
+/* @signature decode_step */
+    requires bits <= 7, buffer < (1u16 << bits), digit < 128,
+    ensures
+        result.1 <= 7,
+        result.0 < (1u16 << result.1),
+        result.2.is_some() == (bits > 0),
+        match result.2 {
+            Some(byte) => result.1 == bits - 1
+                && buffer as int * 128 + digit as int
+                    == byte as int * (1u16 << result.1) as int + result.0 as int,
+            None => result.1 == 7 && result.0 == digit,
+        },
+{
+    proof {
+        assert(((buffer << 7) | digit as u16) as u32 == buffer as u32 * 128 + digit as u32)
+            by(bit_vector) requires bits <= 7, buffer < (1u16 << bits), digit < 128;
+        let combined = (buffer << 7) | digit as u16;
+        if bits > 0 {
+            assert((1u16 << ((bits - 1) as u8)) > 0
+                && (combined >> ((bits - 1) as u8)) < 256
+                && (combined & (((1u16 << ((bits - 1) as u8)) - 1) as u16)) < (1u16 << ((bits - 1) as u8))
+                && combined as u32 == (combined >> ((bits - 1) as u8)) as u32
+                    * (1u16 << ((bits - 1) as u8)) as u32
+                    + (combined & (((1u16 << ((bits - 1) as u8)) - 1) as u16)) as u32
+            ) by(bit_vector) requires 1 <= bits <= 7, buffer < (1u16 << bits), digit < 128,
+                combined == (buffer << 7) | digit as u16;
+        } else {
+            assert(buffer == 0 && combined == digit && combined < (1u16 << 7u8))
+                by(bit_vector) requires bits == 0, buffer < (1u16 << bits), digit < 128,
+                    combined == (buffer << 7) | digit as u16;
+        }
+    }
+    /* @body decode_step */
+}
+
+/* @signature next_symbol_count */
+    requires symbols_mod8 < 8,
+    ensures result < 8, result as int == (symbols_mod8 as int + 1) % 8,
+{
+    /* @body next_symbol_count */
+}
+
+/* @signature valid_length */
+    ensures result == (symbols_mod8 != 1),
+{
+    /* @body valid_length */
+}
+
+/* @signature valid_padding */
+    ensures result == (buffer == 0),
+{
+    /* @body valid_padding */
+}
+
+// For arbitrary symbol counts, the residue check equals the published length rule:
+// m = ceil(8 * floor(7*m/8) / 7). This is independent of machine-sized counters.
+proof fn canonical_length(m: nat)
+    ensures (m % 8 != 1) == (m == (8 * (7 * m / 8) + 6) / 7),
+{
+    assert((m % 8 != 1) == (m == (8 * (7 * m / 8) + 6) / 7)) by(nonlinear_arith);
+}
+
+}

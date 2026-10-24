@@ -22,16 +22,20 @@ fn check_vectors(v: &Value) {
             let mut encoder = BinaryEncoder::new(&alphabet);
             let mut actual = String::new();
             for chunk in bytes.chunks(size) {
+                assert_eq!(encoder.write(&[]).unwrap(), "");
                 actual.push_str(&encoder.write(chunk).unwrap());
             }
+            assert_eq!(encoder.write(&[]).unwrap(), "");
             actual.push_str(&encoder.finish().unwrap());
             assert_eq!(actual, encoded);
         }
         let mut decoder = BinaryDecoder::new(options).unwrap();
         let mut actual = Vec::new();
         for c in encoded.chars() {
+            assert!(decoder.write("").unwrap().is_empty());
             actual.extend(decoder.write(&c.to_string()).unwrap());
         }
+        assert!(decoder.write("").unwrap().is_empty());
         decoder.finish().unwrap();
         assert_eq!(actual, bytes);
         if let Some(mixed) = row["mixed"].as_str() {

@@ -62,6 +62,8 @@ The `lean` CI job runs independently of the Node/Python matrix and Rust tests, w
 
 ## Limits and future work
 
-These proofs do not verify production source, streaming state machines, UTF-8 parsing, alias handling, envelopes, headers, CRC32, file I/O, resource limits, or compiler correctness. Existing tests continue to cover those features. Finite conformance tests can discover disagreements but cannot establish implementation equivalence for every input.
+These Lean proofs do not verify production source, streaming state machines, UTF-8 parsing, alias handling, envelopes, headers, CRC32, file I/O, resource limits, or compiler correctness. Existing tests continue to cover those features. Finite conformance tests can discover disagreements but cannot establish implementation equivalence for every input.
+
+A separate [Verus pilot](verus/README.md) verifies the actual Rust numeric transition functions under explicit state invariants, including bounds, packed-bit conservation, and tail padding. It also proves the arithmetic equivalence of the symbol-count residue rule and the published length equation. This does not yet prove the public streaming callers or refinement to this Lean model; the Lean-to-production connection remains conformance testing.
 
 Possible next steps are a proof that direct length/padding checks are equivalent to the canonical reference decoder, refinement proofs for a production algorithm, and separate envelope verification. Keep any future verification claims specific to the theorems actually checked.
