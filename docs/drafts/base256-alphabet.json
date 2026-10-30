@@ -1,0 +1,1416 @@
+{
+  "name": "Base256 alphabet draft",
+  "status": "Exploratory; not implemented or a published format",
+  "base_alphabet": "../../specs/alphabet.json",
+  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷■▲◆♜★⬟⬢◐▰◇☆⌂⌘⌥⌫♛♭♮∠∮≡≜⊢♞☾⊞⊠⋈ℵℏ✓♫Ä♠♣ÆÇÐÉ♥ÎÑÖØÜ☯ÞŒä☮☢æçðé⚖îñö⎋üýþœ¡¿¢£¤€°±×✠⚑…†‡‰※∂∇∏∑√∫∞≈≠≤≥∝∴∵∈∉☀∩∪⊂⊃⊆⊇⊕⊗⊥☂✂❄¬∀∃←↑→↓↔↕⇐⇒⇔↗↘↙↖⏏↩↪",
+  "symbols": [
+    {
+      "index": 0,
+      "character": "0",
+      "unicode": "U+0030"
+    },
+    {
+      "index": 1,
+      "character": "1",
+      "unicode": "U+0031"
+    },
+    {
+      "index": 2,
+      "character": "2",
+      "unicode": "U+0032"
+    },
+    {
+      "index": 3,
+      "character": "3",
+      "unicode": "U+0033"
+    },
+    {
+      "index": 4,
+      "character": "4",
+      "unicode": "U+0034"
+    },
+    {
+      "index": 5,
+      "character": "5",
+      "unicode": "U+0035"
+    },
+    {
+      "index": 6,
+      "character": "6",
+      "unicode": "U+0036"
+    },
+    {
+      "index": 7,
+      "character": "7",
+      "unicode": "U+0037"
+    },
+    {
+      "index": 8,
+      "character": "8",
+      "unicode": "U+0038"
+    },
+    {
+      "index": 9,
+      "character": "9",
+      "unicode": "U+0039"
+    },
+    {
+      "index": 10,
+      "character": "A",
+      "unicode": "U+0041"
+    },
+    {
+      "index": 11,
+      "character": "B",
+      "unicode": "U+0042"
+    },
+    {
+      "index": 12,
+      "character": "C",
+      "unicode": "U+0043"
+    },
+    {
+      "index": 13,
+      "character": "D",
+      "unicode": "U+0044"
+    },
+    {
+      "index": 14,
+      "character": "E",
+      "unicode": "U+0045"
+    },
+    {
+      "index": 15,
+      "character": "F",
+      "unicode": "U+0046"
+    },
+    {
+      "index": 16,
+      "character": "G",
+      "unicode": "U+0047"
+    },
+    {
+      "index": 17,
+      "character": "H",
+      "unicode": "U+0048"
+    },
+    {
+      "index": 18,
+      "character": "I",
+      "unicode": "U+0049"
+    },
+    {
+      "index": 19,
+      "character": "J",
+      "unicode": "U+004A"
+    },
+    {
+      "index": 20,
+      "character": "K",
+      "unicode": "U+004B"
+    },
+    {
+      "index": 21,
+      "character": "L",
+      "unicode": "U+004C"
+    },
+    {
+      "index": 22,
+      "character": "M",
+      "unicode": "U+004D"
+    },
+    {
+      "index": 23,
+      "character": "N",
+      "unicode": "U+004E"
+    },
+    {
+      "index": 24,
+      "character": "O",
+      "unicode": "U+004F"
+    },
+    {
+      "index": 25,
+      "character": "P",
+      "unicode": "U+0050"
+    },
+    {
+      "index": 26,
+      "character": "Q",
+      "unicode": "U+0051"
+    },
+    {
+      "index": 27,
+      "character": "R",
+      "unicode": "U+0052"
+    },
+    {
+      "index": 28,
+      "character": "S",
+      "unicode": "U+0053"
+    },
+    {
+      "index": 29,
+      "character": "T",
+      "unicode": "U+0054"
+    },
+    {
+      "index": 30,
+      "character": "U",
+      "unicode": "U+0055"
+    },
+    {
+      "index": 31,
+      "character": "V",
+      "unicode": "U+0056"
+    },
+    {
+      "index": 32,
+      "character": "W",
+      "unicode": "U+0057"
+    },
+    {
+      "index": 33,
+      "character": "X",
+      "unicode": "U+0058"
+    },
+    {
+      "index": 34,
+      "character": "Y",
+      "unicode": "U+0059"
+    },
+    {
+      "index": 35,
+      "character": "Z",
+      "unicode": "U+005A"
+    },
+    {
+      "index": 36,
+      "character": "a",
+      "unicode": "U+0061"
+    },
+    {
+      "index": 37,
+      "character": "b",
+      "unicode": "U+0062"
+    },
+    {
+      "index": 38,
+      "character": "c",
+      "unicode": "U+0063"
+    },
+    {
+      "index": 39,
+      "character": "d",
+      "unicode": "U+0064"
+    },
+    {
+      "index": 40,
+      "character": "e",
+      "unicode": "U+0065"
+    },
+    {
+      "index": 41,
+      "character": "f",
+      "unicode": "U+0066"
+    },
+    {
+      "index": 42,
+      "character": "g",
+      "unicode": "U+0067"
+    },
+    {
+      "index": 43,
+      "character": "h",
+      "unicode": "U+0068"
+    },
+    {
+      "index": 44,
+      "character": "i",
+      "unicode": "U+0069"
+    },
+    {
+      "index": 45,
+      "character": "j",
+      "unicode": "U+006A"
+    },
+    {
+      "index": 46,
+      "character": "k",
+      "unicode": "U+006B"
+    },
+    {
+      "index": 47,
+      "character": "l",
+      "unicode": "U+006C"
+    },
+    {
+      "index": 48,
+      "character": "m",
+      "unicode": "U+006D"
+    },
+    {
+      "index": 49,
+      "character": "n",
+      "unicode": "U+006E"
+    },
+    {
+      "index": 50,
+      "character": "o",
+      "unicode": "U+006F"
+    },
+    {
+      "index": 51,
+      "character": "p",
+      "unicode": "U+0070"
+    },
+    {
+      "index": 52,
+      "character": "q",
+      "unicode": "U+0071"
+    },
+    {
+      "index": 53,
+      "character": "r",
+      "unicode": "U+0072"
+    },
+    {
+      "index": 54,
+      "character": "s",
+      "unicode": "U+0073"
+    },
+    {
+      "index": 55,
+      "character": "t",
+      "unicode": "U+0074"
+    },
+    {
+      "index": 56,
+      "character": "u",
+      "unicode": "U+0075"
+    },
+    {
+      "index": 57,
+      "character": "v",
+      "unicode": "U+0076"
+    },
+    {
+      "index": 58,
+      "character": "w",
+      "unicode": "U+0077"
+    },
+    {
+      "index": 59,
+      "character": "x",
+      "unicode": "U+0078"
+    },
+    {
+      "index": 60,
+      "character": "y",
+      "unicode": "U+0079"
+    },
+    {
+      "index": 61,
+      "character": "z",
+      "unicode": "U+007A"
+    },
+    {
+      "index": 62,
+      "character": "!",
+      "unicode": "U+0021"
+    },
+    {
+      "index": 63,
+      "character": "\"",
+      "unicode": "U+0022"
+    },
+    {
+      "index": 64,
+      "character": "#",
+      "unicode": "U+0023"
+    },
+    {
+      "index": 65,
+      "character": "$",
+      "unicode": "U+0024"
+    },
+    {
+      "index": 66,
+      "character": "%",
+      "unicode": "U+0025"
+    },
+    {
+      "index": 67,
+      "character": "&",
+      "unicode": "U+0026"
+    },
+    {
+      "index": 68,
+      "character": "'",
+      "unicode": "U+0027"
+    },
+    {
+      "index": 69,
+      "character": "(",
+      "unicode": "U+0028"
+    },
+    {
+      "index": 70,
+      "character": ")",
+      "unicode": "U+0029"
+    },
+    {
+      "index": 71,
+      "character": "*",
+      "unicode": "U+002A"
+    },
+    {
+      "index": 72,
+      "character": "+",
+      "unicode": "U+002B"
+    },
+    {
+      "index": 73,
+      "character": ",",
+      "unicode": "U+002C"
+    },
+    {
+      "index": 74,
+      "character": "-",
+      "unicode": "U+002D"
+    },
+    {
+      "index": 75,
+      "character": ".",
+      "unicode": "U+002E"
+    },
+    {
+      "index": 76,
+      "character": "/",
+      "unicode": "U+002F"
+    },
+    {
+      "index": 77,
+      "character": ":",
+      "unicode": "U+003A"
+    },
+    {
+      "index": 78,
+      "character": ";",
+      "unicode": "U+003B"
+    },
+    {
+      "index": 79,
+      "character": "<",
+      "unicode": "U+003C"
+    },
+    {
+      "index": 80,
+      "character": "=",
+      "unicode": "U+003D"
+    },
+    {
+      "index": 81,
+      "character": ">",
+      "unicode": "U+003E"
+    },
+    {
+      "index": 82,
+      "character": "?",
+      "unicode": "U+003F"
+    },
+    {
+      "index": 83,
+      "character": "@",
+      "unicode": "U+0040"
+    },
+    {
+      "index": 84,
+      "character": "[",
+      "unicode": "U+005B"
+    },
+    {
+      "index": 85,
+      "character": "\\",
+      "unicode": "U+005C"
+    },
+    {
+      "index": 86,
+      "character": "]",
+      "unicode": "U+005D"
+    },
+    {
+      "index": 87,
+      "character": "^",
+      "unicode": "U+005E"
+    },
+    {
+      "index": 88,
+      "character": "_",
+      "unicode": "U+005F"
+    },
+    {
+      "index": 89,
+      "character": "`",
+      "unicode": "U+0060"
+    },
+    {
+      "index": 90,
+      "character": "{",
+      "unicode": "U+007B"
+    },
+    {
+      "index": 91,
+      "character": "|",
+      "unicode": "U+007C"
+    },
+    {
+      "index": 92,
+      "character": "}",
+      "unicode": "U+007D"
+    },
+    {
+      "index": 93,
+      "character": "~",
+      "unicode": "U+007E"
+    },
+    {
+      "index": 94,
+      "character": "Γ",
+      "unicode": "U+0393"
+    },
+    {
+      "index": 95,
+      "character": "Δ",
+      "unicode": "U+0394"
+    },
+    {
+      "index": 96,
+      "character": "Θ",
+      "unicode": "U+0398"
+    },
+    {
+      "index": 97,
+      "character": "Λ",
+      "unicode": "U+039B"
+    },
+    {
+      "index": 98,
+      "character": "Ξ",
+      "unicode": "U+039E"
+    },
+    {
+      "index": 99,
+      "character": "Π",
+      "unicode": "U+03A0"
+    },
+    {
+      "index": 100,
+      "character": "Φ",
+      "unicode": "U+03A6"
+    },
+    {
+      "index": 101,
+      "character": "Ψ",
+      "unicode": "U+03A8"
+    },
+    {
+      "index": 102,
+      "character": "Ω",
+      "unicode": "U+03A9"
+    },
+    {
+      "index": 103,
+      "character": "α",
+      "unicode": "U+03B1"
+    },
+    {
+      "index": 104,
+      "character": "β",
+      "unicode": "U+03B2"
+    },
+    {
+      "index": 105,
+      "character": "γ",
+      "unicode": "U+03B3"
+    },
+    {
+      "index": 106,
+      "character": "δ",
+      "unicode": "U+03B4"
+    },
+    {
+      "index": 107,
+      "character": "ε",
+      "unicode": "U+03B5"
+    },
+    {
+      "index": 108,
+      "character": "ζ",
+      "unicode": "U+03B6"
+    },
+    {
+      "index": 109,
+      "character": "η",
+      "unicode": "U+03B7"
+    },
+    {
+      "index": 110,
+      "character": "θ",
+      "unicode": "U+03B8"
+    },
+    {
+      "index": 111,
+      "character": "ι",
+      "unicode": "U+03B9"
+    },
+    {
+      "index": 112,
+      "character": "κ",
+      "unicode": "U+03BA"
+    },
+    {
+      "index": 113,
+      "character": "λ",
+      "unicode": "U+03BB"
+    },
+    {
+      "index": 114,
+      "character": "μ",
+      "unicode": "U+03BC"
+    },
+    {
+      "index": 115,
+      "character": "ξ",
+      "unicode": "U+03BE"
+    },
+    {
+      "index": 116,
+      "character": "π",
+      "unicode": "U+03C0"
+    },
+    {
+      "index": 117,
+      "character": "σ",
+      "unicode": "U+03C3"
+    },
+    {
+      "index": 118,
+      "character": "τ",
+      "unicode": "U+03C4"
+    },
+    {
+      "index": 119,
+      "character": "φ",
+      "unicode": "U+03C6"
+    },
+    {
+      "index": 120,
+      "character": "ψ",
+      "unicode": "U+03C8"
+    },
+    {
+      "index": 121,
+      "character": "ω",
+      "unicode": "U+03C9"
+    },
+    {
+      "index": 122,
+      "character": "¥",
+      "unicode": "U+00A5"
+    },
+    {
+      "index": 123,
+      "character": "§",
+      "unicode": "U+00A7"
+    },
+    {
+      "index": 124,
+      "character": "©",
+      "unicode": "U+00A9"
+    },
+    {
+      "index": 125,
+      "character": "®",
+      "unicode": "U+00AE"
+    },
+    {
+      "index": 126,
+      "character": "¶",
+      "unicode": "U+00B6"
+    },
+    {
+      "index": 127,
+      "character": "÷",
+      "unicode": "U+00F7"
+    },
+    {
+      "index": 128,
+      "character": "■",
+      "unicode": "U+25A0",
+      "spoken_name": "Square"
+    },
+    {
+      "index": 129,
+      "character": "▲",
+      "unicode": "U+25B2",
+      "spoken_name": "Triangle"
+    },
+    {
+      "index": 130,
+      "character": "◆",
+      "unicode": "U+25C6",
+      "spoken_name": "Diamond"
+    },
+    {
+      "index": 131,
+      "character": "♜",
+      "unicode": "U+265C",
+      "spoken_name": "Rook"
+    },
+    {
+      "index": 132,
+      "character": "★",
+      "unicode": "U+2605",
+      "spoken_name": "Star"
+    },
+    {
+      "index": 133,
+      "character": "⬟",
+      "unicode": "U+2B1F",
+      "spoken_name": "Pentagon"
+    },
+    {
+      "index": 134,
+      "character": "⬢",
+      "unicode": "U+2B22",
+      "spoken_name": "Hexagon"
+    },
+    {
+      "index": 135,
+      "character": "◐",
+      "unicode": "U+25D0",
+      "spoken_name": "Half circle"
+    },
+    {
+      "index": 136,
+      "character": "▰",
+      "unicode": "U+25B0",
+      "spoken_name": "Parallelogram"
+    },
+    {
+      "index": 137,
+      "character": "◇",
+      "unicode": "U+25C7",
+      "spoken_name": "Hollow diamond"
+    },
+    {
+      "index": 138,
+      "character": "☆",
+      "unicode": "U+2606",
+      "spoken_name": "Hollow star"
+    },
+    {
+      "index": 139,
+      "character": "⌂",
+      "unicode": "U+2302",
+      "spoken_name": "House"
+    },
+    {
+      "index": 140,
+      "character": "⌘",
+      "unicode": "U+2318",
+      "spoken_name": "Command"
+    },
+    {
+      "index": 141,
+      "character": "⌥",
+      "unicode": "U+2325",
+      "spoken_name": "Option"
+    },
+    {
+      "index": 142,
+      "character": "⌫",
+      "unicode": "U+232B",
+      "spoken_name": "Backspace"
+    },
+    {
+      "index": 143,
+      "character": "♛",
+      "unicode": "U+265B",
+      "spoken_name": "Queen"
+    },
+    {
+      "index": 144,
+      "character": "♭",
+      "unicode": "U+266D",
+      "spoken_name": "Flat"
+    },
+    {
+      "index": 145,
+      "character": "♮",
+      "unicode": "U+266E",
+      "spoken_name": "Natural"
+    },
+    {
+      "index": 146,
+      "character": "∠",
+      "unicode": "U+2220",
+      "spoken_name": "Angle"
+    },
+    {
+      "index": 147,
+      "character": "∮",
+      "unicode": "U+222E",
+      "spoken_name": "Contour integral"
+    },
+    {
+      "index": 148,
+      "character": "≡",
+      "unicode": "U+2261",
+      "spoken_name": "Identical"
+    },
+    {
+      "index": 149,
+      "character": "≜",
+      "unicode": "U+225C",
+      "spoken_name": "Defined as"
+    },
+    {
+      "index": 150,
+      "character": "⊢",
+      "unicode": "U+22A2",
+      "spoken_name": "Turnstile"
+    },
+    {
+      "index": 151,
+      "character": "♞",
+      "unicode": "U+265E",
+      "spoken_name": "Knight"
+    },
+    {
+      "index": 152,
+      "character": "☾",
+      "unicode": "U+263E",
+      "spoken_name": "Crescent"
+    },
+    {
+      "index": 153,
+      "character": "⊞",
+      "unicode": "U+229E",
+      "spoken_name": "Squared plus"
+    },
+    {
+      "index": 154,
+      "character": "⊠",
+      "unicode": "U+22A0",
+      "spoken_name": "Squared times"
+    },
+    {
+      "index": 155,
+      "character": "⋈",
+      "unicode": "U+22C8",
+      "spoken_name": "Bowtie"
+    },
+    {
+      "index": 156,
+      "character": "ℵ",
+      "unicode": "U+2135",
+      "spoken_name": "Aleph"
+    },
+    {
+      "index": 157,
+      "character": "ℏ",
+      "unicode": "U+210F",
+      "spoken_name": "H-bar"
+    },
+    {
+      "index": 158,
+      "character": "✓",
+      "unicode": "U+2713",
+      "spoken_name": "Checkmark"
+    },
+    {
+      "index": 159,
+      "character": "♫",
+      "unicode": "U+266B",
+      "spoken_name": "Music"
+    },
+    {
+      "index": 160,
+      "character": "Ä",
+      "unicode": "U+00C4",
+      "spoken_name": "Capital A diaeresis"
+    },
+    {
+      "index": 161,
+      "character": "♠",
+      "unicode": "U+2660",
+      "spoken_name": "Spade"
+    },
+    {
+      "index": 162,
+      "character": "♣",
+      "unicode": "U+2663",
+      "spoken_name": "Club"
+    },
+    {
+      "index": 163,
+      "character": "Æ",
+      "unicode": "U+00C6",
+      "spoken_name": "Capital AE"
+    },
+    {
+      "index": 164,
+      "character": "Ç",
+      "unicode": "U+00C7",
+      "spoken_name": "Capital C cedilla"
+    },
+    {
+      "index": 165,
+      "character": "Ð",
+      "unicode": "U+00D0",
+      "spoken_name": "Capital eth"
+    },
+    {
+      "index": 166,
+      "character": "É",
+      "unicode": "U+00C9",
+      "spoken_name": "Capital E acute"
+    },
+    {
+      "index": 167,
+      "character": "♥",
+      "unicode": "U+2665",
+      "spoken_name": "Heart"
+    },
+    {
+      "index": 168,
+      "character": "Î",
+      "unicode": "U+00CE",
+      "spoken_name": "Capital I circumflex"
+    },
+    {
+      "index": 169,
+      "character": "Ñ",
+      "unicode": "U+00D1",
+      "spoken_name": "Capital N tilde"
+    },
+    {
+      "index": 170,
+      "character": "Ö",
+      "unicode": "U+00D6",
+      "spoken_name": "Capital O diaeresis"
+    },
+    {
+      "index": 171,
+      "character": "Ø",
+      "unicode": "U+00D8",
+      "spoken_name": "Capital O stroke"
+    },
+    {
+      "index": 172,
+      "character": "Ü",
+      "unicode": "U+00DC",
+      "spoken_name": "Capital U diaeresis"
+    },
+    {
+      "index": 173,
+      "character": "☯",
+      "unicode": "U+262F",
+      "spoken_name": "Yin-yang"
+    },
+    {
+      "index": 174,
+      "character": "Þ",
+      "unicode": "U+00DE",
+      "spoken_name": "Capital thorn"
+    },
+    {
+      "index": 175,
+      "character": "Œ",
+      "unicode": "U+0152",
+      "spoken_name": "Capital OE"
+    },
+    {
+      "index": 176,
+      "character": "ä",
+      "unicode": "U+00E4",
+      "spoken_name": "Lowercase A diaeresis"
+    },
+    {
+      "index": 177,
+      "character": "☮",
+      "unicode": "U+262E",
+      "spoken_name": "Peace"
+    },
+    {
+      "index": 178,
+      "character": "☢",
+      "unicode": "U+2622",
+      "spoken_name": "Radiation"
+    },
+    {
+      "index": 179,
+      "character": "æ",
+      "unicode": "U+00E6",
+      "spoken_name": "Lowercase AE"
+    },
+    {
+      "index": 180,
+      "character": "ç",
+      "unicode": "U+00E7",
+      "spoken_name": "Lowercase C cedilla"
+    },
+    {
+      "index": 181,
+      "character": "ð",
+      "unicode": "U+00F0",
+      "spoken_name": "Lowercase eth"
+    },
+    {
+      "index": 182,
+      "character": "é",
+      "unicode": "U+00E9",
+      "spoken_name": "Lowercase E acute"
+    },
+    {
+      "index": 183,
+      "character": "⚖",
+      "unicode": "U+2696",
+      "spoken_name": "Scales"
+    },
+    {
+      "index": 184,
+      "character": "î",
+      "unicode": "U+00EE",
+      "spoken_name": "Lowercase I circumflex"
+    },
+    {
+      "index": 185,
+      "character": "ñ",
+      "unicode": "U+00F1",
+      "spoken_name": "Lowercase N tilde"
+    },
+    {
+      "index": 186,
+      "character": "ö",
+      "unicode": "U+00F6",
+      "spoken_name": "Lowercase O diaeresis"
+    },
+    {
+      "index": 187,
+      "character": "⎋",
+      "unicode": "U+238B",
+      "spoken_name": "Escape"
+    },
+    {
+      "index": 188,
+      "character": "ü",
+      "unicode": "U+00FC",
+      "spoken_name": "Lowercase U diaeresis"
+    },
+    {
+      "index": 189,
+      "character": "ý",
+      "unicode": "U+00FD",
+      "spoken_name": "Lowercase Y acute"
+    },
+    {
+      "index": 190,
+      "character": "þ",
+      "unicode": "U+00FE",
+      "spoken_name": "Lowercase thorn"
+    },
+    {
+      "index": 191,
+      "character": "œ",
+      "unicode": "U+0153",
+      "spoken_name": "Lowercase OE"
+    },
+    {
+      "index": 192,
+      "character": "¡",
+      "unicode": "U+00A1",
+      "spoken_name": "Inverted exclamation"
+    },
+    {
+      "index": 193,
+      "character": "¿",
+      "unicode": "U+00BF",
+      "spoken_name": "Inverted question"
+    },
+    {
+      "index": 194,
+      "character": "¢",
+      "unicode": "U+00A2",
+      "spoken_name": "Cent"
+    },
+    {
+      "index": 195,
+      "character": "£",
+      "unicode": "U+00A3",
+      "spoken_name": "Pound sterling"
+    },
+    {
+      "index": 196,
+      "character": "¤",
+      "unicode": "U+00A4",
+      "spoken_name": "Currency sign"
+    },
+    {
+      "index": 197,
+      "character": "€",
+      "unicode": "U+20AC",
+      "spoken_name": "Euro"
+    },
+    {
+      "index": 198,
+      "character": "°",
+      "unicode": "U+00B0",
+      "spoken_name": "Degree"
+    },
+    {
+      "index": 199,
+      "character": "±",
+      "unicode": "U+00B1",
+      "spoken_name": "Plus or minus"
+    },
+    {
+      "index": 200,
+      "character": "×",
+      "unicode": "U+00D7",
+      "spoken_name": "Multiplication"
+    },
+    {
+      "index": 201,
+      "character": "✠",
+      "unicode": "U+2720",
+      "spoken_name": "Maltese cross"
+    },
+    {
+      "index": 202,
+      "character": "⚑",
+      "unicode": "U+2691",
+      "spoken_name": "Flag"
+    },
+    {
+      "index": 203,
+      "character": "…",
+      "unicode": "U+2026",
+      "spoken_name": "Ellipsis"
+    },
+    {
+      "index": 204,
+      "character": "†",
+      "unicode": "U+2020",
+      "spoken_name": "Dagger"
+    },
+    {
+      "index": 205,
+      "character": "‡",
+      "unicode": "U+2021",
+      "spoken_name": "Double dagger"
+    },
+    {
+      "index": 206,
+      "character": "‰",
+      "unicode": "U+2030",
+      "spoken_name": "Per mille"
+    },
+    {
+      "index": 207,
+      "character": "※",
+      "unicode": "U+203B",
+      "spoken_name": "Reference mark"
+    },
+    {
+      "index": 208,
+      "character": "∂",
+      "unicode": "U+2202",
+      "spoken_name": "Partial"
+    },
+    {
+      "index": 209,
+      "character": "∇",
+      "unicode": "U+2207",
+      "spoken_name": "Nabla"
+    },
+    {
+      "index": 210,
+      "character": "∏",
+      "unicode": "U+220F",
+      "spoken_name": "Product"
+    },
+    {
+      "index": 211,
+      "character": "∑",
+      "unicode": "U+2211",
+      "spoken_name": "Summation"
+    },
+    {
+      "index": 212,
+      "character": "√",
+      "unicode": "U+221A",
+      "spoken_name": "Square root"
+    },
+    {
+      "index": 213,
+      "character": "∫",
+      "unicode": "U+222B",
+      "spoken_name": "Integral"
+    },
+    {
+      "index": 214,
+      "character": "∞",
+      "unicode": "U+221E",
+      "spoken_name": "Infinity"
+    },
+    {
+      "index": 215,
+      "character": "≈",
+      "unicode": "U+2248",
+      "spoken_name": "Approximately equal"
+    },
+    {
+      "index": 216,
+      "character": "≠",
+      "unicode": "U+2260",
+      "spoken_name": "Not equal"
+    },
+    {
+      "index": 217,
+      "character": "≤",
+      "unicode": "U+2264",
+      "spoken_name": "Less than or equal"
+    },
+    {
+      "index": 218,
+      "character": "≥",
+      "unicode": "U+2265",
+      "spoken_name": "Greater than or equal"
+    },
+    {
+      "index": 219,
+      "character": "∝",
+      "unicode": "U+221D",
+      "spoken_name": "Proportional to"
+    },
+    {
+      "index": 220,
+      "character": "∴",
+      "unicode": "U+2234",
+      "spoken_name": "Therefore"
+    },
+    {
+      "index": 221,
+      "character": "∵",
+      "unicode": "U+2235",
+      "spoken_name": "Because"
+    },
+    {
+      "index": 222,
+      "character": "∈",
+      "unicode": "U+2208",
+      "spoken_name": "Element of"
+    },
+    {
+      "index": 223,
+      "character": "∉",
+      "unicode": "U+2209",
+      "spoken_name": "Not an element of"
+    },
+    {
+      "index": 224,
+      "character": "☀",
+      "unicode": "U+2600",
+      "spoken_name": "Sun"
+    },
+    {
+      "index": 225,
+      "character": "∩",
+      "unicode": "U+2229",
+      "spoken_name": "Intersection"
+    },
+    {
+      "index": 226,
+      "character": "∪",
+      "unicode": "U+222A",
+      "spoken_name": "Union"
+    },
+    {
+      "index": 227,
+      "character": "⊂",
+      "unicode": "U+2282",
+      "spoken_name": "Subset"
+    },
+    {
+      "index": 228,
+      "character": "⊃",
+      "unicode": "U+2283",
+      "spoken_name": "Superset"
+    },
+    {
+      "index": 229,
+      "character": "⊆",
+      "unicode": "U+2286",
+      "spoken_name": "Subset or equal"
+    },
+    {
+      "index": 230,
+      "character": "⊇",
+      "unicode": "U+2287",
+      "spoken_name": "Superset or equal"
+    },
+    {
+      "index": 231,
+      "character": "⊕",
+      "unicode": "U+2295",
+      "spoken_name": "Circled plus"
+    },
+    {
+      "index": 232,
+      "character": "⊗",
+      "unicode": "U+2297",
+      "spoken_name": "Circled times"
+    },
+    {
+      "index": 233,
+      "character": "⊥",
+      "unicode": "U+22A5",
+      "spoken_name": "Perpendicular"
+    },
+    {
+      "index": 234,
+      "character": "☂",
+      "unicode": "U+2602",
+      "spoken_name": "Umbrella"
+    },
+    {
+      "index": 235,
+      "character": "✂",
+      "unicode": "U+2702",
+      "spoken_name": "Scissors"
+    },
+    {
+      "index": 236,
+      "character": "❄",
+      "unicode": "U+2744",
+      "spoken_name": "Snowflake"
+    },
+    {
+      "index": 237,
+      "character": "¬",
+      "unicode": "U+00AC",
+      "spoken_name": "Logical not"
+    },
+    {
+      "index": 238,
+      "character": "∀",
+      "unicode": "U+2200",
+      "spoken_name": "For all"
+    },
+    {
+      "index": 239,
+      "character": "∃",
+      "unicode": "U+2203",
+      "spoken_name": "There exists"
+    },
+    {
+      "index": 240,
+      "character": "←",
+      "unicode": "U+2190",
+      "spoken_name": "Left arrow"
+    },
+    {
+      "index": 241,
+      "character": "↑",
+      "unicode": "U+2191",
+      "spoken_name": "Up arrow"
+    },
+    {
+      "index": 242,
+      "character": "→",
+      "unicode": "U+2192",
+      "spoken_name": "Right arrow"
+    },
+    {
+      "index": 243,
+      "character": "↓",
+      "unicode": "U+2193",
+      "spoken_name": "Down arrow"
+    },
+    {
+      "index": 244,
+      "character": "↔",
+      "unicode": "U+2194",
+      "spoken_name": "Left-right arrow"
+    },
+    {
+      "index": 245,
+      "character": "↕",
+      "unicode": "U+2195",
+      "spoken_name": "Up-down arrow"
+    },
+    {
+      "index": 246,
+      "character": "⇐",
+      "unicode": "U+21D0",
+      "spoken_name": "Double left arrow"
+    },
+    {
+      "index": 247,
+      "character": "⇒",
+      "unicode": "U+21D2",
+      "spoken_name": "Double right arrow"
+    },
+    {
+      "index": 248,
+      "character": "⇔",
+      "unicode": "U+21D4",
+      "spoken_name": "Double left-right arrow"
+    },
+    {
+      "index": 249,
+      "character": "↗",
+      "unicode": "U+2197",
+      "spoken_name": "Up-right arrow"
+    },
+    {
+      "index": 250,
+      "character": "↘",
+      "unicode": "U+2198",
+      "spoken_name": "Down-right arrow"
+    },
+    {
+      "index": 251,
+      "character": "↙",
+      "unicode": "U+2199",
+      "spoken_name": "Down-left arrow"
+    },
+    {
+      "index": 252,
+      "character": "↖",
+      "unicode": "U+2196",
+      "spoken_name": "Up-left arrow"
+    },
+    {
+      "index": 253,
+      "character": "⏏",
+      "unicode": "U+23CF",
+      "spoken_name": "Eject"
+    },
+    {
+      "index": 254,
+      "character": "↩",
+      "unicode": "U+21A9",
+      "spoken_name": "Left arrow with hook"
+    },
+    {
+      "index": 255,
+      "character": "↪",
+      "unicode": "U+21AA",
+      "spoken_name": "Right arrow with hook"
+    }
+  ]
+}
