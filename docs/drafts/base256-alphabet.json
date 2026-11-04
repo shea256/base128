@@ -1,8 +1,8 @@
 {
   "name": "Base256 alphabet draft",
-  "status": "Exploratory; not implemented or a published format",
+  "status": "Accepted alphabet and ordering; codec not implemented or published",
   "base_alphabet": "../../specs/alphabet.json",
-  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷■▲◆◇★☆⬟⬢◐▰⌖⌬⊞⊠⊕⊗⌘⌥⌫⎋⏏⌂✓✎⚙⚒⚗⚖✂⚔⚕⚑☀☾☁☃☂❄☄☎✉☯☮☢☣♭♮♫♚♛♜♞♟♠♣♥ÆæŒœÐðÞþÇçØℵℏ¡¿…†‡※⁂✠⚜°‰¢£¤€±×∠⋈≡≜≈≠≤≥∝∞∂∇∏∑√∫∮⊥∈∉∩∪⊂⊃⊆⊇⊢¬∀∃∴∵↔↕←↑→↓↗↘↙↖",
+  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷■▲♦◇★☆⬟⬢◐▰∠⋈⌖♯⚘♻⌘⌥⌫⎋⏏⌂✓✎⚙⚒⚗⚖✂⚔⚕⚑☀☾☠☃☂❄☄☎✉☯☮☢☣⚠✈⚛♚♛♜♝♞♟♠♣♥♭♮♫ÆæÇç☿♀♁♂♃♄♅♆♇ℵℏ¢£¤€°±×≡≜≈≠≤≥∝∂∇∏∑√∫∮∈∉∩∪⊂⊃⊆⊇⊢⊥¬∀∃∴∵∞¡¿…†‡‰←↑→↓↔↕↗↘↙↖",
   "symbols": [
     {
       "index": 0,
@@ -658,8 +658,8 @@
     },
     {
       "index": 130,
-      "character": "◆",
-      "unicode": "U+25C6",
+      "character": "♦",
+      "unicode": "U+2666",
       "spoken_name": "Diamond"
     },
     {
@@ -706,39 +706,39 @@
     },
     {
       "index": 138,
+      "character": "∠",
+      "unicode": "U+2220",
+      "spoken_name": "Angle"
+    },
+    {
+      "index": 139,
+      "character": "⋈",
+      "unicode": "U+22C8",
+      "spoken_name": "Bowtie"
+    },
+    {
+      "index": 140,
       "character": "⌖",
       "unicode": "U+2316",
       "spoken_name": "Crosshair"
     },
     {
-      "index": 139,
-      "character": "⌬",
-      "unicode": "U+232C",
-      "spoken_name": "Benzene ring"
-    },
-    {
-      "index": 140,
-      "character": "⊞",
-      "unicode": "U+229E",
-      "spoken_name": "Squared plus"
-    },
-    {
       "index": 141,
-      "character": "⊠",
-      "unicode": "U+22A0",
-      "spoken_name": "Squared times"
+      "character": "♯",
+      "unicode": "U+266F",
+      "spoken_name": "Sharp"
     },
     {
       "index": 142,
-      "character": "⊕",
-      "unicode": "U+2295",
-      "spoken_name": "Circled plus"
+      "character": "⚘",
+      "unicode": "U+2698",
+      "spoken_name": "Flower"
     },
     {
       "index": 143,
-      "character": "⊗",
-      "unicode": "U+2297",
-      "spoken_name": "Circled times"
+      "character": "♻",
+      "unicode": "U+267B",
+      "spoken_name": "Recycling"
     },
     {
       "index": 144,
@@ -850,9 +850,9 @@
     },
     {
       "index": 162,
-      "character": "☁",
-      "unicode": "U+2601",
-      "spoken_name": "Cloud"
+      "character": "☠",
+      "unicode": "U+2620",
+      "spoken_name": "Skull"
     },
     {
       "index": 163,
@@ -916,21 +916,21 @@
     },
     {
       "index": 173,
-      "character": "♭",
-      "unicode": "U+266D",
-      "spoken_name": "Flat"
+      "character": "⚠",
+      "unicode": "U+26A0",
+      "spoken_name": "Warning"
     },
     {
       "index": 174,
-      "character": "♮",
-      "unicode": "U+266E",
-      "spoken_name": "Natural"
+      "character": "✈",
+      "unicode": "U+2708",
+      "spoken_name": "Airplane"
     },
     {
       "index": 175,
-      "character": "♫",
-      "unicode": "U+266B",
-      "spoken_name": "Music"
+      "character": "⚛",
+      "unicode": "U+269B",
+      "spoken_name": "Atom"
     },
     {
       "index": 176,
@@ -952,441 +952,441 @@
     },
     {
       "index": 179,
+      "character": "♝",
+      "unicode": "U+265D",
+      "spoken_name": "Bishop"
+    },
+    {
+      "index": 180,
       "character": "♞",
       "unicode": "U+265E",
       "spoken_name": "Knight"
     },
     {
-      "index": 180,
+      "index": 181,
       "character": "♟",
       "unicode": "U+265F",
       "spoken_name": "Pawn"
     },
     {
-      "index": 181,
+      "index": 182,
       "character": "♠",
       "unicode": "U+2660",
       "spoken_name": "Spade"
     },
     {
-      "index": 182,
+      "index": 183,
       "character": "♣",
       "unicode": "U+2663",
       "spoken_name": "Club"
     },
     {
-      "index": 183,
+      "index": 184,
       "character": "♥",
       "unicode": "U+2665",
       "spoken_name": "Heart"
     },
     {
-      "index": 184,
+      "index": 185,
+      "character": "♭",
+      "unicode": "U+266D",
+      "spoken_name": "Flat"
+    },
+    {
+      "index": 186,
+      "character": "♮",
+      "unicode": "U+266E",
+      "spoken_name": "Natural"
+    },
+    {
+      "index": 187,
+      "character": "♫",
+      "unicode": "U+266B",
+      "spoken_name": "Music"
+    },
+    {
+      "index": 188,
       "character": "Æ",
       "unicode": "U+00C6",
       "spoken_name": "Capital ash"
     },
     {
-      "index": 185,
+      "index": 189,
       "character": "æ",
       "unicode": "U+00E6",
       "spoken_name": "Lowercase ash"
     },
     {
-      "index": 186,
-      "character": "Œ",
-      "unicode": "U+0152",
-      "spoken_name": "Capital OE"
-    },
-    {
-      "index": 187,
-      "character": "œ",
-      "unicode": "U+0153",
-      "spoken_name": "Lowercase OE"
-    },
-    {
-      "index": 188,
-      "character": "Ð",
-      "unicode": "U+00D0",
-      "spoken_name": "Capital eth"
-    },
-    {
-      "index": 189,
-      "character": "ð",
-      "unicode": "U+00F0",
-      "spoken_name": "Lowercase eth"
-    },
-    {
       "index": 190,
-      "character": "Þ",
-      "unicode": "U+00DE",
-      "spoken_name": "Capital thorn"
-    },
-    {
-      "index": 191,
-      "character": "þ",
-      "unicode": "U+00FE",
-      "spoken_name": "Lowercase thorn"
-    },
-    {
-      "index": 192,
       "character": "Ç",
       "unicode": "U+00C7",
       "spoken_name": "Capital cedilla"
     },
     {
-      "index": 193,
+      "index": 191,
       "character": "ç",
       "unicode": "U+00E7",
       "spoken_name": "Lowercase cedilla"
     },
     {
+      "index": 192,
+      "character": "☿",
+      "unicode": "U+263F",
+      "spoken_name": "Mercury"
+    },
+    {
+      "index": 193,
+      "character": "♀",
+      "unicode": "U+2640",
+      "spoken_name": "Venus"
+    },
+    {
       "index": 194,
-      "character": "Ø",
-      "unicode": "U+00D8",
-      "spoken_name": "Slashed O"
+      "character": "♁",
+      "unicode": "U+2641",
+      "spoken_name": "Earth"
     },
     {
       "index": 195,
+      "character": "♂",
+      "unicode": "U+2642",
+      "spoken_name": "Mars"
+    },
+    {
+      "index": 196,
+      "character": "♃",
+      "unicode": "U+2643",
+      "spoken_name": "Jupiter"
+    },
+    {
+      "index": 197,
+      "character": "♄",
+      "unicode": "U+2644",
+      "spoken_name": "Saturn"
+    },
+    {
+      "index": 198,
+      "character": "♅",
+      "unicode": "U+2645",
+      "spoken_name": "Uranus"
+    },
+    {
+      "index": 199,
+      "character": "♆",
+      "unicode": "U+2646",
+      "spoken_name": "Neptune"
+    },
+    {
+      "index": 200,
+      "character": "♇",
+      "unicode": "U+2647",
+      "spoken_name": "Pluto"
+    },
+    {
+      "index": 201,
       "character": "ℵ",
       "unicode": "U+2135",
       "spoken_name": "Aleph"
     },
     {
-      "index": 196,
+      "index": 202,
       "character": "ℏ",
       "unicode": "U+210F",
       "spoken_name": "H-bar"
     },
     {
-      "index": 197,
-      "character": "¡",
-      "unicode": "U+00A1",
-      "spoken_name": "Inverted exclamation"
-    },
-    {
-      "index": 198,
-      "character": "¿",
-      "unicode": "U+00BF",
-      "spoken_name": "Inverted question"
-    },
-    {
-      "index": 199,
-      "character": "…",
-      "unicode": "U+2026",
-      "spoken_name": "Ellipsis"
-    },
-    {
-      "index": 200,
-      "character": "†",
-      "unicode": "U+2020",
-      "spoken_name": "Dagger"
-    },
-    {
-      "index": 201,
-      "character": "‡",
-      "unicode": "U+2021",
-      "spoken_name": "Double dagger"
-    },
-    {
-      "index": 202,
-      "character": "※",
-      "unicode": "U+203B",
-      "spoken_name": "Reference mark"
-    },
-    {
       "index": 203,
-      "character": "⁂",
-      "unicode": "U+2042",
-      "spoken_name": "Asterism"
-    },
-    {
-      "index": 204,
-      "character": "✠",
-      "unicode": "U+2720",
-      "spoken_name": "Maltese cross"
-    },
-    {
-      "index": 205,
-      "character": "⚜",
-      "unicode": "U+269C",
-      "spoken_name": "Fleur-de-lis"
-    },
-    {
-      "index": 206,
-      "character": "°",
-      "unicode": "U+00B0",
-      "spoken_name": "Degree"
-    },
-    {
-      "index": 207,
-      "character": "‰",
-      "unicode": "U+2030",
-      "spoken_name": "Per mille"
-    },
-    {
-      "index": 208,
       "character": "¢",
       "unicode": "U+00A2",
       "spoken_name": "Cent"
     },
     {
-      "index": 209,
+      "index": 204,
       "character": "£",
       "unicode": "U+00A3",
       "spoken_name": "Pound sterling"
     },
     {
-      "index": 210,
+      "index": 205,
       "character": "¤",
       "unicode": "U+00A4",
       "spoken_name": "Currency sign"
     },
     {
-      "index": 211,
+      "index": 206,
       "character": "€",
       "unicode": "U+20AC",
       "spoken_name": "Euro"
     },
     {
-      "index": 212,
+      "index": 207,
+      "character": "°",
+      "unicode": "U+00B0",
+      "spoken_name": "Degree"
+    },
+    {
+      "index": 208,
       "character": "±",
       "unicode": "U+00B1",
       "spoken_name": "Plus-minus"
     },
     {
-      "index": 213,
+      "index": 209,
       "character": "×",
       "unicode": "U+00D7",
       "spoken_name": "Multiplication"
     },
     {
-      "index": 214,
-      "character": "∠",
-      "unicode": "U+2220",
-      "spoken_name": "Angle"
-    },
-    {
-      "index": 215,
-      "character": "⋈",
-      "unicode": "U+22C8",
-      "spoken_name": "Bowtie"
-    },
-    {
-      "index": 216,
+      "index": 210,
       "character": "≡",
       "unicode": "U+2261",
       "spoken_name": "Identical"
     },
     {
-      "index": 217,
+      "index": 211,
       "character": "≜",
       "unicode": "U+225C",
       "spoken_name": "Defined as"
     },
     {
-      "index": 218,
+      "index": 212,
       "character": "≈",
       "unicode": "U+2248",
       "spoken_name": "Approximately equal"
     },
     {
-      "index": 219,
+      "index": 213,
       "character": "≠",
       "unicode": "U+2260",
       "spoken_name": "Not equal"
     },
     {
-      "index": 220,
+      "index": 214,
       "character": "≤",
       "unicode": "U+2264",
       "spoken_name": "Less-equal"
     },
     {
-      "index": 221,
+      "index": 215,
       "character": "≥",
       "unicode": "U+2265",
       "spoken_name": "Greater-equal"
     },
     {
-      "index": 222,
+      "index": 216,
       "character": "∝",
       "unicode": "U+221D",
       "spoken_name": "Proportional"
     },
     {
-      "index": 223,
-      "character": "∞",
-      "unicode": "U+221E",
-      "spoken_name": "Infinity"
-    },
-    {
-      "index": 224,
+      "index": 217,
       "character": "∂",
       "unicode": "U+2202",
       "spoken_name": "Partial"
     },
     {
-      "index": 225,
+      "index": 218,
       "character": "∇",
       "unicode": "U+2207",
       "spoken_name": "Nabla"
     },
     {
-      "index": 226,
+      "index": 219,
       "character": "∏",
       "unicode": "U+220F",
       "spoken_name": "Product"
     },
     {
-      "index": 227,
+      "index": 220,
       "character": "∑",
       "unicode": "U+2211",
       "spoken_name": "Summation"
     },
     {
-      "index": 228,
+      "index": 221,
       "character": "√",
       "unicode": "U+221A",
       "spoken_name": "Square root"
     },
     {
-      "index": 229,
+      "index": 222,
       "character": "∫",
       "unicode": "U+222B",
       "spoken_name": "Integral"
     },
     {
-      "index": 230,
+      "index": 223,
       "character": "∮",
       "unicode": "U+222E",
       "spoken_name": "Contour integral"
     },
     {
-      "index": 231,
-      "character": "⊥",
-      "unicode": "U+22A5",
-      "spoken_name": "Perpendicular"
-    },
-    {
-      "index": 232,
+      "index": 224,
       "character": "∈",
       "unicode": "U+2208",
       "spoken_name": "Member"
     },
     {
-      "index": 233,
+      "index": 225,
       "character": "∉",
       "unicode": "U+2209",
       "spoken_name": "Nonmember"
     },
     {
-      "index": 234,
+      "index": 226,
       "character": "∩",
       "unicode": "U+2229",
       "spoken_name": "Intersection"
     },
     {
-      "index": 235,
+      "index": 227,
       "character": "∪",
       "unicode": "U+222A",
       "spoken_name": "Union"
     },
     {
-      "index": 236,
+      "index": 228,
       "character": "⊂",
       "unicode": "U+2282",
       "spoken_name": "Subset"
     },
     {
-      "index": 237,
+      "index": 229,
       "character": "⊃",
       "unicode": "U+2283",
       "spoken_name": "Superset"
     },
     {
-      "index": 238,
+      "index": 230,
       "character": "⊆",
       "unicode": "U+2286",
       "spoken_name": "Inclusive subset"
     },
     {
-      "index": 239,
+      "index": 231,
       "character": "⊇",
       "unicode": "U+2287",
       "spoken_name": "Inclusive superset"
     },
     {
-      "index": 240,
+      "index": 232,
       "character": "⊢",
       "unicode": "U+22A2",
       "spoken_name": "Turnstile"
     },
     {
-      "index": 241,
+      "index": 233,
+      "character": "⊥",
+      "unicode": "U+22A5",
+      "spoken_name": "Perpendicular"
+    },
+    {
+      "index": 234,
       "character": "¬",
       "unicode": "U+00AC",
       "spoken_name": "Logical not"
     },
     {
-      "index": 242,
+      "index": 235,
       "character": "∀",
       "unicode": "U+2200",
       "spoken_name": "For all"
     },
     {
-      "index": 243,
+      "index": 236,
       "character": "∃",
       "unicode": "U+2203",
       "spoken_name": "There exists"
     },
     {
-      "index": 244,
+      "index": 237,
       "character": "∴",
       "unicode": "U+2234",
       "spoken_name": "Therefore"
     },
     {
-      "index": 245,
+      "index": 238,
       "character": "∵",
       "unicode": "U+2235",
       "spoken_name": "Because"
     },
     {
+      "index": 239,
+      "character": "∞",
+      "unicode": "U+221E",
+      "spoken_name": "Infinity"
+    },
+    {
+      "index": 240,
+      "character": "¡",
+      "unicode": "U+00A1",
+      "spoken_name": "Inverted exclamation"
+    },
+    {
+      "index": 241,
+      "character": "¿",
+      "unicode": "U+00BF",
+      "spoken_name": "Inverted question"
+    },
+    {
+      "index": 242,
+      "character": "…",
+      "unicode": "U+2026",
+      "spoken_name": "Ellipsis"
+    },
+    {
+      "index": 243,
+      "character": "†",
+      "unicode": "U+2020",
+      "spoken_name": "Dagger"
+    },
+    {
+      "index": 244,
+      "character": "‡",
+      "unicode": "U+2021",
+      "spoken_name": "Double dagger"
+    },
+    {
+      "index": 245,
+      "character": "‰",
+      "unicode": "U+2030",
+      "spoken_name": "Per mille"
+    },
+    {
       "index": 246,
-      "character": "↔",
-      "unicode": "U+2194",
-      "spoken_name": "Left-right"
-    },
-    {
-      "index": 247,
-      "character": "↕",
-      "unicode": "U+2195",
-      "spoken_name": "Up-down"
-    },
-    {
-      "index": 248,
       "character": "←",
       "unicode": "U+2190",
       "spoken_name": "Left"
     },
     {
-      "index": 249,
+      "index": 247,
       "character": "↑",
       "unicode": "U+2191",
       "spoken_name": "Up"
     },
     {
-      "index": 250,
+      "index": 248,
       "character": "→",
       "unicode": "U+2192",
       "spoken_name": "Right"
     },
     {
-      "index": 251,
+      "index": 249,
       "character": "↓",
       "unicode": "U+2193",
       "spoken_name": "Down"
+    },
+    {
+      "index": 250,
+      "character": "↔",
+      "unicode": "U+2194",
+      "spoken_name": "Left-right"
+    },
+    {
+      "index": 251,
+      "character": "↕",
+      "unicode": "U+2195",
+      "spoken_name": "Up-down"
     },
     {
       "index": 252,
