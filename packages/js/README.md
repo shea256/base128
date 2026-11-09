@@ -9,7 +9,7 @@ import {
 const encoded = encode(new TextEncoder().encode('Hello 世界'));
 const decoded = new TextDecoder('utf-8', {fatal: true}).decode(decode(encoded));
 
-const integerText = encodeInteger(1000n); // '7β'
+const integerText = encodeInteger(1000n); // '7.'
 const number = decodeInteger(integerText); // 1000n
 // Optional: precompile a custom alphabet for repeated calls.
 const alphabet = createAlphabet(Array.from(DEFAULT_ALPHABET_TEXT).reverse().join(''));
@@ -21,12 +21,8 @@ See [`../../specs/encoding.md`](../../specs/encoding.md) for the wire format.
 
 The npm package name `base128-unicode-codec` is proposed, **not verified available**.
 
-The `MATH_ALPHABET` / `MATH_ALPHABET_TEXT` exports provide the optional
-fixed math preset. Pass `{alphabet: MATH_ALPHABET}` to encode or decode.
-Decoders (`decode`, `decodeInteger`, `BinaryDecoder`) additionally accept
-`{acceptAliases: true}` to accept Compact and Math symbols, even mixed.
-Strict decoding remains the default; alias mode rejects unrelated custom layouts.
-See the [alphabet specification](../../specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the six alias pairs and rules.
+`DEFAULT_ALPHABET` / `DEFAULT_ALPHABET_TEXT` provide the official alphabet.
+Custom alphabets are supported. Decoding is strict, without symbol aliases.
 
 Optional `wrap(payload, {prefix: true, checksum: true, mode: 'binary'})` and
 `unwrap(text, {prefix: true, checksum: true})` support middle-dot envelopes.
@@ -34,7 +30,5 @@ Optional `wrap(payload, {prefix: true, checksum: true, mode: 'binary'})` and
 before returning. Flags default to false; use `mode: 'integer'` for integer payloads.
 See the [envelope specification](../../specs/envelope.md).
 
-`COMPACT_ALPHABET` / `COMPACT_ALPHABET_TEXT` name the default layout explicitly.
-`DEFAULT_ALPHABET` / `DEFAULT_ALPHABET_TEXT` are aliases for Compact.
-The envelope header uses version 0: Compact binary `00`, Compact integer `01`,
-Math binary `08`, and Math integer `09`; see the [envelope specification](../../specs/envelope.md).
+The envelope header uses version 0: binary `00`, integer `01`.
+See the [envelope specification](../../specs/envelope.md).

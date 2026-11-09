@@ -1,7 +1,7 @@
 use crate::binary_core::{
     decode_step, encode_step, encode_tail, next_symbol_count, valid_length, valid_padding,
 };
-use crate::{compact_alphabet, Alphabet, DecodeOptions, Error};
+use crate::{default_alphabet, Alphabet, DecodeOptions, Error};
 use std::collections::HashMap;
 
 /// MSB-first streaming byte encoder. Call finish exactly once to emit tail bits.
@@ -13,7 +13,7 @@ pub struct BinaryEncoder {
 }
 impl Default for BinaryEncoder {
     fn default() -> Self {
-        Self::new(compact_alphabet())
+        Self::new(default_alphabet())
     }
 }
 impl BinaryEncoder {
@@ -66,7 +66,7 @@ pub struct BinaryDecoder {
 impl BinaryDecoder {
     pub fn new(options: DecodeOptions<'_>) -> Result<Self, Error> {
         Ok(Self {
-            indices: options.alphabet().decoder_index(options.accept_aliases)?,
+            indices: options.alphabet().decoder_index(),
             buffer: 0,
             bits: 0,
             symbols_mod8: 0,
@@ -111,7 +111,7 @@ impl BinaryDecoder {
     }
 }
 pub fn encode(bytes: &[u8]) -> String {
-    encode_with_alphabet(bytes, compact_alphabet())
+    encode_with_alphabet(bytes, default_alphabet())
 }
 pub fn encode_with_alphabet(bytes: &[u8], alphabet: &Alphabet) -> String {
     let mut encoder = BinaryEncoder::new(alphabet);

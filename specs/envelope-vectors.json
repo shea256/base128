@@ -33,7 +33,7 @@
     "payload": "",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·00··δ¶6lm"
+    "wrapped": "b128·00··:√6LM"
   },
   {
     "alphabet": 0,
@@ -60,7 +60,7 @@
     "payload": "00",
     "prefix": false,
     "checksum": true,
-    "wrapped": "00·}H%-0"
+    "wrapped": "00·\"hεξ0"
   },
   {
     "alphabet": 0,
@@ -69,115 +69,115 @@
     "payload": "00",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·00·00·PT¥θO"
+    "wrapped": "b128·00·00·pt~>o"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "ff",
-    "payload": "÷#",
+    "payload": "∫γ",
     "prefix": false,
     "checksum": false,
-    "wrapped": "÷#"
+    "wrapped": "∫γ"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "ff",
-    "payload": "÷#",
+    "payload": "∫γ",
     "prefix": true,
     "checksum": false,
-    "wrapped": "b128·00·÷#"
+    "wrapped": "b128·00·∫γ"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "ff",
-    "payload": "÷#",
+    "payload": "∫γ",
     "prefix": false,
     "checksum": true,
-    "wrapped": "÷#·o?φ0m"
+    "wrapped": "∫γ·TV:@8"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "ff",
-    "payload": "÷#",
+    "payload": "∫γ",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·00·÷#·(5JUκ"
+    "wrapped": "b128·00·∫γ·ΩaWuw"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "48656c6c6f",
-    "payload": "aPj)Πy",
+    "payload": "ApJι)Y",
     "prefix": false,
     "checksum": false,
-    "wrapped": "aPj)Πy"
+    "wrapped": "ApJι)Y"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "48656c6c6f",
-    "payload": "aPj)Πy",
+    "payload": "ApJι)Y",
     "prefix": true,
     "checksum": false,
-    "wrapped": "b128·00·aPj)Πy"
+    "wrapped": "b128·00·ApJι)Y"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "48656c6c6f",
-    "payload": "aPj)Πy",
+    "payload": "ApJι)Y",
     "prefix": false,
     "checksum": true,
-    "wrapped": "aPj)Πy·^TQR_"
+    "wrapped": "ApJι)Y·SDU.Φ"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "48656c6c6f",
-    "payload": "aPj)Πy",
+    "payload": "ApJι)Y",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·00·aPj)Πy·'γ(i+"
+    "wrapped": "b128·00·ApJι)Y·BΘ-%λ"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "payload": "!GVchδ*HαtgPdy.ω|lI=)^u",
     "prefix": false,
     "checksum": false,
-    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU"
+    "wrapped": "!GVchδ*HαtgPdy.ω|lI=)^u"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "payload": "!GVchδ*HαtgPdy.ω|lI=)^u",
     "prefix": true,
     "checksum": false,
-    "wrapped": "b128·00·|gvCH$Φh!TGpDYβ=ψLiηΠπU"
+    "wrapped": "b128·00·!GVchδ*HαtgPdy.ω|lI=)^u"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "payload": "!GVchδ*HαtgPdy.ω|lI=)^u",
     "prefix": false,
     "checksum": true,
-    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU·σ7)/W"
+    "wrapped": "!GVchδ*HαtgPdy.ω|lI=)^u·&B\"Zw"
   },
   {
     "alphabet": 0,
     "mode": "binary",
     "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
+    "payload": "!GVchδ*HαtgPdy.ω|lI=)^u",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·00·|gvCH$Φh!TGpDYβ=ψLiηΠπU·v=rZκ"
+    "wrapped": "b128·00·!GVchδ*HαtgPdy.ω|lI=)^u·σmIhω"
   },
   {
     "alphabet": 0,
@@ -204,7 +204,7 @@
     "payload": "0",
     "prefix": false,
     "checksum": true,
-    "wrapped": "0·¥s§μ8"
+    "wrapped": "0·~S¥\\8"
   },
   {
     "alphabet": 0,
@@ -213,79 +213,79 @@
     "payload": "0",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·01·0·CR2σψ"
+    "wrapped": "b128·01·0·cr2_|"
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "127",
-    "payload": "÷",
+    "payload": "∫",
     "prefix": false,
     "checksum": false,
-    "wrapped": "÷"
+    "wrapped": "∫"
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "127",
-    "payload": "÷",
+    "payload": "∫",
     "prefix": true,
     "checksum": false,
-    "wrapped": "b128·01·÷"
+    "wrapped": "b128·01·∫"
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "127",
-    "payload": "÷",
+    "payload": "∫",
     "prefix": false,
     "checksum": true,
-    "wrapped": "÷·¥2τ5β"
+    "wrapped": "∫·]$S%|"
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "127",
-    "payload": "÷",
+    "payload": "∫",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·01·÷·X].wκ"
+    "wrapped": "b128·01·∫·'$λ¥g"
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "1000",
-    "payload": "7β",
+    "payload": "7.",
     "prefix": false,
     "checksum": false,
-    "wrapped": "7β"
+    "wrapped": "7."
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "1000",
-    "payload": "7β",
+    "payload": "7.",
     "prefix": true,
     "checksum": false,
-    "wrapped": "b128·01·7β"
+    "wrapped": "b128·01·7."
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "1000",
-    "payload": "7β",
+    "payload": "7.",
     "prefix": false,
     "checksum": true,
-    "wrapped": "7β·^SΘcu"
+    "wrapped": "7.·6εn@w"
   },
   {
     "alphabet": 0,
     "mode": "integer",
     "value": "1000",
-    "payload": "7β",
+    "payload": "7.",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·01·7β·(SU2="
+    "wrapped": "b128·01·7.·#mGψU"
   },
   {
     "alphabet": 0,
@@ -312,7 +312,7 @@
     "payload": "4000000000000000000",
     "prefix": false,
     "checksum": true,
-    "wrapped": "4000000000000000000·12}Θβ"
+    "wrapped": "4000000000000000000·12\"&."
   },
   {
     "alphabet": 0,
@@ -321,330 +321,6 @@
     "payload": "4000000000000000000",
     "prefix": true,
     "checksum": true,
-    "wrapped": "b128·01·4000000000000000000·Ψnv`0"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "",
-    "payload": "",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": ""
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "",
-    "payload": "",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·08·"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "",
-    "payload": "",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "·00000"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "",
-    "payload": "",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·08··η∂ζqκ"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "00",
-    "payload": "00",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "00"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "00",
-    "payload": "00",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·08·00"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "00",
-    "payload": "00",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "00·}H%-0"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "00",
-    "payload": "00",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·08·00·11ξ?G"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "ff",
-    "payload": "∫#",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "∫#"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "ff",
-    "payload": "∫#",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·08·∫#"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "ff",
-    "payload": "∫#",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "∫#·kΘ1Cu"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "ff",
-    "payload": "∫#",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·08·∫#·ΘKky_"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "48656c6c6f",
-    "payload": "aPj)Πy",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "aPj)Πy"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "48656c6c6f",
-    "payload": "aPj)Πy",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·08·aPj)Πy"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "48656c6c6f",
-    "payload": "aPj)Πy",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "aPj)Πy·^TQR_"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "48656c6c6f",
-    "payload": "aPj)Πy",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·08·aPj)Πy·:SjZβ"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·08·|gvCH$Φh!TGpDYβ=ψLiηΠπU"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "|gvCH$Φh!TGpDYβ=ψLiηΠπU·σ7)/W"
-  },
-  {
-    "alphabet": 1,
-    "mode": "binary",
-    "value": "b6a9c8c230722b7c748331a8b450f05566dc7d0f",
-    "payload": "|gvCH$Φh!TGpDYβ=ψLiηΠπU",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·08·|gvCH$Φh!TGpDYβ=ψLiηΠπU·+LpΩ="
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "0",
-    "payload": "0",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "0"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "0",
-    "payload": "0",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·09·0"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "0",
-    "payload": "0",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "0·∂s∇μ8"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "0",
-    "payload": "0",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·09·0·θτ7∇0"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "127",
-    "payload": "∫",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "∫"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "127",
-    "payload": "∫",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·09·∫"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "127",
-    "payload": "∫",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "∫·ξΓsΔψ"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "127",
-    "payload": "∫",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·09·∫·N-u~ψ"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "1000",
-    "payload": "7β",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "7β"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "1000",
-    "payload": "7β",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·09·7β"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "1000",
-    "payload": "7β",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "7β·^SΘcu"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "1000",
-    "payload": "7β",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·09·7β·p8θau"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "340282366920938463463374607431768211456",
-    "payload": "4000000000000000000",
-    "prefix": false,
-    "checksum": false,
-    "wrapped": "4000000000000000000"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "340282366920938463463374607431768211456",
-    "payload": "4000000000000000000",
-    "prefix": true,
-    "checksum": false,
-    "wrapped": "b128·09·4000000000000000000"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "340282366920938463463374607431768211456",
-    "payload": "4000000000000000000",
-    "prefix": false,
-    "checksum": true,
-    "wrapped": "4000000000000000000·12}Θβ"
-  },
-  {
-    "alphabet": 1,
-    "mode": "integer",
-    "value": "340282366920938463463374607431768211456",
-    "payload": "4000000000000000000",
-    "prefix": true,
-    "checksum": true,
-    "wrapped": "b128·09·4000000000000000000·vΛ~v0"
+    "wrapped": "b128·01·4000000000000000000·+NVΨ0"
   }
 ]

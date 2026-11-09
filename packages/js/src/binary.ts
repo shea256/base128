@@ -46,7 +46,7 @@ export class BinaryDecoder {
   #finished = false;
 
   constructor(options: DecodeOptions = {}) {
-    this.#indexOf = resolveDecoderIndex(resolveAlphabet(options.alphabet), options.acceptAliases);
+    this.#indexOf = resolveDecoderIndex(resolveAlphabet(options.alphabet));
   }
 
   write(text: string): Uint8Array {

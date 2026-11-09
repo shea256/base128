@@ -1,12 +1,12 @@
 # Base128 Python
 
 ```python
-from base128 import encode, decode, encode_integer, decode_integer, create_alphabet, COMPACT_ALPHABET_TEXT
+from base128 import encode, decode, encode_integer, decode_integer, create_alphabet, DEFAULT_ALPHABET_TEXT
 
 assert decode(encode(b"Hello")) == b"Hello"
 assert decode_integer(encode_integer(1000)) == 1000
 
-custom = create_alphabet(COMPACT_ALPHABET_TEXT[::-1])
+custom = create_alphabet(DEFAULT_ALPHABET_TEXT[::-1])
 assert decode(encode(b"Hello", alphabet=custom), alphabet=custom) == b"Hello"
 ```
 
@@ -14,12 +14,8 @@ No runtime dependencies. Exact API and wire format are specified in `../../specs
 
 The PyPI package name `unicode-base128` is a proposed, **unverified** publishing name.
 
-`MATH_ALPHABET` / `MATH_ALPHABET_TEXT` provide the optional fixed math
-preset. Pass `alphabet=MATH_ALPHABET` to encode or decode. Decoders
-(`decode`, `decode_integer`, `BinaryDecoder`) additionally accept
-`accept_aliases=True` to accept Compact and Math symbols, even mixed.
-Strict decoding remains the default; alias mode rejects unrelated custom layouts.
-See the [alphabet specification](../../specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the six alias pairs and rules.
+`DEFAULT_ALPHABET` / `DEFAULT_ALPHABET_TEXT` provide the official alphabet.
+Custom alphabets are supported. Decoding is strict, without symbol aliases.
 
 Optional `wrap(payload, prefix=True, checksum=True, mode='binary')` and
 `unwrap(text, prefix=True, checksum=True)` support middle-dot envelopes.
@@ -27,7 +23,5 @@ Optional `wrap(payload, prefix=True, checksum=True, mode='binary')` and
 `alphabet` attributes after verification. Flags default to false; use
 `mode='integer'` for integer payloads. See the [envelope specification](../../specs/envelope.md).
 
-`COMPACT_ALPHABET` / `COMPACT_ALPHABET_TEXT` name the default layout explicitly.
-`DEFAULT_ALPHABET` / `DEFAULT_ALPHABET_TEXT` are aliases for Compact.
-The envelope header uses version 0: Compact binary `00`, Compact integer `01`,
-Math binary `08`, and Math integer `09`; see the [envelope specification](../../specs/envelope.md).
+The envelope header uses version 0: binary `00`, integer `01`.
+See the [envelope specification](../../specs/envelope.md).

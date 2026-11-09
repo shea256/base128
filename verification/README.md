@@ -18,7 +18,7 @@ Lean is pinned in [lean/lean-toolchain](lean/lean-toolchain). The project uses L
 | Integer encodings are nonempty; positive integers have a nonzero most-significant digit | `Base128.integerDigits_nonempty`, `Base128.integerDigits_last_nonzero` |
 | Binary round-trip and canonical spelling survive any invertible alphabet mapping | `Base128.decodeSymbols_encodeSymbols`, `Base128.encodeSymbols_decodeSymbols` |
 
-The binary round-trip theorem assumes every input element is a byte. Alphabet theorems assume that reading a written digit recovers that digit and that writing an accepted symbol's digit recovers that symbol. These are strict, invertible mappings; alias decoding is not covered. The abstract alphabet proof does not itself establish that the production Unicode tables satisfy these laws.
+The binary round-trip theorem assumes every input element is a byte. Alphabet theorems assume that reading a written digit recovers that digit and that writing an accepted symbol's digit recovers that symbol. These are strict, invertible mappings. The abstract alphabet proof does not itself establish that the production Unicode tables satisfy these laws.
 
 All eleven listed theorems are audited by [lean/Audit.lean](lean/Audit.lean). The conformance runner rejects dependencies on any axiom except Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. This rejects unfinished proofs (`sorryAx`), extra assumed axioms, and native-computation axioms. The Lean build also treats warnings as errors.
 
@@ -51,18 +51,18 @@ lake env lean -DwarningAsError=true Audit.lean
 
 The full runner builds the Lean reference, audits the theorem dependencies, builds JS and a test-only Rust adapter, and compares the actual APIs of all three production libraries against Lean. It checks:
 
-- The independently generated Compact, Math, and custom-alphabet fixtures already in `specs/`, without rewriting them.
+- The independently generated official-alphabet and custom-alphabet fixtures already in `specs/`, without rewriting them.
 - Every byte value, empty and zero-filled inputs, deterministic random byte sequences through 512 bytes, and integers through 2,048 bits.
 - All one- and two-symbol binary strings, valid long payloads, malformed lengths and padding, and empty/leading-zero integer encodings.
-- Compact, Math, reversed Compact, and a custom alphabet of 128 supplementary Unicode scalar values.
+- The official alphabet, the preserved custom fixture alphabet, and an alphabet of 128 supplementary Unicode scalar values.
 
-Currently, 18,301 cases per alphabet are compared in each of three libraries: 219,612 implementation comparisons. Generated cases use a fixed seed for reproducibility. Inputs supplied to the JSON adapters are controlled test data, not an exposed service.
+The case count is reported by the runner for each alphabet and library. Generated cases use a fixed seed for reproducibility. Inputs supplied to the JSON adapters are controlled test data, not an exposed service.
 
 The `lean` CI job runs independently of the Node/Python matrix and Rust tests, with a ten-minute limit to allow the initial toolchain download. It builds proof artifacts afresh instead of restoring a `.lake` build cache. The ordinary `npm test` command remains usable without Lean or Rust installed.
 
 ## Limits and future work
 
-These Lean proofs do not verify production source, streaming state machines, UTF-8 parsing, alias handling, envelopes, headers, CRC32, file I/O, resource limits, or compiler correctness. Existing tests continue to cover those features. Finite conformance tests can discover disagreements but cannot establish implementation equivalence for every input.
+These Lean proofs do not verify production source, streaming state machines, UTF-8 parsing, envelopes, headers, CRC32, file I/O, resource limits, or compiler correctness. Existing tests continue to cover those features. Finite conformance tests can discover disagreements but cannot establish implementation equivalence for every input.
 
 A separate [Verus pilot](verus/README.md) verifies the actual Rust numeric transition functions under explicit state invariants, including bounds, packed-bit conservation, and tail padding. It also proves the arithmetic equivalence of the symbol-count residue rule and the published length equation. This does not yet prove the public streaming callers or refinement to this Lean model; the Lean-to-production connection remains conformance testing.
 

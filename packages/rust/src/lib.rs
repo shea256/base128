@@ -1,4 +1,4 @@
-//! Dependency-free Unicode Base128. Compact is the default; decoding is strict.
+//! Dependency-free Unicode Base128. One official alphabet; strict decoding.
 //!
 //! ```
 //! use base128_unicode_codec::{encode, decode, wrap, unwrap, EnvelopeOptions};
@@ -26,7 +26,6 @@ pub use integer::*;
 pub enum Error {
     InvalidAlphabet,
     InvalidSymbol(char),
-    AliasesRequireBuiltin,
     InvalidLength,
     NonzeroPadding,
     Finalized,
@@ -56,7 +55,6 @@ impl std::fmt::Display for Error {
             Self::UnassignedAlphabet(v) => write!(f, "Unassigned envelope alphabet {v}"),
             other => f.write_str(match other {
                 Self::InvalidAlphabet => "Alphabet must contain 128 distinct Unicode scalar values",
-                Self::AliasesRequireBuiltin => "Alias decoding requires Compact or Math",
                 Self::InvalidLength => "Noncanonical binary length",
                 Self::NonzeroPadding => "Nonzero trailing padding bits",
                 Self::Finalized => "Stream is finalized",
