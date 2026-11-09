@@ -1,14 +1,6 @@
 /** The v0.1 alphabet is ordered, not normalized, and immutable. */
-export const COMPACT_ALPHABET_TEXT =
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
-  Array.from({ length: 94 }, (_, i) => String.fromCharCode(i + 33))
-    .filter(symbol => !/[0-9A-Za-z]/.test(symbol)).join("") +
-  "ΓΔΘΛΞΠΦΨΩ" +
-  "αβγδεζηθικλμξπστφψω" +
-  "¥§©®¶÷";
-
-/** Math preset, with the final six symbols in code-point order. */
-export const MATH_ALPHABET_TEXT = Array.from(COMPACT_ALPHABET_TEXT).slice(0, 122).join("") + "∂∇∏∑√∫";
+export const DEFAULT_ALPHABET_TEXT =
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμξπστφψωΓΔΘΛΞΠΣΦΨΩ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~¥÷∇√∫";
 
 /** A compiled alphabet: 128 unique Unicode scalar values, in index order. */
 export class Alphabet {
@@ -60,10 +52,7 @@ export class Alphabet {
   }
 }
 
-export const DEFAULT_ALPHABET_TEXT = COMPACT_ALPHABET_TEXT;
-export const COMPACT_ALPHABET = new Alphabet(COMPACT_ALPHABET_TEXT);
-export const DEFAULT_ALPHABET = COMPACT_ALPHABET;
-export const MATH_ALPHABET = new Alphabet(MATH_ALPHABET_TEXT);
+export const DEFAULT_ALPHABET = new Alphabet(DEFAULT_ALPHABET_TEXT);
 export type AlphabetInput = Alphabet | string;
 export interface Options { alphabet?: AlphabetInput; }
 
@@ -75,17 +64,8 @@ export function resolveAlphabet(input?: AlphabetInput): Alphabet {
   return new Alphabet(input);
 }
 
-/** Alias acceptance is opt-in and limited to the two compatible built-in layouts. */
-export interface DecodeOptions extends Options { acceptAliases?: boolean; }
+export type DecodeOptions = Options;
 
-export function resolveDecoderIndex(alphabet: Alphabet, acceptAliases = false): (symbol: string) => number {
-  if (!acceptAliases) return symbol => alphabet.indexOf(symbol);
-  if (alphabet.text !== COMPACT_ALPHABET_TEXT && alphabet.text !== MATH_ALPHABET_TEXT) {
-    throw new RangeError("Alias decoding requires the compact or math alphabet");
-  }
-  const aliases = new Map<string, number>();
-  for (const text of [COMPACT_ALPHABET_TEXT, MATH_ALPHABET_TEXT]) {
-    Array.from(text).forEach((symbol, index) => aliases.set(symbol, index));
-  }
-  return symbol => aliases.get(symbol) ?? alphabet.indexOf(symbol);
+export function resolveDecoderIndex(alphabet: Alphabet): (symbol: string) => number {
+  return symbol => alphabet.indexOf(symbol);
 }

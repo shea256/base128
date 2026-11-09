@@ -1,6 +1,6 @@
 # Base128
 
-![Base128 — 0 A a ! Γ α ¥, one symbol from each Compact alphabet block](docs/images/base128-cover-compact.png)
+![Base128 illustrated with the symbols 0 A a ! Γ α ¥](docs/images/base128-cover-compact.png)
 
 A small, dependency-free library for encoding bytes and nonnegative integers with a configurable **128-character Unicode alphabet**. Includes JavaScript/TypeScript, Python, Rust, a streaming CLI, and a browser playground.
 
@@ -25,7 +25,7 @@ A small, dependency-free library for encoding bytes and nonnegative integers wit
 
 Each Base128 symbol carries **7 bits**, compared with Base64's 6 bits per symbol. This usually means fewer displayed characters for the same bytes. The format has a fixed, documented mapping, supports custom alphabets, and produces matching output in JavaScript, Python, and Rust without runtime dependencies.
 
-Fewer characters does **not** necessarily mean smaller storage: Unicode symbols can occupy multiple UTF-8 bytes. The playground compares both character counts and byte sizes. The default Compact alphabet limits every symbol to at most two UTF-8 bytes; Math is an optional alternative.
+Fewer characters does **not** necessarily mean smaller storage: Unicode symbols can occupy multiple UTF-8 bytes. The playground compares both character counts and byte sizes. The official alphabet uses one to three UTF-8 bytes per symbol.
 
 Base128 is useful when you want this specific Unicode representation. It is not Base64-compatible, URL-safe, shell-safe, or visually unambiguous; see [limitations](#compatibility-and-limitations).
 
@@ -75,8 +75,8 @@ const encoded = encode(bytes);
 console.log(encoded);
 console.log(new TextDecoder('utf-8', {fatal: true}).decode(decode(encoded)));
 
-console.log(encodeInteger(1000n)); // 7β
-console.log(decodeInteger('7β')); // 1000n
+console.log(encodeInteger(1000n)); // 7.
+console.log(decodeInteger('7.')); // 1000n
 JS
 ```
 
@@ -91,8 +91,8 @@ from base128 import encode, decode, encode_integer, decode_integer
 encoded = encode('Hello, 世界!'.encode('utf-8'))
 print(encoded)
 print(decode(encoded).decode('utf-8'))
-print(encode_integer(1000))  # 7β
-assert decode_integer('7β') == 1000
+print(encode_integer(1000))  # 7.
+assert decode_integer('7.') == 1000
 PY
 ```
 
@@ -112,11 +112,11 @@ use base128_unicode_codec::{encode, decode, encode_integer, decode_integer};
 
 let encoded = encode("Hello, 世界!".as_bytes());
 assert_eq!(decode(&encoded).unwrap(), "Hello, 世界!".as_bytes());
-assert_eq!(encode_integer(1000), "7β");
-assert_eq!(decode_integer("7β").unwrap(), 1000);
+assert_eq!(encode_integer(1000), "7.");
+assert_eq!(decode_integer("7.").unwrap(), 1000);
 ```
 
-Integer helpers use `u128`; `encode_integer_decimal` and `decode_integer_decimal` support arbitrary-size values through decimal strings. See the [Rust package README](packages/rust/README.md) for streaming, alphabets, aliases, and envelopes.
+Integer helpers use `u128`; `encode_integer_decimal` and `decode_integer_decimal` support arbitrary-size values through decimal strings. See the [Rust package README](packages/rust/README.md) for streaming, custom alphabets and envelopes.
 
 ### CLI
 
@@ -129,8 +129,8 @@ node packages/cli/bin/base128.mjs encode image.png -o image.b128
 node packages/cli/bin/base128.mjs decode image.b128 -o restored.png
 
 # Integer conversion
-node packages/cli/bin/base128.mjs integer encode 1000  # 7β
-node packages/cli/bin/base128.mjs integer decode '7β'  # 1000
+node packages/cli/bin/base128.mjs integer encode 1000  # 7.
+node packages/cli/bin/base128.mjs integer decode '7.'  # 1000
 ```
 
 Output has **no added terminal newline**, and decoding rejects whitespace. Use `printf` rather than `echo` when piping encoded strings into `decode`.
@@ -146,37 +146,34 @@ npm run site
 # Open http://localhost:8080/
 ```
 
-The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Compact, Math, or Custom. Decoding is strict unless **Allow alternate payload symbols** is checked in Decode mode; the file tool has its own decoding option. Custom alphabets use strict decoding. Independent **Add / require prefix** and **Add / require checksum** controls apply to encoding and decoding. The selected mode and alphabet must match a supplied prefix.
+The alphabet selector applies to the text/hex/integer converter, file tool, and symbol explorer. Choose Official or Custom. Decoding is strict to the selected alphabet. Independent **Add / require prefix** and **Add / require checksum** controls apply to encoding and decoding. The selected mode and alphabet must match a supplied prefix.
 
 The site also compares UTF-8 size and character counts. Files are processed locally in the browser and loaded into memory; use the CLI without wrapper options to stream large files.
 
 ## Alphabets and decoding
 
-### Compact alphabet (default)
+### Official alphabet
 
-The Compact alphabet is an immutable, ordered set of 128 distinct Unicode scalar values:
+The alphabet is an ordered set of 128 distinct Unicode scalar values:
 
 | Indices | Characters |
 | --- | --- |
 | 0–9 | ASCII digits `0–9` |
-| 10–35 | Uppercase Latin letters `A–Z` |
-| 36–61 | Lowercase Latin letters `a–z` |
-| 62–93 | ASCII punctuation, in ascending code-point order |
-| 94–102 | Uppercase Greek `ΓΔΘΛΞΠΦΨΩ` |
-| 103–121 | Lowercase Greek `αβγδεζηθικλμξπστφψω` |
-| 122–127 | Compact symbols `¥§©®¶÷` |
+| 10–35 | Lowercase Latin letters `a–z` |
+| 36–61 | Uppercase Latin letters `A–Z` |
+| 62–80 | Lowercase Greek `αβγδεζηθικλμξπστφψω` |
+| 81–90 | Uppercase Greek `ΓΔΘΛΞΠΣΦΨΩ` |
+| 91–122 | ASCII punctuation, in ascending code-point order |
+| 123–127 | Additional symbols `¥÷∇√∫`, in ascending code-point order |
 
-![The complete Base128 v0.1 Compact alphabet, indexed 0–127: digits, uppercase and lowercase Latin letters, punctuation, Greek letters, and Compact symbols.](docs/images/base128-alphabet.svg)
+![The complete Base128 v0.1 alphabet, indexed 0–127: digits, lowercase and uppercase Latin, lowercase and uppercase Greek, punctuation, and additional symbols.](docs/images/base128-alphabet.svg)
 
-The [alphabet specification](specs/alphabet.json) fixes every index and code point. The [spoken alphabet table](specs/spoken-alphabet.md) provides proposed telephone names and numeric fallbacks.
+The [alphabet specification](specs/alphabet.json) fixes every index and code point;
+[alphabet.txt](specs/alphabet.txt) contains the exact alphabet without a trailing newline.
+The [spoken alphabet table](specs/spoken-alphabet.md) provides reading names and numeric fallbacks.
 
-### Alternative alphabets
-
-Compact is the default. Math is an optional built-in alphabet with the same first 122 symbols and a different six-symbol suffix. Both use the same encoding algorithms.
-
-Select an alphabet with `{alphabet: MATH_ALPHABET}` in JavaScript, `alphabet=MATH_ALPHABET` in Python, or `--alphabet math` in the CLI. The JavaScript and Python libraries export `COMPACT_ALPHABET` and `MATH_ALPHABET`; `DEFAULT_ALPHABET` aliases Compact. Rust provides `compact_alphabet()` and `math_alphabet()`, used with `encode_with_alphabet` and `DecodeOptions`. Use the same alphabet when encoding and decoding.
-
-See the [alphabet mappings](specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the symbol comparison and [spoken tables](specs/spoken-alphabet.md) for reading names.
+JavaScript and Python export `DEFAULT_ALPHABET` and `DEFAULT_ALPHABET_TEXT`.
+Rust provides `default_alphabet()` and `DEFAULT_ALPHABET_TEXT`.
 
 ### Custom alphabets
 
@@ -193,21 +190,8 @@ const restored = decode(text, {alphabet});
 
 Python accepts `alphabet=...` as text or a compiled `create_alphabet(...)` result. The CLI accepts `--alphabet-file FILE`, containing the exact UTF-8 alphabet with no terminating newline. The website accepts custom text under **Custom alphabet**.
 
-### Decoder aliases
-
-**Decoding is strict to the selected alphabet by default.** Opt-in alias decoding accepts corresponding Compact and Math symbols, including mixed spellings in one payload:
-
-| Interface | Enable aliases |
-| --- | --- |
-| JavaScript | `{acceptAliases: true}` |
-| Python | `accept_aliases=True` |
-| Rust | `DecodeOptions { accept_aliases: true, ..Default::default() }` |
-| CLI | `--accept-aliases` |
-| Website | **Allow alternate payload symbols** (Decode mode) |
-
-Aliases work with binary, streaming, and integer decoders using either exact built-in layout. Unrelated custom alphabets are rejected in alias mode. Aliases do not detect alphabets, normalize text, or relax length, padding, and integer leading-zero checks. Envelope headers and checksums always use strict spelling.
-
-Alias mode allows multiple strings to represent the same value. For text comparison, hashing, or signing, choose one canonical alphabet and re-encode decoded values into it, or use strict decoding. See the [alias specification](specs/encoding.md#11-optional-math-preset-and-alias-decoding) for the exact mapping and rules.
+Decoding is strict: no aliases, normalization, trimming, case folding, or alphabet
+detection. Binary length/padding and integer minimality checks apply to all alphabets.
 
 ## Optional prefixes and checksums
 
@@ -222,12 +206,10 @@ add a prefix, a checksum, or both:
 
 The header uses a fixed Base128 alphabet: its first character identifies format
 version `0`, and its second packs four alphabet bits followed by three mode bits.
-Compact is alphabet 0, Math is 1; binary is mode 0, integer is 1. The four headers
-are `00` (Compact binary), `01` (Compact integer), `08` (Math binary), and `09`
-(Math integer). Alphabet field 15 introduces one extra character for IDs 15–142;
-only IDs 0 and 1 are currently assigned. Version 127 is reserved and rejected.
-Middle dot (`·`, U+00B7) appears in
-neither built-in alphabet. The checksum is four CRC-32 bytes encoded into exactly
+The official alphabet is alphabet 0; binary is mode 0, integer is 1. The headers
+are `00` (binary) and `01` (integer). Alphabet field 15 introduces one extra
+character for IDs 15–142; only ID 0 is assigned. Version 127 is reserved and rejected.
+Middle dot (`·`, U+00B7) is outside the official alphabet. The checksum is four CRC-32 bytes encoded into exactly
 five Base128 symbols using the payload alphabet. It covers the exact UTF-8 text before the checksum separator, including the
 `b128` identifier, header, and intervening separators when a prefix is present.
 Without a prefix, it covers only the payload.
@@ -262,9 +244,9 @@ unless you supply constraints. For integers, call `wrap(encoded, {mode: 'integer
 in JavaScript or `wrap(encoded, mode='integer', ...)` in Python, then use
 `decodeInteger` / `decode_integer` on the unwrapped payload.
 
-Prefixes support built-in alphabets only. Checksum-only wrappers also support
-custom alphabets that exclude middle dot. Alias decoding is opt-in for the payload;
-checksums are always strict and must be recalculated if the encoded spelling changes.
+Prefixes support the official alphabet only. Checksum-only wrappers also support
+custom alphabets that exclude middle dot. Decoding is strict; checksums must be
+recalculated if the encoded spelling changes.
 These checks detect accidental corruption, not deliberate tampering.
 
 Wrapper helpers operate on complete values, and wrapped CLI operations buffer
@@ -273,9 +255,9 @@ checksum parameters, and validation rules.
 
 ## How it works
 
-**Binary encoding** reads bytes in most-significant-bit-first groups of seven, zero-fills the final group if necessary, and maps each group to a symbol. For example, UTF-8 `Hi` becomes `aQW`:
+**Binary encoding** reads bytes in most-significant-bit-first groups of seven, zero-fills the final group if necessary, and maps each group to a symbol. For example, UTF-8 `Hi` becomes `Aqw`:
 
-![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing aQW. The last five bits are zero-filled.](docs/images/how-base128-encodes-bytes.svg)
+![UTF-8 Hi has bytes 01001000 and 01101001. Seven-bit groups 0100100, 0011010, and 0100000 map to indices 36, 26, and 32, producing Aqw. The last five bits are zero-filled.](docs/images/how-base128-encodes-bytes.svg)
 
 For `n` bytes, binary encoding emits `ceil(8n / 7)` symbols. Decoding validates the encoded length and trailing zero bits. Streaming encoders and decoders carry incomplete bit groups between chunks; decoders validate final length and padding when finalized.
 
@@ -316,7 +298,7 @@ A separate Lean job checks binary and integer round-trip/canonicality proofs and
 
 A separate [Verus job](verification/verus/README.md) verifies the production Rust numeric streaming helpers under explicit state invariants: bit conservation, bounded state, and tail padding, plus an arithmetic theorem for canonical lengths. It does not yet prove the public streaming loops or equivalence to Lean. Verus adds no runtime dependency; see its setup instructions for `python3 scripts/check-verus.py --check-mutations`.
 
-The shared [default vectors](specs/test-vectors.json) and [math vectors](specs/test-vectors-math.json) are independently generated from bit grouping and positional arithmetic. Cross-language checks compare JavaScript and Python across default, alternative, and custom alphabets. Website interaction tests cover preset selection, aliases, the explorer, and file decoding.
+The shared [reference vectors](specs/test-vectors.json) are independently generated from bit grouping and positional arithmetic. They cover all 128 official integer digits and preserve independent custom-alphabet fixtures. Cross-language checks compare JavaScript and Python across official and custom alphabets. Website interaction tests cover alphabet selection, strict decoding, the explorer, and file decoding.
 
 Generated `packages/js/dist/` and `website/vendor/` files are tracked; commit rebuilt outputs with their source changes. README figures are generated with `node scripts/build-readme-images.mjs` after building the library. The cover illustration's prompt is in [`docs/images/cover-prompt.txt`](docs/images/cover-prompt.txt).
 

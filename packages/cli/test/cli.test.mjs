@@ -33,8 +33,8 @@ test('CLI supports stdin and files without modifying raw content',()=>{
 });
 
 test('CLI integers and custom alphabets',()=>{
-  assert.equal(run(['integer','encode','1000']).stdout.toString(),'7β');
-  assert.equal(run(['integer','decode','7β']).stdout.toString(),'1000');
+  assert.equal(run(['integer','encode','1000']).stdout.toString(),'7.');
+  assert.equal(run(['integer','decode','7.']).stdout.toString(),'1000');
   const dir=mkdtempSync(join(tmpdir(),'base128-test-'));
   try {
     const abc=join(dir,'alphabet.txt');
@@ -47,28 +47,23 @@ test('CLI integers and custom alphabets',()=>{
   } finally { rmSync(dir,{recursive:true,force:true}); }
 });
 
-test('CLI math preset and opt-in aliases',()=>{
-  const bytes=Buffer.from([255,255,255,255,255,255,255]);
-  const encoded=run(['encode','--alphabet','math'],bytes);
+test('CLI official alphabet and removed options',()=>{
+  const bytes=Buffer.alloc(7,255);
+  const encoded=run(['encode','--alphabet','default'],bytes);
   assert.equal(encoded.status,0,encoded.stderr.toString());
   assert.equal(encoded.stdout.toString(),'∫'.repeat(8));
-  assert.equal(run(['decode'],encoded.stdout).status,1);
-  for (const args of [['decode','--alphabet','math'],['decode','--accept-aliases']]) {
-    const decoded=run(args,encoded.stdout);
-    assert.equal(decoded.status,0,decoded.stderr.toString());
-    assert.deepEqual(decoded.stdout,bytes);
+  assert.deepEqual(run(['decode'],encoded.stdout).stdout,bytes);
+  for (const args of [['decode','--accept-aliases'],['encode','--alphabet','math'],
+    ['encode','--alphabet','compact'],['encode','--alphabet','unknown'],
+    ['encode','--alphabet','default','--alphabet-file','missing']]) {
+    assert.equal(run(args,bytes).status,1);
   }
-  assert.deepEqual(run(['decode','--accept-aliases'],Buffer.from('÷∫'.repeat(4))).stdout,bytes);
-  assert.equal(run(['integer','encode','122','--alphabet','math']).stdout.toString(),'∂');
-  assert.equal(run(['integer','decode','∂','--accept-aliases']).stdout.toString(),'122');
-  assert.equal(run(['encode','--accept-aliases'],bytes).status,1);
-  assert.equal(run(['encode','--alphabet','unknown'],bytes).status,1);
-  assert.equal(run(['encode','--alphabet','math','--alphabet-file','missing'],bytes).status,1);
+  assert.equal(run(['integer','decode','∂']).status,1);
 });
 
 test('CLI prefix/checksum combinations, inferred alphabet, and checked file output',()=>{
   const bytes=Buffer.from([255,0,255]);
-  for(const preset of ['compact','math']) {
+  for(const preset of ['default']) {
     for(const flags of [['--prefix'],['--checksum'],['--prefix','--checksum']]) {
       const encoded=run(['encode','--alphabet',preset,...flags],bytes);
       assert.equal(encoded.status,0,encoded.stderr.toString());

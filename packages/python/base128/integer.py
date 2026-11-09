@@ -1,6 +1,6 @@
 """Canonical positional Base128 conversion for nonnegative Python integers."""
 
-from .alphabet import Alphabet, resolve_alphabet, resolve_decoder_index
+from .alphabet import Alphabet, resolve_alphabet
 
 
 def encode_integer(value: int, *, alphabet: Alphabet | str | None = None) -> str:
@@ -18,11 +18,11 @@ def encode_integer(value: int, *, alphabet: Alphabet | str | None = None) -> str
     return "".join(reversed(result))
 
 
-def decode_integer(text: str, *, alphabet: Alphabet | str | None = None, accept_aliases: bool = False) -> int:
+def decode_integer(text: str, *, alphabet: Alphabet | str | None = None) -> int:
     if not isinstance(text, str):
         raise TypeError("Encoded integer must be a string")
     abc = resolve_alphabet(alphabet)
-    index_of = resolve_decoder_index(abc, accept_aliases)
+    index_of = abc.index_of
     if not text:
         raise ValueError("Encoded integer cannot be empty")
     if len(text) > 1 and text[0] == abc.symbol_at(0):

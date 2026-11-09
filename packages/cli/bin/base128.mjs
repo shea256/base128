@@ -8,7 +8,7 @@ import {finished} from 'node:stream/promises';
 import {TextDecoder} from 'node:util';
 import {resolve, dirname, basename, join} from 'node:path';
 import {
-  DEFAULT_ALPHABET, MATH_ALPHABET,
+  DEFAULT_ALPHABET,
   BinaryEncoder, BinaryDecoder, createAlphabet, encode, decode, encodeInteger, decodeInteger, wrap, unwrap,
 } from '../../js/dist/index.js';
 
@@ -27,8 +27,7 @@ Binary output uses raw bytes; encoded output is UTF-8 without a trailing newline
 --checksum adds/requires a middle dot and a five-symbol CRC-32 suffix.
 Combine --prefix and --checksum for both. Wrapped file operations buffer input.
 A prefix supplies its alphabet unless --alphabet or --alphabet-file explicitly constrains it.
---alphabet compact|math selects a built-in preset (default: compact).
---accept-aliases accepts both built-in symbol forms on decode, including mixed input.
+--alphabet default selects the official alphabet (the default).
 --alphabet and --alphabet-file cannot be combined.
 --alphabet-file contains exactly 128 Unicode code points (no terminating newline).
 Text: printf 'hello' | base128 encode
@@ -42,7 +41,6 @@ function parseOptions(args) {
   let outputPath;
   let alphabetFile;
   let preset;
-  let acceptAliases=false;
   let prefix=false, checksum=false;
   for (let i=0;i<args.length;i++) {
     const arg=args[i];
@@ -53,14 +51,12 @@ function parseOptions(args) {
       if (alphabetFile || !args[i+1]) throw new Error('Expected one path after --alphabet-file');
       alphabetFile=args[++i];
     } else if (arg==='--alphabet') {
-      if (preset || !['compact','math'].includes(args[i+1])) throw new Error('Expected compact or math after --alphabet');
+      if (preset || !['default'].includes(args[i+1])) throw new Error('Expected default after --alphabet');
       preset=args[++i];
     } else if (arg==='--prefix') {
       prefix=true;
     } else if (arg==='--checksum') {
       checksum=true;
-    } else if (arg==='--accept-aliases') {
-      acceptAliases=true;
     } else if (arg==='--help'||arg==='-h') {
       process.stdout.write(HELP);
       return null;
@@ -71,7 +67,7 @@ function parseOptions(args) {
     }
   }
   if (preset && alphabetFile) throw new Error('--alphabet and --alphabet-file cannot be combined');
-  return {positional,outputPath,alphabetFile,preset,acceptAliases,prefix,checksum};
+  return {positional,outputPath,alphabetFile,preset,prefix,checksum};
 }
 
 async function streamWrite(stream,data) {
@@ -100,14 +96,14 @@ async function withOutput(outputPath,action) {
   }
 }
 
-async function binaryCommand(kind,inputPath,outputPath,alphabet,acceptAliases,options) {
+async function binaryCommand(kind,inputPath,outputPath,alphabet,options) {
   const input= inputPath && inputPath!=='-' ? createReadStream(inputPath) : process.stdin;
   await withOutput(outputPath,async output=>{
     if (options.prefix || options.checksum) {
       const chunks=[];
       for await (const chunk of input) chunks.push(chunk);
       const bytes=Buffer.concat(chunks);
-      const envelopeOptions={mode:'binary',prefix:options.prefix,checksum:options.checksum,acceptAliases};
+      const envelopeOptions={mode:'binary',prefix:options.prefix,checksum:options.checksum};
       if (kind==='encode') {
         const wrapped=wrap(encode(bytes,{alphabet}),{...envelopeOptions,alphabet});
         await streamWrite(output,Buffer.from(wrapped,'utf8'));
@@ -115,7 +111,7 @@ async function binaryCommand(kind,inputPath,outputPath,alphabet,acceptAliases,op
         const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes);
         const selected=options.preset || options.alphabetFile ? alphabet : undefined;
         const result=unwrap(text,{...envelopeOptions,alphabet:selected});
-        await streamWrite(output,decode(result.payload,{alphabet:result.alphabet,acceptAliases}));
+        await streamWrite(output,decode(result.payload,{alphabet:result.alphabet}));
       }
       return;
     }
@@ -126,7 +122,7 @@ async function binaryCommand(kind,inputPath,outputPath,alphabet,acceptAliases,op
       }
       await streamWrite(output,Buffer.from(encoder.finish(),'utf8'));
     } else {
-      const decoder = new BinaryDecoder({alphabet,acceptAliases});
+      const decoder = new BinaryDecoder({alphabet});
       const utf8 = new TextDecoder('utf-8',{fatal:true});
       for await (const bytes of input) {
         const text=utf8.decode(bytes,{stream:true});
@@ -153,16 +149,14 @@ async function main(argv) {
   }
   const options=parseOptions(args);
   if (!options) return;
-  const {acceptAliases}=options;
-  if (acceptAliases && (subcommand || command)!=='decode') throw new Error('--accept-aliases is only valid for decode');
-  let alphabet=options.preset==='math' ? MATH_ALPHABET : DEFAULT_ALPHABET;
+  let alphabet=DEFAULT_ALPHABET;
   if (options.alphabetFile) {
     alphabet=createAlphabet(await readFile(options.alphabetFile,'utf8'));
   }
   if (command==='integer') {
     if (options.positional.length!==1) throw new Error('Expected exactly one integer argument');
     const value=options.positional[0];
-    const envelopeOptions={mode:'integer',prefix:options.prefix,checksum:options.checksum,acceptAliases};
+    const envelopeOptions={mode:'integer',prefix:options.prefix,checksum:options.checksum};
     let output;
     if (subcommand==='encode') {
       output=encodeInteger(BigInt(value),{alphabet});
@@ -170,12 +164,12 @@ async function main(argv) {
     } else {
       const selected=options.preset || options.alphabetFile ? alphabet : undefined;
       const result=options.prefix || options.checksum ? unwrap(value,{...envelopeOptions,alphabet:selected}) : {payload:value,alphabet};
-      output=String(decodeInteger(result.payload,{alphabet:result.alphabet,acceptAliases}));
+      output=String(decodeInteger(result.payload,{alphabet:result.alphabet}));
     }
     await withOutput(options.outputPath,async sink=>streamWrite(sink,Buffer.from(output,'utf8')));
   } else {
     if (options.positional.length>1) throw new Error('Expected at most one input file');
-    await binaryCommand(command, options.positional[0], options.outputPath, alphabet, acceptAliases, options);
+    await binaryCommand(command, options.positional[0], options.outputPath, alphabet, options);
   }
 }
 

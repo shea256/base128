@@ -1,7 +1,7 @@
 {
-  "name": "Base128 Compact Unicode alphabet v0.1",
+  "name": "Base128 Unicode alphabet v0.1",
   "version": "0.1",
-  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷",
+  "alphabet": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμξπστφψωΓΔΘΛΞΠΣΦΨΩ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~¥÷∇√∫",
   "symbols": [
     {
       "index": 0,
@@ -55,593 +55,593 @@
     },
     {
       "index": 10,
-      "character": "A",
-      "unicode": "U+0041"
-    },
-    {
-      "index": 11,
-      "character": "B",
-      "unicode": "U+0042"
-    },
-    {
-      "index": 12,
-      "character": "C",
-      "unicode": "U+0043"
-    },
-    {
-      "index": 13,
-      "character": "D",
-      "unicode": "U+0044"
-    },
-    {
-      "index": 14,
-      "character": "E",
-      "unicode": "U+0045"
-    },
-    {
-      "index": 15,
-      "character": "F",
-      "unicode": "U+0046"
-    },
-    {
-      "index": 16,
-      "character": "G",
-      "unicode": "U+0047"
-    },
-    {
-      "index": 17,
-      "character": "H",
-      "unicode": "U+0048"
-    },
-    {
-      "index": 18,
-      "character": "I",
-      "unicode": "U+0049"
-    },
-    {
-      "index": 19,
-      "character": "J",
-      "unicode": "U+004A"
-    },
-    {
-      "index": 20,
-      "character": "K",
-      "unicode": "U+004B"
-    },
-    {
-      "index": 21,
-      "character": "L",
-      "unicode": "U+004C"
-    },
-    {
-      "index": 22,
-      "character": "M",
-      "unicode": "U+004D"
-    },
-    {
-      "index": 23,
-      "character": "N",
-      "unicode": "U+004E"
-    },
-    {
-      "index": 24,
-      "character": "O",
-      "unicode": "U+004F"
-    },
-    {
-      "index": 25,
-      "character": "P",
-      "unicode": "U+0050"
-    },
-    {
-      "index": 26,
-      "character": "Q",
-      "unicode": "U+0051"
-    },
-    {
-      "index": 27,
-      "character": "R",
-      "unicode": "U+0052"
-    },
-    {
-      "index": 28,
-      "character": "S",
-      "unicode": "U+0053"
-    },
-    {
-      "index": 29,
-      "character": "T",
-      "unicode": "U+0054"
-    },
-    {
-      "index": 30,
-      "character": "U",
-      "unicode": "U+0055"
-    },
-    {
-      "index": 31,
-      "character": "V",
-      "unicode": "U+0056"
-    },
-    {
-      "index": 32,
-      "character": "W",
-      "unicode": "U+0057"
-    },
-    {
-      "index": 33,
-      "character": "X",
-      "unicode": "U+0058"
-    },
-    {
-      "index": 34,
-      "character": "Y",
-      "unicode": "U+0059"
-    },
-    {
-      "index": 35,
-      "character": "Z",
-      "unicode": "U+005A"
-    },
-    {
-      "index": 36,
       "character": "a",
       "unicode": "U+0061"
     },
     {
-      "index": 37,
+      "index": 11,
       "character": "b",
       "unicode": "U+0062"
     },
     {
-      "index": 38,
+      "index": 12,
       "character": "c",
       "unicode": "U+0063"
     },
     {
-      "index": 39,
+      "index": 13,
       "character": "d",
       "unicode": "U+0064"
     },
     {
-      "index": 40,
+      "index": 14,
       "character": "e",
       "unicode": "U+0065"
     },
     {
-      "index": 41,
+      "index": 15,
       "character": "f",
       "unicode": "U+0066"
     },
     {
-      "index": 42,
+      "index": 16,
       "character": "g",
       "unicode": "U+0067"
     },
     {
-      "index": 43,
+      "index": 17,
       "character": "h",
       "unicode": "U+0068"
     },
     {
-      "index": 44,
+      "index": 18,
       "character": "i",
       "unicode": "U+0069"
     },
     {
-      "index": 45,
+      "index": 19,
       "character": "j",
       "unicode": "U+006A"
     },
     {
-      "index": 46,
+      "index": 20,
       "character": "k",
       "unicode": "U+006B"
     },
     {
-      "index": 47,
+      "index": 21,
       "character": "l",
       "unicode": "U+006C"
     },
     {
-      "index": 48,
+      "index": 22,
       "character": "m",
       "unicode": "U+006D"
     },
     {
-      "index": 49,
+      "index": 23,
       "character": "n",
       "unicode": "U+006E"
     },
     {
-      "index": 50,
+      "index": 24,
       "character": "o",
       "unicode": "U+006F"
     },
     {
-      "index": 51,
+      "index": 25,
       "character": "p",
       "unicode": "U+0070"
     },
     {
-      "index": 52,
+      "index": 26,
       "character": "q",
       "unicode": "U+0071"
     },
     {
-      "index": 53,
+      "index": 27,
       "character": "r",
       "unicode": "U+0072"
     },
     {
-      "index": 54,
+      "index": 28,
       "character": "s",
       "unicode": "U+0073"
     },
     {
-      "index": 55,
+      "index": 29,
       "character": "t",
       "unicode": "U+0074"
     },
     {
-      "index": 56,
+      "index": 30,
       "character": "u",
       "unicode": "U+0075"
     },
     {
-      "index": 57,
+      "index": 31,
       "character": "v",
       "unicode": "U+0076"
     },
     {
-      "index": 58,
+      "index": 32,
       "character": "w",
       "unicode": "U+0077"
     },
     {
-      "index": 59,
+      "index": 33,
       "character": "x",
       "unicode": "U+0078"
     },
     {
-      "index": 60,
+      "index": 34,
       "character": "y",
       "unicode": "U+0079"
     },
     {
-      "index": 61,
+      "index": 35,
       "character": "z",
       "unicode": "U+007A"
     },
     {
+      "index": 36,
+      "character": "A",
+      "unicode": "U+0041"
+    },
+    {
+      "index": 37,
+      "character": "B",
+      "unicode": "U+0042"
+    },
+    {
+      "index": 38,
+      "character": "C",
+      "unicode": "U+0043"
+    },
+    {
+      "index": 39,
+      "character": "D",
+      "unicode": "U+0044"
+    },
+    {
+      "index": 40,
+      "character": "E",
+      "unicode": "U+0045"
+    },
+    {
+      "index": 41,
+      "character": "F",
+      "unicode": "U+0046"
+    },
+    {
+      "index": 42,
+      "character": "G",
+      "unicode": "U+0047"
+    },
+    {
+      "index": 43,
+      "character": "H",
+      "unicode": "U+0048"
+    },
+    {
+      "index": 44,
+      "character": "I",
+      "unicode": "U+0049"
+    },
+    {
+      "index": 45,
+      "character": "J",
+      "unicode": "U+004A"
+    },
+    {
+      "index": 46,
+      "character": "K",
+      "unicode": "U+004B"
+    },
+    {
+      "index": 47,
+      "character": "L",
+      "unicode": "U+004C"
+    },
+    {
+      "index": 48,
+      "character": "M",
+      "unicode": "U+004D"
+    },
+    {
+      "index": 49,
+      "character": "N",
+      "unicode": "U+004E"
+    },
+    {
+      "index": 50,
+      "character": "O",
+      "unicode": "U+004F"
+    },
+    {
+      "index": 51,
+      "character": "P",
+      "unicode": "U+0050"
+    },
+    {
+      "index": 52,
+      "character": "Q",
+      "unicode": "U+0051"
+    },
+    {
+      "index": 53,
+      "character": "R",
+      "unicode": "U+0052"
+    },
+    {
+      "index": 54,
+      "character": "S",
+      "unicode": "U+0053"
+    },
+    {
+      "index": 55,
+      "character": "T",
+      "unicode": "U+0054"
+    },
+    {
+      "index": 56,
+      "character": "U",
+      "unicode": "U+0055"
+    },
+    {
+      "index": 57,
+      "character": "V",
+      "unicode": "U+0056"
+    },
+    {
+      "index": 58,
+      "character": "W",
+      "unicode": "U+0057"
+    },
+    {
+      "index": 59,
+      "character": "X",
+      "unicode": "U+0058"
+    },
+    {
+      "index": 60,
+      "character": "Y",
+      "unicode": "U+0059"
+    },
+    {
+      "index": 61,
+      "character": "Z",
+      "unicode": "U+005A"
+    },
+    {
       "index": 62,
-      "character": "!",
-      "unicode": "U+0021"
-    },
-    {
-      "index": 63,
-      "character": "\"",
-      "unicode": "U+0022"
-    },
-    {
-      "index": 64,
-      "character": "#",
-      "unicode": "U+0023"
-    },
-    {
-      "index": 65,
-      "character": "$",
-      "unicode": "U+0024"
-    },
-    {
-      "index": 66,
-      "character": "%",
-      "unicode": "U+0025"
-    },
-    {
-      "index": 67,
-      "character": "&",
-      "unicode": "U+0026"
-    },
-    {
-      "index": 68,
-      "character": "'",
-      "unicode": "U+0027"
-    },
-    {
-      "index": 69,
-      "character": "(",
-      "unicode": "U+0028"
-    },
-    {
-      "index": 70,
-      "character": ")",
-      "unicode": "U+0029"
-    },
-    {
-      "index": 71,
-      "character": "*",
-      "unicode": "U+002A"
-    },
-    {
-      "index": 72,
-      "character": "+",
-      "unicode": "U+002B"
-    },
-    {
-      "index": 73,
-      "character": ",",
-      "unicode": "U+002C"
-    },
-    {
-      "index": 74,
-      "character": "-",
-      "unicode": "U+002D"
-    },
-    {
-      "index": 75,
-      "character": ".",
-      "unicode": "U+002E"
-    },
-    {
-      "index": 76,
-      "character": "/",
-      "unicode": "U+002F"
-    },
-    {
-      "index": 77,
-      "character": ":",
-      "unicode": "U+003A"
-    },
-    {
-      "index": 78,
-      "character": ";",
-      "unicode": "U+003B"
-    },
-    {
-      "index": 79,
-      "character": "<",
-      "unicode": "U+003C"
-    },
-    {
-      "index": 80,
-      "character": "=",
-      "unicode": "U+003D"
-    },
-    {
-      "index": 81,
-      "character": ">",
-      "unicode": "U+003E"
-    },
-    {
-      "index": 82,
-      "character": "?",
-      "unicode": "U+003F"
-    },
-    {
-      "index": 83,
-      "character": "@",
-      "unicode": "U+0040"
-    },
-    {
-      "index": 84,
-      "character": "[",
-      "unicode": "U+005B"
-    },
-    {
-      "index": 85,
-      "character": "\\",
-      "unicode": "U+005C"
-    },
-    {
-      "index": 86,
-      "character": "]",
-      "unicode": "U+005D"
-    },
-    {
-      "index": 87,
-      "character": "^",
-      "unicode": "U+005E"
-    },
-    {
-      "index": 88,
-      "character": "_",
-      "unicode": "U+005F"
-    },
-    {
-      "index": 89,
-      "character": "`",
-      "unicode": "U+0060"
-    },
-    {
-      "index": 90,
-      "character": "{",
-      "unicode": "U+007B"
-    },
-    {
-      "index": 91,
-      "character": "|",
-      "unicode": "U+007C"
-    },
-    {
-      "index": 92,
-      "character": "}",
-      "unicode": "U+007D"
-    },
-    {
-      "index": 93,
-      "character": "~",
-      "unicode": "U+007E"
-    },
-    {
-      "index": 94,
-      "character": "Γ",
-      "unicode": "U+0393"
-    },
-    {
-      "index": 95,
-      "character": "Δ",
-      "unicode": "U+0394"
-    },
-    {
-      "index": 96,
-      "character": "Θ",
-      "unicode": "U+0398"
-    },
-    {
-      "index": 97,
-      "character": "Λ",
-      "unicode": "U+039B"
-    },
-    {
-      "index": 98,
-      "character": "Ξ",
-      "unicode": "U+039E"
-    },
-    {
-      "index": 99,
-      "character": "Π",
-      "unicode": "U+03A0"
-    },
-    {
-      "index": 100,
-      "character": "Φ",
-      "unicode": "U+03A6"
-    },
-    {
-      "index": 101,
-      "character": "Ψ",
-      "unicode": "U+03A8"
-    },
-    {
-      "index": 102,
-      "character": "Ω",
-      "unicode": "U+03A9"
-    },
-    {
-      "index": 103,
       "character": "α",
       "unicode": "U+03B1"
     },
     {
-      "index": 104,
+      "index": 63,
       "character": "β",
       "unicode": "U+03B2"
     },
     {
-      "index": 105,
+      "index": 64,
       "character": "γ",
       "unicode": "U+03B3"
     },
     {
-      "index": 106,
+      "index": 65,
       "character": "δ",
       "unicode": "U+03B4"
     },
     {
-      "index": 107,
+      "index": 66,
       "character": "ε",
       "unicode": "U+03B5"
     },
     {
-      "index": 108,
+      "index": 67,
       "character": "ζ",
       "unicode": "U+03B6"
     },
     {
-      "index": 109,
+      "index": 68,
       "character": "η",
       "unicode": "U+03B7"
     },
     {
-      "index": 110,
+      "index": 69,
       "character": "θ",
       "unicode": "U+03B8"
     },
     {
-      "index": 111,
+      "index": 70,
       "character": "ι",
       "unicode": "U+03B9"
     },
     {
-      "index": 112,
+      "index": 71,
       "character": "κ",
       "unicode": "U+03BA"
     },
     {
-      "index": 113,
+      "index": 72,
       "character": "λ",
       "unicode": "U+03BB"
     },
     {
-      "index": 114,
+      "index": 73,
       "character": "μ",
       "unicode": "U+03BC"
     },
     {
-      "index": 115,
+      "index": 74,
       "character": "ξ",
       "unicode": "U+03BE"
     },
     {
-      "index": 116,
+      "index": 75,
       "character": "π",
       "unicode": "U+03C0"
     },
     {
-      "index": 117,
+      "index": 76,
       "character": "σ",
       "unicode": "U+03C3"
     },
     {
-      "index": 118,
+      "index": 77,
       "character": "τ",
       "unicode": "U+03C4"
     },
     {
-      "index": 119,
+      "index": 78,
       "character": "φ",
       "unicode": "U+03C6"
     },
     {
-      "index": 120,
+      "index": 79,
       "character": "ψ",
       "unicode": "U+03C8"
     },
     {
-      "index": 121,
+      "index": 80,
       "character": "ω",
       "unicode": "U+03C9"
     },
     {
+      "index": 81,
+      "character": "Γ",
+      "unicode": "U+0393"
+    },
+    {
+      "index": 82,
+      "character": "Δ",
+      "unicode": "U+0394"
+    },
+    {
+      "index": 83,
+      "character": "Θ",
+      "unicode": "U+0398"
+    },
+    {
+      "index": 84,
+      "character": "Λ",
+      "unicode": "U+039B"
+    },
+    {
+      "index": 85,
+      "character": "Ξ",
+      "unicode": "U+039E"
+    },
+    {
+      "index": 86,
+      "character": "Π",
+      "unicode": "U+03A0"
+    },
+    {
+      "index": 87,
+      "character": "Σ",
+      "unicode": "U+03A3"
+    },
+    {
+      "index": 88,
+      "character": "Φ",
+      "unicode": "U+03A6"
+    },
+    {
+      "index": 89,
+      "character": "Ψ",
+      "unicode": "U+03A8"
+    },
+    {
+      "index": 90,
+      "character": "Ω",
+      "unicode": "U+03A9"
+    },
+    {
+      "index": 91,
+      "character": "!",
+      "unicode": "U+0021"
+    },
+    {
+      "index": 92,
+      "character": "\"",
+      "unicode": "U+0022"
+    },
+    {
+      "index": 93,
+      "character": "#",
+      "unicode": "U+0023"
+    },
+    {
+      "index": 94,
+      "character": "$",
+      "unicode": "U+0024"
+    },
+    {
+      "index": 95,
+      "character": "%",
+      "unicode": "U+0025"
+    },
+    {
+      "index": 96,
+      "character": "&",
+      "unicode": "U+0026"
+    },
+    {
+      "index": 97,
+      "character": "'",
+      "unicode": "U+0027"
+    },
+    {
+      "index": 98,
+      "character": "(",
+      "unicode": "U+0028"
+    },
+    {
+      "index": 99,
+      "character": ")",
+      "unicode": "U+0029"
+    },
+    {
+      "index": 100,
+      "character": "*",
+      "unicode": "U+002A"
+    },
+    {
+      "index": 101,
+      "character": "+",
+      "unicode": "U+002B"
+    },
+    {
+      "index": 102,
+      "character": ",",
+      "unicode": "U+002C"
+    },
+    {
+      "index": 103,
+      "character": "-",
+      "unicode": "U+002D"
+    },
+    {
+      "index": 104,
+      "character": ".",
+      "unicode": "U+002E"
+    },
+    {
+      "index": 105,
+      "character": "/",
+      "unicode": "U+002F"
+    },
+    {
+      "index": 106,
+      "character": ":",
+      "unicode": "U+003A"
+    },
+    {
+      "index": 107,
+      "character": ";",
+      "unicode": "U+003B"
+    },
+    {
+      "index": 108,
+      "character": "<",
+      "unicode": "U+003C"
+    },
+    {
+      "index": 109,
+      "character": "=",
+      "unicode": "U+003D"
+    },
+    {
+      "index": 110,
+      "character": ">",
+      "unicode": "U+003E"
+    },
+    {
+      "index": 111,
+      "character": "?",
+      "unicode": "U+003F"
+    },
+    {
+      "index": 112,
+      "character": "@",
+      "unicode": "U+0040"
+    },
+    {
+      "index": 113,
+      "character": "[",
+      "unicode": "U+005B"
+    },
+    {
+      "index": 114,
+      "character": "\\",
+      "unicode": "U+005C"
+    },
+    {
+      "index": 115,
+      "character": "]",
+      "unicode": "U+005D"
+    },
+    {
+      "index": 116,
+      "character": "^",
+      "unicode": "U+005E"
+    },
+    {
+      "index": 117,
+      "character": "_",
+      "unicode": "U+005F"
+    },
+    {
+      "index": 118,
+      "character": "`",
+      "unicode": "U+0060"
+    },
+    {
+      "index": 119,
+      "character": "{",
+      "unicode": "U+007B"
+    },
+    {
+      "index": 120,
+      "character": "|",
+      "unicode": "U+007C"
+    },
+    {
+      "index": 121,
+      "character": "}",
+      "unicode": "U+007D"
+    },
+    {
       "index": 122,
+      "character": "~",
+      "unicode": "U+007E"
+    },
+    {
+      "index": 123,
       "character": "¥",
       "unicode": "U+00A5"
     },
     {
-      "index": 123,
-      "character": "§",
-      "unicode": "U+00A7"
-    },
-    {
       "index": 124,
-      "character": "©",
-      "unicode": "U+00A9"
+      "character": "÷",
+      "unicode": "U+00F7"
     },
     {
       "index": 125,
-      "character": "®",
-      "unicode": "U+00AE"
+      "character": "∇",
+      "unicode": "U+2207"
     },
     {
       "index": 126,
-      "character": "¶",
-      "unicode": "U+00B6"
+      "character": "√",
+      "unicode": "U+221A"
     },
     {
       "index": 127,
-      "character": "÷",
-      "unicode": "U+00F7"
+      "character": "∫",
+      "unicode": "U+222B"
     }
   ]
 }

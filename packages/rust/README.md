@@ -1,6 +1,6 @@
 # Base128 for Rust
 
-Dependency-free at runtime, with the same wire format as the JavaScript and Python libraries. Compact is the default alphabet; Math and custom alphabets are supported. This crate is prepublication: use a local path dependency, not a crates.io install.
+Dependency-free at runtime, with the same wire format as the JavaScript and Python libraries. One official alphabet and caller-supplied custom alphabets are supported. This crate is prepublication: use a local path dependency, not a crates.io install.
 
 ```toml
 [dependencies]
@@ -12,8 +12,8 @@ use base128_unicode_codec::{encode, decode, encode_integer, decode_integer};
 
 let encoded = encode("Hello, 世界!".as_bytes());
 assert_eq!(decode(&encoded).unwrap(), "Hello, 世界!".as_bytes());
-assert_eq!(encode_integer(1000), "7β");
-assert_eq!(decode_integer("7β").unwrap(), 1000);
+assert_eq!(encode_integer(1000), "7.");
+assert_eq!(decode_integer("7.").unwrap(), 1000);
 ```
 
 ## Integers
@@ -22,20 +22,20 @@ assert_eq!(decode_integer("7β").unwrap(), 1000);
 
 ## Alphabets and strict decoding
 
-`compact_alphabet()`, `math_alphabet()`, and `default_alphabet()` return shared validated alphabets. `DEFAULT_ALPHABET_TEXT`, `COMPACT_ALPHABET_TEXT`, and `MATH_ALPHABET_TEXT` provide their exact text. `Alphabet::new(text)` validates custom alphabets: exactly 128 distinct Unicode scalar values, including support for supplementary-plane characters.
+`default_alphabet()` returns the shared official alphabet; `DEFAULT_ALPHABET_TEXT` provides its exact text. `Alphabet::new(text)` validates custom alphabets: exactly 128 distinct Unicode scalar values, including support for supplementary-plane characters.
 
 ```rust
 use base128_unicode_codec::*;
 
-let alphabet = math_alphabet();
+let alphabet = default_alphabet();
 let encoded = encode_with_alphabet(&[255], alphabet);
-let options = DecodeOptions { alphabet: Some(alphabet), accept_aliases: false };
+let options = DecodeOptions { alphabet: Some(alphabet) };
 assert_eq!(decode_with_options(&encoded, options).unwrap(), [255]);
 ```
 
 Encoding variants are `encode_with_alphabet`, `encode_integer_with_alphabet`, and `encode_integer_decimal_with_alphabet`. Decoding variants are `decode_with_options`, `decode_integer_with_options`, and `decode_integer_decimal_with_options`.
 
-Decoding is strict by default. Set `DecodeOptions::accept_aliases` to accept corresponding Compact and Math symbols, including mixed input; this is allowed only for those exact built-in layouts. No input is trimmed, case-folded, or normalized. Binary decoding rejects noncanonical lengths and nonzero trailing bits. Rust strings already require valid UTF-8.
+Decoding is strict. No input is trimmed, case-folded, or normalized. Binary decoding rejects noncanonical lengths and nonzero trailing bits. Rust strings already require valid UTF-8.
 
 ## Streaming bytes
 
@@ -71,9 +71,9 @@ assert_eq!(decode_with_options(&result.payload, DecodeOptions {
 }).unwrap(), b"Hello");
 ```
 
-`wrap` validates an already encoded payload. Prefix and checksum are independent options, disabled by default. `unwrap` requires the explicitly selected shape and verifies checksums before returning `Unwrapped { payload, mode, alphabet }`. Without a prefix, omitted constraints mean binary/Compact. With a prefix, omitted mode/alphabet constraints are inferred; explicit constraints must match the header. For integers, set `mode: Some(Mode::Integer)` when wrapping and decode the returned payload with an integer decoder.
+`wrap` validates an already encoded payload. Prefix and checksum are independent options, disabled by default. `unwrap` requires the explicitly selected shape and verifies checksums before returning `Unwrapped { payload, mode, alphabet }`. Without a prefix, omitted constraints mean binary/the official alphabet. With a prefix, omitted mode/alphabet constraints are inferred; explicit constraints must match the header. For integers, set `mode: Some(Mode::Integer)` when wrapping and decode the returned payload with an integer decoder.
 
-`EnvelopeOptions::accept_aliases` affects only payload decoding. Headers and checksums are always strict. Prefixes require a built-in alphabet; checksum-only envelopes also support custom alphabets that exclude middle dot. Wrappers buffer whole values. CRC32 detects accidental corruption, not malicious changes. See the [envelope specification](../../specs/envelope.md).
+Prefixes require a built-in alphabet; checksum-only envelopes also support custom alphabets that exclude middle dot. Wrappers buffer whole values. CRC32 detects accidental corruption, not malicious changes. See the [envelope specification](../../specs/envelope.md).
 
 ## Development
 
@@ -86,7 +86,7 @@ cargo clippy --manifest-path packages/rust/Cargo.toml --all-targets -- -D warnin
 cargo doc --manifest-path packages/rust/Cargo.toml --no-deps
 ```
 
-Tests consume the shared Compact, Math, custom-alphabet, and envelope reference vectors; `serde_json` is a development dependency only. The repository's CLI remains Node.js-based and can be used independently of the Rust library.
+Tests consume the shared official-alphabet, custom-alphabet, and envelope reference vectors; `serde_json` is a development dependency only. The repository's CLI remains Node.js-based and can be used independently of the Rust library.
 
 The [Verus pilot](../../verification/verus/README.md) checks the production numeric
 streaming helpers under explicit state invariants. Run
