@@ -175,6 +175,46 @@ The [spoken alphabet table](specs/spoken-alphabet.md) provides reading names and
 JavaScript and Python export `DEFAULT_ALPHABET` and `DEFAULT_ALPHABET_TEXT`.
 Rust provides `default_alphabet()` and `DEFAULT_ALPHABET_TEXT`.
 
+### Characters and spoken names
+
+Read down each column, then move right. “Capital” marks uppercase letters;
+unqualified letter names mean lowercase.
+
+| 0–31 | 32–63 | 64–95 | 96–127 |
+| --- | --- | --- | --- |
+| 0 · <code>0</code> — Zero | 32 · <code>w</code> — Double-you | 64 · <code>γ</code> — Gamma | 96 · <code>&amp;</code> — Ampersand |
+| 1 · <code>1</code> — One | 33 · <code>x</code> — Ex | 65 · <code>δ</code> — Delta | 97 · <code>'</code> — Apostrophe |
+| 2 · <code>2</code> — Two | 34 · <code>y</code> — Why | 66 · <code>ε</code> — Epsilon | 98 · <code>(</code> — Left parenthesis |
+| 3 · <code>3</code> — Three | 35 · <code>z</code> — Zee | 67 · <code>ζ</code> — Zeta | 99 · <code>)</code> — Right parenthesis |
+| 4 · <code>4</code> — Four | 36 · <code>A</code> — Capital ay | 68 · <code>η</code> — Eta | 100 · <code>*</code> — Asterisk |
+| 5 · <code>5</code> — Five | 37 · <code>B</code> — Capital bee | 69 · <code>θ</code> — Theta | 101 · <code>+</code> — Plus |
+| 6 · <code>6</code> — Six | 38 · <code>C</code> — Capital see | 70 · <code>ι</code> — Iota | 102 · <code>,</code> — Comma |
+| 7 · <code>7</code> — Seven | 39 · <code>D</code> — Capital dee | 71 · <code>κ</code> — Kappa | 103 · <code>-</code> — Hyphen |
+| 8 · <code>8</code> — Eight | 40 · <code>E</code> — Capital ee | 72 · <code>λ</code> — Lambda | 104 · <code>.</code> — Period |
+| 9 · <code>9</code> — Nine | 41 · <code>F</code> — Capital ef | 73 · <code>μ</code> — Mu | 105 · <code>/</code> — Forward slash |
+| 10 · <code>a</code> — Ay | 42 · <code>G</code> — Capital jee | 74 · <code>ξ</code> — Xi | 106 · <code>:</code> — Colon |
+| 11 · <code>b</code> — Bee | 43 · <code>H</code> — Capital aitch | 75 · <code>π</code> — Pi | 107 · <code>;</code> — Semicolon |
+| 12 · <code>c</code> — See | 44 · <code>I</code> — Capital eye | 76 · <code>σ</code> — Sigma | 108 · <code>&lt;</code> — Less than |
+| 13 · <code>d</code> — Dee | 45 · <code>J</code> — Capital jay | 77 · <code>τ</code> — Tau | 109 · <code>=</code> — Equals |
+| 14 · <code>e</code> — Ee | 46 · <code>K</code> — Capital kay | 78 · <code>φ</code> — Phi | 110 · <code>&gt;</code> — Greater than |
+| 15 · <code>f</code> — Ef | 47 · <code>L</code> — Capital el | 79 · <code>ψ</code> — Psi | 111 · <code>?</code> — Question mark |
+| 16 · <code>g</code> — Jee | 48 · <code>M</code> — Capital em | 80 · <code>ω</code> — Omega | 112 · <code>@</code> — At sign |
+| 17 · <code>h</code> — Aitch | 49 · <code>N</code> — Capital en | 81 · <code>Γ</code> — Capital Gamma | 113 · <code>[</code> — Left bracket |
+| 18 · <code>i</code> — Eye | 50 · <code>O</code> — Capital oh | 82 · <code>Δ</code> — Capital Delta | 114 · <code>&#92;</code> — Backslash |
+| 19 · <code>j</code> — Jay | 51 · <code>P</code> — Capital pee | 83 · <code>Θ</code> — Capital Theta | 115 · <code>]</code> — Right bracket |
+| 20 · <code>k</code> — Kay | 52 · <code>Q</code> — Capital cue | 84 · <code>Λ</code> — Capital Lambda | 116 · <code>^</code> — Caret |
+| 21 · <code>l</code> — El | 53 · <code>R</code> — Capital ar | 85 · <code>Ξ</code> — Capital Xi | 117 · <code>_</code> — Underscore |
+| 22 · <code>m</code> — Em | 54 · <code>S</code> — Capital ess | 86 · <code>Π</code> — Capital Pi | 118 · <code>&#96;</code> — Backtick |
+| 23 · <code>n</code> — En | 55 · <code>T</code> — Capital tee | 87 · <code>Σ</code> — Capital Sigma | 119 · <code>{</code> — Left brace |
+| 24 · <code>o</code> — Oh | 56 · <code>U</code> — Capital you | 88 · <code>Φ</code> — Capital Phi | 120 · <code>&#124;</code> — Vertical bar |
+| 25 · <code>p</code> — Pee | 57 · <code>V</code> — Capital vee | 89 · <code>Ψ</code> — Capital Psi | 121 · <code>}</code> — Right brace |
+| 26 · <code>q</code> — Cue | 58 · <code>W</code> — Capital double-you | 90 · <code>Ω</code> — Capital Omega | 122 · <code>~</code> — Tilde |
+| 27 · <code>r</code> — Ar | 59 · <code>X</code> — Capital ex | 91 · <code>!</code> — Exclamation mark | 123 · <code>¥</code> — Yen |
+| 28 · <code>s</code> — Ess | 60 · <code>Y</code> — Capital why | 92 · <code>"</code> — Double quote | 124 · <code>÷</code> — Division |
+| 29 · <code>t</code> — Tee | 61 · <code>Z</code> — Capital zee | 93 · <code>#</code> — Number sign | 125 · <code>∇</code> — Nabla |
+| 30 · <code>u</code> — You | 62 · <code>α</code> — Alpha | 94 · <code>$</code> — Dollar | 126 · <code>√</code> — Square root |
+| 31 · <code>v</code> — Vee | 63 · <code>β</code> — Beta | 95 · <code>%</code> — Percent | 127 · <code>∫</code> — Integral |
+
 ### Custom alphabets
 
 Supply exactly **128 unique Unicode scalar values** in digit order. Encoders and decoders must agree on the mapping; the payload carries no alphabet identifier.
