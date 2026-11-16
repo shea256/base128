@@ -1,7 +1,8 @@
 import {
   DEFAULT_ALPHABET, createAlphabet, encode, decode,
   encodeInteger, decodeInteger, wrap, unwrap,
-} from './vendor/index.js?v=playground-alphabet-0.1';
+} from './vendor/index.js?v=ethereum-demo-0.1';
+import {ETHEREUM_DEMO} from './vendor/ethereum-demo.js?v=ethereum-demo-0.1';
 
 const $ = id => document.getElementById(id);
 const input = $('payload-input');
@@ -234,3 +235,52 @@ function updateAlphabet() {
   update();
 }
 updateAlphabet();
+
+// Published example only: no wallet inputs or key generation in the browser.
+function renderEthereumDemo() {
+  const kind=$('ethereum-key').value;
+  const values=ETHEREUM_DEMO[kind];
+  $('ethereum-key-description').textContent=kind==='private'
+    ? '32-byte private key · publicly disclosed demo data'
+    : '20-byte Ethereum address · last 20 bytes of Keccak-256(public key)';
+  $('ethereum-feedback').textContent='';
+  const grid=$('ethereum-values');
+  grid.replaceChildren();
+  for (const [format,value] of Object.entries(values)) {
+    const card=document.createElement('div');
+    card.className='ethereum-card';
+    const heading=document.createElement('h3');
+    const label=format.replace('base','Base');
+    heading.textContent=label;
+    const metrics=document.createElement('p');
+    metrics.className='ethereum-metrics';
+    metrics.textContent=`${Array.from(value).length} characters · ${new TextEncoder().encode(value).length} UTF-8 bytes`;
+    const code=document.createElement('code');
+    code.textContent=value;
+    const copy=document.createElement('button');
+    copy.type='button';copy.className='ghost-btn small';
+    copy.textContent='Copy '+label;
+    copy.setAttribute('aria-label',`Copy demo ${kind} in ${label}`);
+    copy.addEventListener('click',async()=>{
+      try {
+        await navigator.clipboard.writeText(value);
+        $('ethereum-feedback').textContent=`Copied ${label} demo ${kind}.`;
+      } catch {
+        $('ethereum-feedback').textContent='Clipboard unavailable; select and copy the displayed value.';
+      }
+    });
+    card.append(heading,metrics,code,copy);
+    grid.append(card);
+  }
+}
+$('ethereum-key').addEventListener('change',renderEthereumDemo);
+$('ethereum-load').addEventListener('click',()=>{
+  setDirection('encode');
+  inputType.value='hex';selectedType='hex';
+  input.value=ETHEREUM_DEMO[$('ethereum-key').value].base16.slice(2);
+  encodeDrafts.hex=input.value;
+  alphabetPreset.value='default';
+  wrapPrefix.checked=false;wrapChecksum.checked=false;
+  updateAlphabet();
+});
+renderEthereumDemo();

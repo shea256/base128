@@ -24,6 +24,7 @@ test('website official alphabet, strict decode, custom reset, explorer, and file
   get('input-type').value='integer';
   get('payload-input').value='123';
   get('alphabet-preset').value='default';
+  get('ethereum-key').value='private';
   globalThis.document={getElementById:get,createElement:()=>new Element(),body:new Element()};
   const {DEFAULT_ALPHABET_TEXT}=await import('../vendor/index.js');
   await import('../app.js');
@@ -120,5 +121,39 @@ test('website official alphabet, strict decode, custom reset, explorer, and file
     await get('alphabet-preset').fire('change');
     assert.equal(get('wrap-prefix').disabled,true);
     assert.equal(get('wrap-prefix').checked,false);
+    // The demo remains tied to the official alphabet even when the playground is custom.
+    const demo=JSON.parse(readFileSync(new URL('../ethereum-demo.json',import.meta.url),'utf8'));
+    const previousNavigator=Object.getOwnPropertyDescriptor(globalThis,'navigator');
+    let copied;
+    Object.defineProperty(globalThis,'navigator',{configurable:true,value:{clipboard:{writeText:async value=>{copied=value;}}}});
+    try {
+      for (const kind of ['private','address','private']) {
+        get('ethereum-key').value=kind;
+        await get('ethereum-key').fire('change');
+        const cards=get('ethereum-values').children;
+        assert.equal(cards.length,4);
+        assert.match(get('ethereum-key-description').textContent,kind==='private'?/32-byte private/:/20-byte Ethereum address/);
+        for (const [i,value] of Object.values(demo[kind]).entries()) {
+          assert.equal(cards[i].children[2].textContent,value);
+          assert.equal(cards[i].children[1].textContent,`${Array.from(value).length} characters · ${Buffer.byteLength(value)} UTF-8 bytes`);
+          await cards[i].children[3].fire('click');
+          assert.equal(copied,value);
+        }
+        get('wrap-prefix').checked=true;get('wrap-checksum').checked=true;
+        await get('ethereum-load').fire('click');
+        assert.equal(get('input-type').value,'hex');
+        assert.equal(get('payload-input').value,demo[kind].base16.slice(2));
+        assert.equal(get('payload-output').value,demo[kind].base128);
+        assert.equal(get('alphabet-preset').value,'default');
+        assert.equal(get('wrap-prefix').checked,false);
+        assert.equal(get('wrap-checksum').checked,false);
+      }
+      navigator.clipboard.writeText=async()=>{throw new Error('Clipboard denied');};
+      await get('ethereum-values').children[0].children[3].fire('click');
+      assert.match(get('ethereum-feedback').textContent,/Clipboard unavailable/);
+    } finally {
+      if(previousNavigator) Object.defineProperty(globalThis,'navigator',previousNavigator);
+      else delete globalThis.navigator;
+    }
   } finally {URL.createObjectURL=original;delete globalThis.document;}
 });
