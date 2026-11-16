@@ -18,7 +18,7 @@ export function encodeInteger(value: bigint, options: Options = {}): string {
 export function decodeInteger(text: string, options: DecodeOptions = {}): bigint {
   if (typeof text !== "string") throw new TypeError("Encoded integer must be a string");
   const alphabet = resolveAlphabet(options.alphabet);
-  const indexOf = resolveDecoderIndex(alphabet, options.acceptAliases);
+  const indexOf = resolveDecoderIndex(alphabet);
   const digits = Array.from(text);
   if (digits.length === 0) throw new RangeError("Encoded integer cannot be empty");
   if (digits.length > 1 && digits[0] === alphabet.symbolAt(0)) {

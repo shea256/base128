@@ -1,11 +1,9 @@
-import { Alphabet, COMPACT_ALPHABET, MATH_ALPHABET, resolveAlphabet, } from './alphabet.js';
+import { Alphabet, DEFAULT_ALPHABET, resolveAlphabet, } from './alphabet.js';
 import { encode, decode } from './binary.js';
 import { decodeInteger } from './integer.js';
 const SEPARATOR = '·';
 // Fixed wire alphabet: never infer it from the payload or DEFAULT_ALPHABET.
-const HEADER_ALPHABET = new Alphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' +
-    Array.from({ length: 94 }, (_, i) => String.fromCharCode(i + 33)).filter(c => !/[0-9A-Za-z]/.test(c)).join('') +
-    'ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷');
+const HEADER_ALPHABET = new Alphabet("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμξπστφψωΓΔΘΛΞΠΣΦΨΩ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~¥÷∇√∫");
 function parseHeader(text) {
     const symbols = Array.from(text);
     if (!symbols.length)
@@ -40,7 +38,7 @@ function checksumBytes(text) {
     return Uint8Array.of(crc >>> 24, (crc >>> 16) & 255, (crc >>> 8) & 255, crc & 255);
 }
 function checkOptions(options) {
-    for (const flag of ['prefix', 'checksum', 'acceptAliases']) {
+    for (const flag of ['prefix', 'checksum']) {
         if (options[flag] !== undefined && typeof options[flag] !== 'boolean')
             throw new TypeError(`${flag} must be boolean`);
     }
@@ -53,17 +51,15 @@ function checkAlphabet(alphabet, options) {
         throw new RangeError('Envelope alphabet must exclude middle dot (U+00B7)');
     }
 }
-function validate(payload, mode, alphabet, acceptAliases = false) {
+function validate(payload, mode, alphabet) {
     if (mode === 'binary')
-        decode(payload, { alphabet, acceptAliases });
+        decode(payload, { alphabet });
     else
-        decodeInteger(payload, { alphabet, acceptAliases });
+        decodeInteger(payload, { alphabet });
 }
 function alphabetId(alphabet) {
-    if (alphabet.text === COMPACT_ALPHABET.text)
+    if (alphabet.text === DEFAULT_ALPHABET.text)
         return 0;
-    if (alphabet.text === MATH_ALPHABET.text)
-        return 1;
     throw new RangeError('Prefixes require a built-in alphabet');
 }
 /** Wrap an already encoded payload. Bare output remains the default. */
@@ -74,7 +70,7 @@ export function wrap(payload, options = {}) {
     const alphabet = resolveAlphabet(options.alphabet);
     const mode = options.mode ?? 'binary';
     checkAlphabet(alphabet, options);
-    validate(payload, mode, alphabet, options.acceptAliases);
+    validate(payload, mode, alphabet);
     const body = options.prefix ? `b128·0${HEADER_ALPHABET.symbolAt((alphabetId(alphabet) << 3) | (mode === 'binary' ? 0 : 1))}·${payload}` : payload;
     return options.checksum ? `${body}·${encode(checksumBytes(body), { alphabet })}` : body;
 }
@@ -86,7 +82,7 @@ export function unwrap(text, options = {}) {
     let alphabet = resolveAlphabet(options.alphabet);
     let mode = options.mode ?? 'binary';
     if (!options.prefix && !options.checksum) {
-        validate(text, mode, alphabet, options.acceptAliases);
+        validate(text, mode, alphabet);
         return { payload: text, mode, alphabet };
     }
     checkAlphabet(alphabet, options);
@@ -98,9 +94,9 @@ export function unwrap(text, options = {}) {
         if (fields[0] !== 'b128')
             throw new RangeError('Invalid envelope identifier');
         const header = parseHeader(fields[1]);
-        if (header.alphabetId > 1)
+        if (header.alphabetId !== 0)
             throw new RangeError(`Unassigned envelope alphabet ${header.alphabetId}`);
-        const declared = header.alphabetId === 0 ? COMPACT_ALPHABET : MATH_ALPHABET;
+        const declared = DEFAULT_ALPHABET;
         const declaredMode = header.mode;
         if (options.alphabet !== undefined && alphabet.text !== declared.text)
             throw new RangeError('Envelope alphabet does not match selected alphabet');
@@ -120,6 +116,6 @@ export function unwrap(text, options = {}) {
         if (actual.length !== 4 || actual.some((byte, i) => byte !== expectedBytes[i]))
             throw new RangeError('Checksum mismatch');
     }
-    validate(payload, mode, alphabet, options.acceptAliases);
+    validate(payload, mode, alphabet);
     return { payload, mode, alphabet };
 }

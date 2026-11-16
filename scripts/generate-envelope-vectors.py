@@ -5,7 +5,7 @@ import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 alphabets = [json.loads((ROOT / 'specs' / name).read_text())['alphabet']
-             for name in ('alphabet.json', 'alphabet-math.json')]
+             for name in ('alphabet.json',)]
 
 
 def binary(data, alphabet):

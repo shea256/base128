@@ -2,17 +2,13 @@
 from dataclasses import dataclass
 import zlib
 
-from .alphabet import Alphabet, COMPACT_ALPHABET, MATH_ALPHABET, resolve_alphabet
+from .alphabet import Alphabet, DEFAULT_ALPHABET, resolve_alphabet
 from .binary import encode, decode
 from .integer import decode_integer
 
 
 # Fixed wire alphabet, independent of the configured payload alphabet.
-_HEADER_ALPHABET = Alphabet(
-    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-    + ''.join(chr(i) for i in range(33, 127) if not chr(i).isalnum())
-    + 'ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷'
-)
+_HEADER_ALPHABET = Alphabet('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμξπστφψωΓΔΘΛΞΠΣΦΨΩ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~¥÷∇√∫')
 
 
 def _parse_header(text):
@@ -43,17 +39,17 @@ class Unwrapped:
     alphabet: Alphabet
 
 
-def _options(mode, prefix, checksum, accept_aliases):
+def _options(mode, prefix, checksum):
     if mode is not None and mode not in ('binary', 'integer'):
         raise ValueError('Envelope mode must be binary or integer')
-    for name, value in [('prefix', prefix), ('checksum', checksum), ('accept_aliases', accept_aliases)]:
+    for name, value in [('prefix', prefix), ('checksum', checksum)]:
         if not isinstance(value, bool):
             raise TypeError(f'{name} must be boolean')
 
 
-def _validate(payload, mode, alphabet, accept_aliases):
+def _validate(payload, mode, alphabet):
     operation = decode if mode == 'binary' else decode_integer
-    operation(payload, alphabet=alphabet, accept_aliases=accept_aliases)
+    operation(payload, alphabet=alphabet)
 
 
 def _check_alphabet(alphabet, prefix, checksum):
@@ -66,22 +62,20 @@ def _checksum(body):
 
 
 def wrap(payload: str, *, mode: str = 'binary', alphabet: Alphabet | str | None = None,
-         prefix: bool = False, checksum: bool = False, accept_aliases: bool = False) -> str:
+         prefix: bool = False, checksum: bool = False) -> str:
     """Wrap validated encoded text; bare output remains the default."""
     if not isinstance(payload, str):
         raise TypeError('Encoded payload must be a string')
-    _options(mode, prefix, checksum, accept_aliases)
+    _options(mode, prefix, checksum)
     if mode is None:
         raise ValueError('Envelope mode must be binary or integer')
     abc = resolve_alphabet(alphabet)
     _check_alphabet(abc, prefix, checksum)
-    _validate(payload, mode, abc, accept_aliases)
+    _validate(payload, mode, abc)
     body = payload
     if prefix:
-        if abc.text == COMPACT_ALPHABET.text:
+        if abc.text == DEFAULT_ALPHABET.text:
             identifier = 0
-        elif abc.text == MATH_ALPHABET.text:
-            identifier = 1
         else:
             raise ValueError('Prefixes require a built-in alphabet')
         config = (identifier << 3) | (0 if mode == "binary" else 1)
@@ -90,15 +84,15 @@ def wrap(payload: str, *, mode: str = 'binary', alphabet: Alphabet | str | None 
 
 
 def unwrap(text: str, *, mode: str | None = None, alphabet: Alphabet | str | None = None,
-           prefix: bool = False, checksum: bool = False, accept_aliases: bool = False) -> Unwrapped:
+           prefix: bool = False, checksum: bool = False) -> Unwrapped:
     """Require the selected wrapper shape and verify before returning payload."""
     if not isinstance(text, str):
         raise TypeError('Encoded envelope must be a string')
-    _options(mode, prefix, checksum, accept_aliases)
+    _options(mode, prefix, checksum)
     abc = resolve_alphabet(alphabet)
     selected_mode = mode or 'binary'
     if not prefix and not checksum:
-        _validate(text, selected_mode, abc, accept_aliases)
+        _validate(text, selected_mode, abc)
         return Unwrapped(text, selected_mode, abc)
     _check_alphabet(abc, prefix, checksum)
     fields = text.split('·')
@@ -108,9 +102,9 @@ def unwrap(text: str, *, mode: str | None = None, alphabet: Alphabet | str | Non
         if fields[0] != 'b128':
             raise ValueError('Invalid envelope identifier')
         declared_mode, identifier = _parse_header(fields[1])
-        if identifier > 1:
+        if identifier != 0:
             raise ValueError(f'Unassigned envelope alphabet {identifier}')
-        declared = COMPACT_ALPHABET if identifier == 0 else MATH_ALPHABET
+        declared = DEFAULT_ALPHABET
         if alphabet is not None and abc.text != declared.text:
             raise ValueError('Envelope alphabet does not match selected alphabet')
         if mode is not None and mode != declared_mode:
@@ -123,5 +117,5 @@ def unwrap(text: str, *, mode: str | None = None, alphabet: Alphabet | str | Non
         actual = decode(fields[-1], alphabet=abc)
         if actual != _checksum('·'.join(fields[:-1])):
             raise ValueError('Checksum mismatch')
-    _validate(payload, selected_mode, abc, accept_aliases)
+    _validate(payload, selected_mode, abc)
     return Unwrapped(payload, selected_mode, abc)

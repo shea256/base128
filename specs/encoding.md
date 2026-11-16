@@ -7,55 +7,27 @@ This specification describes the bare codec.
 
 ## 1. Alphabet
 
-The default Compact alphabet consists of exactly 128 Unicode scalar values, in this order:
+The official alphabet consists of exactly 128 Unicode scalar values, in this order:
 
 1. ASCII digits `0–9` (indices 0–9).
-2. ASCII uppercase letters `A–Z` (indices 10–35).
-3. ASCII lowercase letters `a–z` (indices 36–61).
-4. The remaining 32 printable, non-space ASCII characters, in ascending code-point order (indices 62–93).
-5. `ΓΔΘΛΞΠΦΨΩ` (9 symbols, indices 94–102).
-6. `αβγδεζηθικλμξπστφψω` (19 symbols, indices 103–121).
-7. `¥§©®¶÷` (6 symbols in ascending Unicode code-point order, indices 122–127).
+2. ASCII lowercase letters `a–z` (indices 10–35).
+3. ASCII uppercase letters `A–Z` (indices 36–61).
+4. `αβγδεζηθικλμξπστφψω` (19 lowercase Greek letters, indices 62–80).
+5. `ΓΔΘΛΞΠΣΦΨΩ` (10 uppercase Greek letters, indices 81–90).
+6. The 32 printable, non-space ASCII punctuation characters, in ascending code-point order (indices 91–122).
+7. `¥÷∇√∫` (5 symbols in ascending Unicode code-point order, indices 123–127).
+
+Letters are grouped by script, lowercase before uppercase. Each group is in
+Unicode code-point order; the entire alphabet is not globally code-point sorted.
 
 The full ordered alphabet and the index-to-code-point mapping are in [`alphabet.json`](alphabet.json). That file is authoritative for interoperability. The alphabet has 128 unique code points; Unicode scalar values are compared exactly (case-sensitive, no Unicode normalization).
 
 Custom alphabets are allowed as caller-supplied configuration. A custom alphabet must contain exactly 128 **distinct Unicode scalar values**. Each code point is one digit, even if Unicode grapheme-cluster segmentation might combine it with an adjacent code point. Unpaired UTF-16 surrogates are invalid. Encoders and decoders must agree on the exact alphabet and order. The payload carries no alphabet identifier.
 
-### 1.1 Optional math preset and alias decoding
-
-The optional [`alphabet-math.json`](alphabet-math.json)
-preset retains default indices 0–121 and assigns these final six values:
-
-| Index | Compact | Math |
-| ---: | :---: | :---: |
-| 122 | ¥ | ∂ |
-| 123 | § | ∇ |
-| 124 | © | ∏ |
-| 125 | ® | ∑ |
-| 126 | ¶ | √ |
-| 127 | ÷ | ∫ |
-
-Both alphabets have 128 unique scalar values. Compact uses at most two UTF-8
-bytes per symbol; Math uses three bytes for its final six symbols. They use the
-same binary and integer algorithms and strict decoding rules.
-
-An explicitly enabled alias decoder may accept both characters in each row,
-including mixed spellings in a single payload. All other characters retain their
-v0.1 indices. Alias mode is supported only with the exact Compact or Math
-layout, whether supplied as a compiled alphabet or text; requesting it with any
-other layout is an error. It does not detect alphabets or normalize Unicode.
-
-Alias mode changes only character-to-digit lookup. Binary length and padding
-validation, integer minimality, case sensitivity, and whitespace rejection still
-apply. Re-encoding chooses the selected alphabet's canonical spelling, so an
-alias-containing input need not round-trip to the identical text. Applications
-comparing, hashing, or signing encoded text should first establish a canonical
-spelling, or use strict decoding. The payload carries no preset or alias-mode flag.
-
-[`test-vectors-math.json`](test-vectors-math.json) supplies independent
-binary and integer examples, including mixed spellings. Spoken names for the six
-Math symbols are Partial, Nabla, Product, Summation, Square root, and
-Integral; other names follow [`spoken-alphabet.md`](spoken-alphabet.md).
+Decoding is strict to the selected alphabet. There are no alternate presets or
+symbol aliases. The official alphabet uses one UTF-8 byte for its 94 ASCII
+symbols, two for its 29 Greek letters plus `¥` and `÷`, and three for `∇√∫`.
+See [spoken-alphabet.md](spoken-alphabet.md) for reading names.
 
 ## 2. Binary-to-text encoding
 
@@ -68,11 +40,11 @@ Input: a finite ordered sequence of octets (8-bit bytes). Output: a string of Ba
 
 For `n` input bytes, the output contains `m = ceil(8*n / 7)` **Unicode code points**. Empty bytes encode as an empty string.
 
-Example: bytes `01 00` have bitstream `00000001 00000000`, producing digits `[0, 64, 0]` and default-alphabet text `0#0`.
+Example: bytes `01 00` have bitstream `00000001 00000000`, producing digits `[0, 64, 0]` and default-alphabet text `0γ0`.
 
 ### Binary decoding and validity
 
-1. Map every encoded Unicode code point to its digit index 0–127. Reject characters missing from the chosen alphabet, except the explicit aliases in §1.1 when enabled.
+1. Map every encoded Unicode code point to its digit index 0–127. Reject characters missing from the chosen alphabet.
 2. Concatenate their 7-bit unsigned representations, most-significant bit first.
 3. Emit full 8-bit groups from the start.
 4. Verify **both** conditions:
@@ -93,7 +65,7 @@ Input: a nonnegative arbitrary-precision integer. Output: the **shortest big-end
 
 For integer `N >= 0`, write `N = sum(d_i * 128^i)` with `0 <= d_i <= 127`, then emit digits from most to least significant. The zero value is encoded by the alphabet's digit-zero symbol, `0` by default. Negative numbers are not supported. Integer decoding rejects empty strings and numerals containing unnecessary leading digit-zero symbols.
 
-Example: `1000 = 7*128 + 104`, so the default-alphabet integer representation is `7β`.
+Example: `1000 = 7*128 + 104`, so the default-alphabet integer representation is `7.`.
 
 **The integer and binary representations are not interchangeable.** Binary encoding preserves leading zero bytes and byte lengths; positional integer encoding does not preserve byte-length information.
 

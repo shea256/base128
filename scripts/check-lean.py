@@ -56,14 +56,13 @@ def main():
     rust = Path(metadata['target_directory']) / 'debug' / 'examples' / ('lean_conformance' + suffix)
     reference = LEAN / '.lake' / 'build' / 'bin' / ('base128_reference' + suffix)
 
-    compact = json.loads((ROOT / 'specs/test-vectors.json').read_text())
-    math = json.loads((ROOT / 'specs/test-vectors-math.json').read_text())
+    official = json.loads((ROOT / 'specs/test-vectors.json').read_text())
     rng = random.Random(128)
-    byte_cases = [list(bytes.fromhex(row['hex'])) for row in compact['binary']]
+    byte_cases = [list(bytes.fromhex(row['hex'])) for row in official['binary']]
     byte_cases += [[n] for n in range(256)]
     byte_cases += [list(rng.randbytes(n)) for n in list(range(129)) + [255, 256, 511, 512]]
     byte_cases += [[0] * n for n in range(33)]
-    decimals = [row['decimal'] for row in compact['integer']]
+    decimals = [row['decimal'] for row in official['integer']]
     decimals += [str(rng.getrandbits(n)) for n in range(0, 2049, 17)]
     decimals.append(str((1 << 2048) - 1))
     requests = [{'op': 'encode', 'values': b} for b in byte_cases]
@@ -71,7 +70,7 @@ def main():
     expected = json.loads(run([str(reference)], data=requests))
 
     # The independent, pre-existing fixtures anchor the model to the published wire format.
-    for fixture in [compact, math, compact['custom']]:
+    for fixture in [official, official['custom']]:
         indices = {c: i for i, c in enumerate(fixture['alphabet'])}
         fixture_requests = [{'op': 'encode', 'values': list(bytes.fromhex(r['hex']))} for r in fixture['binary']]
         fixture_requests += [{'op': 'encodeInteger', 'decimal': r['decimal']} for r in fixture['integer']]
@@ -94,8 +93,8 @@ def main():
     expected += json.loads(run([str(reference)], data=decode_requests))
     requests += decode_requests
 
-    alphabets = [('Compact', compact['alphabet']), ('Math', math['alphabet']),
-                 ('reversed', compact['custom']['alphabet']),
+    alphabets = [('Official', official['alphabet']),
+                 ('custom fixture', official['custom']['alphabet']),
                  ('supplementary Unicode', ''.join(chr(0x1f600 + i) for i in range(128)))]
     for name, alphabet in alphabets:
         payload = {'alphabet': alphabet, 'requests': requests}

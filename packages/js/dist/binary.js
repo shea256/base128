@@ -44,7 +44,7 @@ export class BinaryDecoder {
     #pendingHighSurrogate = "";
     #finished = false;
     constructor(options = {}) {
-        this.#indexOf = resolveDecoderIndex(resolveAlphabet(options.alphabet), options.acceptAliases);
+        this.#indexOf = resolveDecoderIndex(resolveAlphabet(options.alphabet));
     }
     write(text) {
         if (this.#finished)

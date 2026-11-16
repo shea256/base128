@@ -1,9 +1,7 @@
 use crate::Error;
 use std::{collections::HashMap, sync::OnceLock};
 
-pub const COMPACT_ALPHABET_TEXT: &str = r##"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷"##;
-pub const MATH_ALPHABET_TEXT: &str = r##"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω∂∇∏∑√∫"##;
-pub const DEFAULT_ALPHABET_TEXT: &str = COMPACT_ALPHABET_TEXT;
+pub const DEFAULT_ALPHABET_TEXT: &str = r##"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμξπστφψωΓΔΘΛΞΠΣΦΨΩ!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~¥÷∇√∫"##;
 
 /// Immutable, validated, ordered mapping of Unicode scalar values to digits.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -49,43 +47,26 @@ impl Alphabet {
     }
     pub(crate) fn id(&self) -> Option<u8> {
         match self.text() {
-            COMPACT_ALPHABET_TEXT => Some(0),
-            MATH_ALPHABET_TEXT => Some(1),
+            DEFAULT_ALPHABET_TEXT => Some(0),
             _ => None,
         }
     }
-    pub(crate) fn decoder_index(&self, aliases: bool) -> Result<HashMap<char, u8>, Error> {
-        if !aliases {
-            return Ok(self.indices.clone());
-        }
-        if self.id().is_none() {
-            return Err(Error::AliasesRequireBuiltin);
-        }
-        let mut indices = compact_alphabet().indices.clone();
-        indices.extend(math_alphabet().indices.iter().map(|(&c, &i)| (c, i)));
-        Ok(indices)
+    pub(crate) fn decoder_index(&self) -> HashMap<char, u8> {
+        self.indices.clone()
     }
 }
-pub fn compact_alphabet() -> &'static Alphabet {
-    static VALUE: OnceLock<Alphabet> = OnceLock::new();
-    VALUE.get_or_init(|| Alphabet::new(COMPACT_ALPHABET_TEXT).expect("valid built-in alphabet"))
-}
-pub fn math_alphabet() -> &'static Alphabet {
-    static VALUE: OnceLock<Alphabet> = OnceLock::new();
-    VALUE.get_or_init(|| Alphabet::new(MATH_ALPHABET_TEXT).expect("valid built-in alphabet"))
-}
-pub fn default_alphabet() -> &'static Alphabet {
-    compact_alphabet()
-}
 
-/// Defaults to Compact with strict character lookup.
+pub fn default_alphabet() -> &'static Alphabet {
+    static VALUE: OnceLock<Alphabet> = OnceLock::new();
+    VALUE.get_or_init(|| Alphabet::new(DEFAULT_ALPHABET_TEXT).expect("valid built-in alphabet"))
+}
+/// Defaults to the official alphabet with strict character lookup.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct DecodeOptions<'a> {
     pub alphabet: Option<&'a Alphabet>,
-    pub accept_aliases: bool,
 }
 impl<'a> DecodeOptions<'a> {
     pub(crate) fn alphabet(self) -> &'a Alphabet {
-        self.alphabet.unwrap_or_else(|| compact_alphabet())
+        self.alphabet.unwrap_or_else(|| default_alphabet())
     }
 }

@@ -25,26 +25,22 @@ arguments containing punctuation; use files or stdin for arbitrary payloads.
 
 | Option | Behavior |
 | --- | --- |
-| `--alphabet compact` | Compact alphabet; also used when omitted |
-| `--alphabet math` | Math alphabet |
+| `--alphabet default` | Official alphabet; also used when omitted |
 | `--alphabet-file FILE` | Exactly 128 unique Unicode scalar values, UTF-8, no newline; cannot combine with `--alphabet` |
 | `--prefix` | Encode: add the metadata prefix. Decode: require it and infer its alphabet unless explicitly constrained. |
 | `--checksum` | Encode: append CRC-32 in five Base128 symbols. Decode: require and verify it. |
-| `--accept-aliases` | Decode only: accepts either built-in symbol form, even mixed; rejects unrelated custom layouts |
 | `-o FILE` | Write output to a file (`-` means stdout) |
 | `--help`, `-h` | Show usage |
 
-Decoding is strict unless `--accept-aliases` is present. All modes enforce binary
-length/padding and integer leading-zero rules as applicable. Alias mode does not
-trim whitespace or detect alphabets. See the [specification](../specs/encoding.md).
+Decoding strictly enforces binary length/padding and integer leading-zero rules.
+It does not trim whitespace or detect alphabets. See the [specification](../specs/encoding.md).
 
 ```sh
 printf 'Hello' | node packages/cli/bin/base128.mjs encode
-node packages/cli/bin/base128.mjs encode input.bin --alphabet math -o output.b128
-node packages/cli/bin/base128.mjs decode output.b128 --alphabet math -o restored.bin
-node packages/cli/bin/base128.mjs decode output.b128 --accept-aliases -o restored.bin
+node packages/cli/bin/base128.mjs encode input.bin --alphabet default -o output.b128
+node packages/cli/bin/base128.mjs decode output.b128 --alphabet default -o restored.bin
 node packages/cli/bin/base128.mjs integer encode 1000
-node packages/cli/bin/base128.mjs integer decode '7β'
+node packages/cli/bin/base128.mjs integer decode '7.'
 ```
 
 For a value with both prefix and checksum, use the same flags in both directions:
@@ -54,11 +50,11 @@ printf 'Hello' | node packages/cli/bin/base128.mjs encode --prefix --checksum > 
 node packages/cli/bin/base128.mjs decode hello.b128 --prefix --checksum
 ```
 
-The fixed header alphabet is Compact. Format version 0 uses `00` for Compact
-binary, `01` for Compact integer, `08` for Math binary, and `09` for Math integer.
+The fixed header alphabet is the official alphabet. Format version 0 uses `00`
+for binary and `01` for integer.
 The `encode`/`decode` commands select binary mode; `integer encode`/`integer decode`
 select integer mode. A mismatched prefix mode is an error. With a prefix, omitting
-`--alphabet` lets decoding use the declared alphabet; without a prefix it uses Compact.
+`--alphabet` lets decoding use the declared alphabet; without a prefix it uses the official alphabet.
 
 Success exits 0; failures exit 1 and report `base128: ...` on stderr. Human-readable
 error wording is not a structured API; inspect the exit status. Stdout may contain

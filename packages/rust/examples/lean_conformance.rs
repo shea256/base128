@@ -10,7 +10,6 @@ fn main() {
     let alphabet = Alphabet::new(data["alphabet"].as_str().unwrap()).unwrap();
     let options = DecodeOptions {
         alphabet: Some(&alphabet),
-        accept_aliases: false,
     };
     let digits = |text: String| -> Value {
         json!(text

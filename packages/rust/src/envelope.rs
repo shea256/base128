@@ -9,14 +9,13 @@ pub enum Mode {
 }
 
 /// Wrapper shape is explicit. Omitted mode/alphabet constraints are inferred from
-/// a prefix, or default to binary/Compact when there is no prefix.
+/// a prefix, or default to binary/the official alphabet when there is no prefix.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct EnvelopeOptions<'a> {
     pub alphabet: Option<&'a Alphabet>,
     pub mode: Option<Mode>,
     pub prefix: bool,
     pub checksum: bool,
-    pub accept_aliases: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -26,10 +25,9 @@ pub struct Unwrapped {
     pub alphabet: Alphabet,
 }
 
-fn validate(payload: &str, alphabet: &Alphabet, mode: Mode, aliases: bool) -> Result<(), Error> {
+fn validate(payload: &str, alphabet: &Alphabet, mode: Mode) -> Result<(), Error> {
     let options = DecodeOptions {
         alphabet: Some(alphabet),
-        accept_aliases: aliases,
     };
     match mode {
         Mode::Binary => {
@@ -60,7 +58,7 @@ fn crc32(bytes: &[u8]) -> u32 {
 fn parse_header(header: &str) -> Result<(Mode, &'static Alphabet), Error> {
     let digits: Vec<_> = header
         .chars()
-        .map(|c| compact_alphabet().index_of(c))
+        .map(|c| default_alphabet().index_of(c))
         .collect::<Result<_, _>>()?;
     let version = *digits.first().ok_or(Error::InvalidHeader)?;
     match version {
@@ -87,8 +85,7 @@ fn parse_header(header: &str) -> Result<(Mode, &'static Alphabet), Error> {
         v => return Err(Error::UnassignedMode(v)),
     };
     let alphabet = match id {
-        0 => compact_alphabet(),
-        1 => math_alphabet(),
+        0 => default_alphabet(),
         v => return Err(Error::UnassignedAlphabet(v)),
     };
     Ok((mode, alphabet))
@@ -96,14 +93,14 @@ fn parse_header(header: &str) -> Result<(Mode, &'static Alphabet), Error> {
 
 /// Validate and optionally prefix/checksum an already encoded payload.
 pub fn wrap(payload: &str, options: EnvelopeOptions<'_>) -> Result<String, Error> {
-    let alphabet = options.alphabet.unwrap_or_else(|| compact_alphabet());
+    let alphabet = options.alphabet.unwrap_or_else(|| default_alphabet());
     let mode = options.mode.unwrap_or_default();
     check_separator(alphabet, options)?;
-    validate(payload, alphabet, mode, options.accept_aliases)?;
+    validate(payload, alphabet, mode)?;
     let mut body = if options.prefix {
         let id = alphabet.id().ok_or(Error::PrefixRequiresBuiltin)?;
         let config = (id << 3) | u8::from(mode == Mode::Integer);
-        format!("b128·0{}·{payload}", compact_alphabet().digit(config))
+        format!("b128·0{}·{payload}", default_alphabet().digit(config))
     } else {
         payload.to_owned()
     };
@@ -118,7 +115,7 @@ pub fn wrap(payload: &str, options: EnvelopeOptions<'_>) -> Result<String, Error
 /// Enforce the requested wrapper shape and verify the checksum before returning.
 /// No trimming, normalization, or automatic wrapper detection is performed.
 pub fn unwrap(text: &str, options: EnvelopeOptions<'_>) -> Result<Unwrapped, Error> {
-    let mut alphabet = options.alphabet.unwrap_or_else(|| compact_alphabet());
+    let mut alphabet = options.alphabet.unwrap_or_else(|| default_alphabet());
     let mut mode = options.mode.unwrap_or_default();
     let payload;
     let mut checksum_text = None;
@@ -160,7 +157,6 @@ pub fn unwrap(text: &str, options: EnvelopeOptions<'_>) -> Result<Unwrapped, Err
             checksum,
             DecodeOptions {
                 alphabet: Some(alphabet),
-                accept_aliases: false,
             },
         )?;
         let body = text.rsplit_once('·').ok_or(Error::InvalidEnvelope)?.0;
@@ -168,7 +164,7 @@ pub fn unwrap(text: &str, options: EnvelopeOptions<'_>) -> Result<Unwrapped, Err
             return Err(Error::ChecksumMismatch);
         }
     }
-    validate(payload, alphabet, mode, options.accept_aliases)?;
+    validate(payload, alphabet, mode)?;
     Ok(Unwrapped {
         payload: payload.into(),
         mode,

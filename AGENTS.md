@@ -48,8 +48,8 @@ implementation conformance is tested; do not describe production code as proved.
   checksum verification, and bare-codec defaults.
 - Read `specs/encoding.md` before changing encoding behavior. Published alphabet
   mappings and reference fixtures are immutable once released; changes need a separate version.
-- Compact (default) and Math are separate fixed alphabets. Strict decoding is the
-  default. Opt-in aliases are permitted only for these exact compatible layouts.
+- There is one official alphabet plus caller-supplied custom alphabets. Decoding
+  is strict; no symbol aliases or automatic alphabet detection.
 - Preserve binary length/padding validation, integer minimality, Unicode scalar
   validation, and arbitrary custom-alphabet behavior in all three implementations.
 - Do not introduce implicit trimming, normalization, case folding, or alphabet

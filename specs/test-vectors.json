@@ -1,6 +1,6 @@
 {
   "format": "base128-v0.1-test-vectors",
-  "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ΓΔΘΛΞΠΦΨΩαβγδεζηθικλμξπστφψω¥§©®¶÷",
+  "alphabet": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμξπστφψωΓΔΘΛΞΠΣΦΨΩ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~¥÷∇√∫",
   "binary": [
     {
       "hex": "",
@@ -12,19 +12,19 @@
     },
     {
       "hex": "01",
-      "encoded": "0#"
+      "encoded": "0γ"
     },
     {
       "hex": "7f",
-      "encoded": "\"#"
+      "encoded": "βγ"
     },
     {
       "hex": "80",
-      "encoded": "#0"
+      "encoded": "γ0"
     },
     {
       "hex": "ff",
-      "encoded": "÷#"
+      "encoded": "∫γ"
     },
     {
       "hex": "0000",
@@ -32,35 +32,35 @@
     },
     {
       "hex": "0100",
-      "encoded": "0#0"
+      "encoded": "0γ0"
     },
     {
       "hex": "0001",
-      "encoded": "00W"
+      "encoded": "00w"
     },
     {
       "hex": "ffffff",
-      "encoded": "÷÷÷κ"
+      "encoded": "∫∫∫@"
     },
     {
       "hex": "48656c6c6f",
-      "encoded": "aPj)Πy"
+      "encoded": "ApJι)Y"
     },
     {
       "hex": "48656c6c6f20776f726c6421",
-      "encoded": "aPj)Πy#φt}:)X4"
+      "encoded": "ApJι)Yγ{T\"τιx4"
     },
     {
       "hex": "48656c6c6f2c204261736531323821",
-      "encoded": "aPj)Πy_WXOksf'ΦuG#"
+      "encoded": "ApJι)YΦwxoKSFη*Ugγ"
     },
     {
       "hex": "48692c20e4b896e7958c20f09f8c8d",
-      "encoded": "aQb%7IλMξΨn%7%\"C)#"
+      "encoded": "AqBε7i[m]+Nε7εβcιγ"
     },
     {
       "hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
-      "encoded": "00WWOGA63%1G=iOD73Ξ18+cKA(%λ#ΦqRE7ZΛω0%YH,4?nS=fLAΨ%γuΓmO/)pX[ζtSEdZ`κ¥!V=8KID8(ZHγ4-fM/c@,σ2(a@gLgΨwΛo{j^B\\μ®#ΛnOζ)hP;βq{:sΠr}ιuSkdR>δτxΓFN@ηψ®\"Vκ8CA74%Λ=ψ'cLB)Znβ©%ZI,ΨI`qΓnP:cξ,ζ¥\"W=β[wbM:d[grg~o|k^ζMRL;γr|jφB:δφyΓι^©675&Ξnuζ!ZJ-ΨξP}τ\"X>γq¥:k|l_ζτ|zΩφzΔκuykVJ.Ωξ¥TU^l`ηφx¶FF.απ¥®Γ÷*ασ§¶\"\"ιψ"
+      "encoded": "00wwoga63ε1gωIod73(18λCkaθε[γ*Qre7z'}0εyhμ4ΔNsωFla+ε/U$MoσιPxΛ<TseDzΨ@~αvω8kid8θzh/4ξFmσCΘμ_2θAΘGlG+W'OΩJΣbΞ\\∇γ'No<ιHpφ.QΩτS)R\"?UsKDrΓ:`X$fnΘ=|∇βv@8ca74ε'ω|ηClbιzN.÷εziμ+iΨQ$NpτC]μ<~βwω.ΛWBmτDΛGRG#O!KΣ<mrlφ/R!J{bτ:{Y$?Σ÷675ζ(NU<αzjξ+]p\"`βxΓ/Q~τK!LΦ<`!Z,{Z%@UYKvjπ,]~tuΣLΨ={X√ffπ-^~∇$∫κ-_¥√ββ?|"
     }
   ],
   "integer": [
@@ -78,63 +78,63 @@
     },
     {
       "decimal": "15",
-      "encoded": "F"
+      "encoded": "f"
     },
     {
       "decimal": "16",
-      "encoded": "G"
+      "encoded": "g"
     },
     {
       "decimal": "35",
-      "encoded": "Z"
-    },
-    {
-      "decimal": "36",
-      "encoded": "a"
-    },
-    {
-      "decimal": "61",
       "encoded": "z"
     },
     {
+      "decimal": "36",
+      "encoded": "A"
+    },
+    {
+      "decimal": "61",
+      "encoded": "Z"
+    },
+    {
       "decimal": "62",
-      "encoded": "!"
+      "encoded": "α"
     },
     {
       "decimal": "63",
-      "encoded": "\""
+      "encoded": "β"
     },
     {
       "decimal": "64",
-      "encoded": "#"
+      "encoded": "γ"
     },
     {
       "decimal": "65",
-      "encoded": "$"
+      "encoded": "δ"
     },
     {
       "decimal": "122",
-      "encoded": "¥"
+      "encoded": "~"
     },
     {
       "decimal": "123",
-      "encoded": "§"
+      "encoded": "¥"
     },
     {
       "decimal": "124",
-      "encoded": "©"
+      "encoded": "÷"
     },
     {
       "decimal": "125",
-      "encoded": "®"
+      "encoded": "∇"
     },
     {
       "decimal": "126",
-      "encoded": "¶"
+      "encoded": "√"
     },
     {
       "decimal": "127",
-      "encoded": "÷"
+      "encoded": "∫"
     },
     {
       "decimal": "128",
@@ -146,7 +146,7 @@
     },
     {
       "decimal": "255",
-      "encoded": "1÷"
+      "encoded": "1∫"
     },
     {
       "decimal": "256",
@@ -154,15 +154,15 @@
     },
     {
       "decimal": "1000",
-      "encoded": "7β"
+      "encoded": "7."
     },
     {
       "decimal": "65535",
-      "encoded": "3÷÷"
+      "encoded": "3∫∫"
     },
     {
       "decimal": "18446744073709551615",
-      "encoded": "1÷÷÷÷÷÷÷÷÷"
+      "encoded": "1∫∫∫∫∫∫∫∫∫"
     },
     {
       "decimal": "340282366920938463463374607431768211456",
@@ -170,11 +170,451 @@
     },
     {
       "decimal": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
-      "encoded": "F÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷"
+      "encoded": "f∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫∫"
     },
     {
       "decimal": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-      "encoded": "9Ir?i@6©σ%ΦψcJSBωΞ`Φ4u%Q!g]aOY=k*'00000000000000"
+      "encoded": "9iRΔIΘ6÷_ε*|Cjsb}(Ψ*4UεqαGΠAoyωKκη00000000000000"
+    },
+    {
+      "decimal": "2",
+      "encoded": "2"
+    },
+    {
+      "decimal": "3",
+      "encoded": "3"
+    },
+    {
+      "decimal": "4",
+      "encoded": "4"
+    },
+    {
+      "decimal": "5",
+      "encoded": "5"
+    },
+    {
+      "decimal": "6",
+      "encoded": "6"
+    },
+    {
+      "decimal": "8",
+      "encoded": "8"
+    },
+    {
+      "decimal": "9",
+      "encoded": "9"
+    },
+    {
+      "decimal": "10",
+      "encoded": "a"
+    },
+    {
+      "decimal": "11",
+      "encoded": "b"
+    },
+    {
+      "decimal": "12",
+      "encoded": "c"
+    },
+    {
+      "decimal": "13",
+      "encoded": "d"
+    },
+    {
+      "decimal": "14",
+      "encoded": "e"
+    },
+    {
+      "decimal": "17",
+      "encoded": "h"
+    },
+    {
+      "decimal": "18",
+      "encoded": "i"
+    },
+    {
+      "decimal": "19",
+      "encoded": "j"
+    },
+    {
+      "decimal": "20",
+      "encoded": "k"
+    },
+    {
+      "decimal": "21",
+      "encoded": "l"
+    },
+    {
+      "decimal": "22",
+      "encoded": "m"
+    },
+    {
+      "decimal": "23",
+      "encoded": "n"
+    },
+    {
+      "decimal": "24",
+      "encoded": "o"
+    },
+    {
+      "decimal": "25",
+      "encoded": "p"
+    },
+    {
+      "decimal": "26",
+      "encoded": "q"
+    },
+    {
+      "decimal": "27",
+      "encoded": "r"
+    },
+    {
+      "decimal": "28",
+      "encoded": "s"
+    },
+    {
+      "decimal": "29",
+      "encoded": "t"
+    },
+    {
+      "decimal": "30",
+      "encoded": "u"
+    },
+    {
+      "decimal": "31",
+      "encoded": "v"
+    },
+    {
+      "decimal": "32",
+      "encoded": "w"
+    },
+    {
+      "decimal": "33",
+      "encoded": "x"
+    },
+    {
+      "decimal": "34",
+      "encoded": "y"
+    },
+    {
+      "decimal": "37",
+      "encoded": "B"
+    },
+    {
+      "decimal": "38",
+      "encoded": "C"
+    },
+    {
+      "decimal": "39",
+      "encoded": "D"
+    },
+    {
+      "decimal": "40",
+      "encoded": "E"
+    },
+    {
+      "decimal": "41",
+      "encoded": "F"
+    },
+    {
+      "decimal": "42",
+      "encoded": "G"
+    },
+    {
+      "decimal": "43",
+      "encoded": "H"
+    },
+    {
+      "decimal": "44",
+      "encoded": "I"
+    },
+    {
+      "decimal": "45",
+      "encoded": "J"
+    },
+    {
+      "decimal": "46",
+      "encoded": "K"
+    },
+    {
+      "decimal": "47",
+      "encoded": "L"
+    },
+    {
+      "decimal": "48",
+      "encoded": "M"
+    },
+    {
+      "decimal": "49",
+      "encoded": "N"
+    },
+    {
+      "decimal": "50",
+      "encoded": "O"
+    },
+    {
+      "decimal": "51",
+      "encoded": "P"
+    },
+    {
+      "decimal": "52",
+      "encoded": "Q"
+    },
+    {
+      "decimal": "53",
+      "encoded": "R"
+    },
+    {
+      "decimal": "54",
+      "encoded": "S"
+    },
+    {
+      "decimal": "55",
+      "encoded": "T"
+    },
+    {
+      "decimal": "56",
+      "encoded": "U"
+    },
+    {
+      "decimal": "57",
+      "encoded": "V"
+    },
+    {
+      "decimal": "58",
+      "encoded": "W"
+    },
+    {
+      "decimal": "59",
+      "encoded": "X"
+    },
+    {
+      "decimal": "60",
+      "encoded": "Y"
+    },
+    {
+      "decimal": "66",
+      "encoded": "ε"
+    },
+    {
+      "decimal": "67",
+      "encoded": "ζ"
+    },
+    {
+      "decimal": "68",
+      "encoded": "η"
+    },
+    {
+      "decimal": "69",
+      "encoded": "θ"
+    },
+    {
+      "decimal": "70",
+      "encoded": "ι"
+    },
+    {
+      "decimal": "71",
+      "encoded": "κ"
+    },
+    {
+      "decimal": "72",
+      "encoded": "λ"
+    },
+    {
+      "decimal": "73",
+      "encoded": "μ"
+    },
+    {
+      "decimal": "74",
+      "encoded": "ξ"
+    },
+    {
+      "decimal": "75",
+      "encoded": "π"
+    },
+    {
+      "decimal": "76",
+      "encoded": "σ"
+    },
+    {
+      "decimal": "77",
+      "encoded": "τ"
+    },
+    {
+      "decimal": "78",
+      "encoded": "φ"
+    },
+    {
+      "decimal": "79",
+      "encoded": "ψ"
+    },
+    {
+      "decimal": "80",
+      "encoded": "ω"
+    },
+    {
+      "decimal": "81",
+      "encoded": "Γ"
+    },
+    {
+      "decimal": "82",
+      "encoded": "Δ"
+    },
+    {
+      "decimal": "83",
+      "encoded": "Θ"
+    },
+    {
+      "decimal": "84",
+      "encoded": "Λ"
+    },
+    {
+      "decimal": "85",
+      "encoded": "Ξ"
+    },
+    {
+      "decimal": "86",
+      "encoded": "Π"
+    },
+    {
+      "decimal": "87",
+      "encoded": "Σ"
+    },
+    {
+      "decimal": "88",
+      "encoded": "Φ"
+    },
+    {
+      "decimal": "89",
+      "encoded": "Ψ"
+    },
+    {
+      "decimal": "90",
+      "encoded": "Ω"
+    },
+    {
+      "decimal": "91",
+      "encoded": "!"
+    },
+    {
+      "decimal": "92",
+      "encoded": "\""
+    },
+    {
+      "decimal": "93",
+      "encoded": "#"
+    },
+    {
+      "decimal": "94",
+      "encoded": "$"
+    },
+    {
+      "decimal": "95",
+      "encoded": "%"
+    },
+    {
+      "decimal": "96",
+      "encoded": "&"
+    },
+    {
+      "decimal": "97",
+      "encoded": "'"
+    },
+    {
+      "decimal": "98",
+      "encoded": "("
+    },
+    {
+      "decimal": "99",
+      "encoded": ")"
+    },
+    {
+      "decimal": "100",
+      "encoded": "*"
+    },
+    {
+      "decimal": "101",
+      "encoded": "+"
+    },
+    {
+      "decimal": "102",
+      "encoded": ","
+    },
+    {
+      "decimal": "103",
+      "encoded": "-"
+    },
+    {
+      "decimal": "104",
+      "encoded": "."
+    },
+    {
+      "decimal": "105",
+      "encoded": "/"
+    },
+    {
+      "decimal": "106",
+      "encoded": ":"
+    },
+    {
+      "decimal": "107",
+      "encoded": ";"
+    },
+    {
+      "decimal": "108",
+      "encoded": "<"
+    },
+    {
+      "decimal": "109",
+      "encoded": "="
+    },
+    {
+      "decimal": "110",
+      "encoded": ">"
+    },
+    {
+      "decimal": "111",
+      "encoded": "?"
+    },
+    {
+      "decimal": "112",
+      "encoded": "@"
+    },
+    {
+      "decimal": "113",
+      "encoded": "["
+    },
+    {
+      "decimal": "114",
+      "encoded": "\\"
+    },
+    {
+      "decimal": "115",
+      "encoded": "]"
+    },
+    {
+      "decimal": "116",
+      "encoded": "^"
+    },
+    {
+      "decimal": "117",
+      "encoded": "_"
+    },
+    {
+      "decimal": "118",
+      "encoded": "`"
+    },
+    {
+      "decimal": "119",
+      "encoded": "{"
+    },
+    {
+      "decimal": "120",
+      "encoded": "|"
+    },
+    {
+      "decimal": "121",
+      "encoded": "}"
     }
   ],
   "custom": {

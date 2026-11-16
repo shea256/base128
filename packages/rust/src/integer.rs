@@ -1,7 +1,7 @@
-use crate::{compact_alphabet, Alphabet, DecodeOptions, Error};
+use crate::{default_alphabet, Alphabet, DecodeOptions, Error};
 
 pub(crate) fn integer_digits(text: &str, options: DecodeOptions<'_>) -> Result<Vec<u8>, Error> {
-    let indices = options.alphabet().decoder_index(options.accept_aliases)?;
+    let indices = options.alphabet().decoder_index();
     let digits: Vec<_> = text
         .chars()
         .map(|c| indices.get(&c).copied().ok_or(Error::InvalidSymbol(c)))
@@ -15,7 +15,7 @@ pub(crate) fn integer_digits(text: &str, options: DecodeOptions<'_>) -> Result<V
     Ok(digits)
 }
 pub fn encode_integer(value: u128) -> String {
-    encode_integer_with_alphabet(value, compact_alphabet())
+    encode_integer_with_alphabet(value, default_alphabet())
 }
 pub fn encode_integer_with_alphabet(mut value: u128, alphabet: &Alphabet) -> String {
     let mut digits = Vec::new();
@@ -43,7 +43,7 @@ pub fn decode_integer_with_options(text: &str, options: DecodeOptions<'_>) -> Re
 /// Arbitrary-precision unsigned ASCII decimal input. Leading decimal zeros are
 /// accepted and canonicalized. Signs, whitespace, and non-ASCII digits are rejected.
 pub fn encode_integer_decimal(decimal: &str) -> Result<String, Error> {
-    encode_integer_decimal_with_alphabet(decimal, compact_alphabet())
+    encode_integer_decimal_with_alphabet(decimal, default_alphabet())
 }
 pub fn encode_integer_decimal_with_alphabet(
     decimal: &str,

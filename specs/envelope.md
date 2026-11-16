@@ -25,21 +25,21 @@ and no normalization, alternate separators, or case folding is performed.
 ## Prefix
 
 The identifier is exactly `b128`. The header is a sequence of Base128 symbols,
-not decimal text. It uses a **fixed header alphabet** equal to the Compact mapping
+not decimal text. It uses a **fixed header alphabet** equal to the official alphabet mapping
 in [alphabet.json](alphabet.json), independently of the selected payload alphabet.
-Header decoding is always strict: payload alias options do not apply to it.
+Header decoding is always strict.
 This mapping is fixed across versions, even if the library default ever changes.
 
 The first symbol is the format version. Value `0` selects the first format,
 introduced in package release 0.1.0; package releases and format versions are
-independent. Values 1–126 are unassigned. Value 127 (`÷`) is reserved for a future
+independent. Values 1–126 are unassigned. Value 127 (`∫`) is reserved for a future
 version-extension mechanism; it is rejected, with no extension syntax defined yet.
 
 Version 0 defines the second symbol as `aaaa mmm`: four high bits for alphabet,
 three low bits for mode. Its value is `(alphabet << 3) | mode`.
 
 - Mode 0: binary bytes; mode 1: nonnegative integer. Modes 2–7 are unassigned.
-- Alphabet 0: Compact; alphabet 1: Math. All other IDs are unassigned.
+- Alphabet 0: official alphabet. All other IDs are unassigned.
 - Alphabet field values 0–14 encode the ID directly and require exactly two header symbols.
 - Alphabet field 15 is an escape and requires exactly one more header symbol.
   The third symbol's value plus 15 is the alphabet ID (15–142).
@@ -53,21 +53,19 @@ Custom alphabets are not automatically assigned IDs.
 
 | Mode | Alphabet | Configuration bits | Header | Prefix |
 | --- | --- | --- | --- | --- |
-| Binary | Compact | `0000 000` | `00` | `b128·00·` |
-| Integer | Compact | `0000 001` | `01` | `b128·01·` |
-| Binary | Math | `0001 000` | `08` | `b128·08·` |
-| Integer | Math | `0001 001` | `09` | `b128·09·` |
+| Binary | official alphabet | `0000 000` | `00` | `b128·00·` |
+| Integer | official alphabet | `0000 001` | `01` | `b128·01·` |
 
-For syntax examples, `0κ` denotes binary/alphabet 14; `0ψ0` denotes
-binary/alphabet 15; `0ψ÷` denotes binary/alphabet 142. These are rejected today
+For syntax examples, `0@` denotes binary/alphabet 14; `0|0` denotes
+binary/alphabet 15; `0|∫` denotes binary/alphabet 142. These are rejected today
 because their alphabet IDs are unassigned.
 
 The header's alphabet and mode govern the payload. Explicit caller constraints
 must match the header; omitted constraints are inferred. Without a prefix, mode
-and alphabet come from caller configuration (defaulting to binary and Compact).
+and alphabet come from caller configuration (defaulting to binary and the official alphabet).
 Future versions define their own configuration layout and length rules.
 
-Only the exact two built-in layouts can be prefixed, including when supplied as
+Only the exact official layout can be prefixed, including when supplied as
 text. A checksum-only envelope may use an arbitrary configured alphabet, provided
 it excludes middle dot. Bare encoding still supports any valid custom alphabet.
 
@@ -90,23 +88,17 @@ CRC. Verify before returning an unwrapped payload. A mismatch is an error.
 The CRC detects accidental corruption; it is not a MAC, signature, or proof of
 an authentic sender.
 
-Payload alias acceptance remains opt-in and is restricted to the built-in
-layouts. Checksum spelling is always strict. CRC covers the received text:
-changing an alias requires recalculating the checksum even if decoded data is
-unchanged. To canonicalize an envelope, decode its payload, re-encode with the
-chosen alphabet, and wrap again.
-
 ## Example
 
 HASH160 of UTF-8 `hello` is the 20 bytes
 `b6a9c8c230722b7c748331a8b450f05566dc7d0f`. With both options enabled:
 
 ```text
-b128·00·|gvCH$Φh!TGpDYβ=ψLiηΠπU·v=rZκ
+b128·00·!GVchδ*HαtgPdy.ω|lI=)^u·σmIhω
 ```
 
-The checksum is `v=rZκ`. See [envelope-vectors.json](envelope-vectors.json)
-for independently generated examples across both modes, both alphabets, and all
+The checksum is `σmIhω`. See [envelope-vectors.json](envelope-vectors.json)
+for independently generated examples across both modes and all
 four option combinations.
 
 ## API and processing

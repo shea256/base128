@@ -11,7 +11,6 @@ fn check_vectors(v: &Value) {
     let alphabet = Alphabet::new(v["alphabet"].as_str().unwrap()).unwrap();
     let options = DecodeOptions {
         alphabet: Some(&alphabet),
-        accept_aliases: false,
     };
     for row in v["binary"].as_array().unwrap() {
         let bytes = hex(row["hex"].as_str().unwrap());
@@ -38,21 +37,6 @@ fn check_vectors(v: &Value) {
         assert!(decoder.write("").unwrap().is_empty());
         decoder.finish().unwrap();
         assert_eq!(actual, bytes);
-        if let Some(mixed) = row["mixed"].as_str() {
-            for a in [compact_alphabet(), math_alphabet()] {
-                assert_eq!(
-                    decode_with_options(
-                        mixed,
-                        DecodeOptions {
-                            alphabet: Some(a),
-                            accept_aliases: true
-                        }
-                    )
-                    .unwrap(),
-                    bytes
-                );
-            }
-        }
     }
     for row in v["integer"].as_array().unwrap() {
         let decimal = row["decimal"].as_str().unwrap();
@@ -74,42 +58,26 @@ fn check_vectors(v: &Value) {
                 Err(Error::IntegerOverflow)
             );
         }
-        if let Some(mixed) = row["mixed"].as_str() {
-            assert_eq!(
-                decode_integer_decimal_with_options(
-                    mixed,
-                    DecodeOptions {
-                        accept_aliases: true,
-                        ..options
-                    }
-                )
-                .unwrap(),
-                decimal
-            );
-        }
     }
 }
 #[test]
 fn shared_codec_vectors() {
-    let compact: Value =
+    let official: Value =
         serde_json::from_str(include_str!("../../../specs/test-vectors.json")).unwrap();
-    check_vectors(&compact);
-    check_vectors(&compact["custom"]);
-    check_vectors(
-        &serde_json::from_str::<Value>(include_str!("../../../specs/test-vectors-math.json"))
-            .unwrap(),
+    assert_eq!(
+        DEFAULT_ALPHABET_TEXT,
+        official["alphabet"].as_str().unwrap()
     );
+    check_vectors(&official);
+    check_vectors(&official["custom"]);
 }
 #[test]
 fn shared_envelope_vectors() {
     let vectors: Value =
         serde_json::from_str(include_str!("../../../specs/envelope-vectors.json")).unwrap();
     for row in vectors.as_array().unwrap() {
-        let alphabet = if row["alphabet"] == 0 {
-            compact_alphabet()
-        } else {
-            math_alphabet()
-        };
+        assert_eq!(row["alphabet"], 0);
+        let alphabet = default_alphabet();
         let mode = if row["mode"] == "binary" {
             Mode::Binary
         } else {
@@ -120,7 +88,6 @@ fn shared_envelope_vectors() {
             mode: Some(mode),
             prefix: row["prefix"].as_bool().unwrap(),
             checksum: row["checksum"].as_bool().unwrap(),
-            accept_aliases: false,
         };
         let payload = row["payload"].as_str().unwrap();
         let wrapped = row["wrapped"].as_str().unwrap();
@@ -190,20 +157,11 @@ fn custom_unicode_and_wrappers() {
             &payload,
             DecodeOptions {
                 alphabet: Some(&alphabet),
-                accept_aliases: false
             }
         )
         .unwrap(),
         bytes
     );
-    assert!(decode_with_options(
-        &payload,
-        DecodeOptions {
-            alphabet: Some(&alphabet),
-            accept_aliases: true
-        }
-    )
-    .is_err());
     let options = EnvelopeOptions {
         alphabet: Some(&alphabet),
         checksum: true,
@@ -221,7 +179,7 @@ fn custom_unicode_and_wrappers() {
         ),
         Err(Error::PrefixRequiresBuiltin)
     );
-    let dotted = Alphabet::new(&COMPACT_ALPHABET_TEXT.replacen('0', "·", 1)).unwrap();
+    let dotted = Alphabet::new(&DEFAULT_ALPHABET_TEXT.replacen('0', "·", 1)).unwrap();
     let options = EnvelopeOptions {
         alphabet: Some(&dotted),
         ..Default::default()
@@ -249,13 +207,13 @@ fn reject_bad_headers_shapes_checksums_and_constraints() {
         "b128·000·",
         "B128·00·",
         "b128·10·",
-        "b128·÷0·",
+        "b128·∫0·",
         "b128·02·",
-        "b128·0G·",
-        "b128·0ψ·",
-        "b128·0ψ0·",
-        "b128·0ψ÷·",
-        "b128·0ψ00·",
+        "b128·0g·",
+        "b128·0|·",
+        "b128·0|0·",
+        "b128·0|÷·",
+        "b128·0|00·",
         "b128·0∫·",
         "b128·00··",
         "00",
@@ -266,11 +224,11 @@ fn reject_bad_headers_shapes_checksums_and_constraints() {
         unwrap(
             "b128·08·",
             EnvelopeOptions {
-                alphabet: Some(compact_alphabet()),
+                alphabet: Some(default_alphabet()),
                 ..options
             }
         ),
-        Err(Error::AlphabetMismatch)
+        Err(Error::UnassignedAlphabet(1))
     );
     assert_eq!(
         unwrap(
@@ -293,30 +251,13 @@ fn reject_bad_headers_shapes_checksums_and_constraints() {
     assert!(unwrap("b128·00·00·00000", options).is_err());
     assert!(unwrap("b128·00·00·00001", options).is_err());
     assert!(unwrap("b128·00·00·0000", options).is_err());
-    // A checksum containing an alternative spelling remains invalid with aliases enabled.
-    assert!(unwrap(
-        &wrapped.replace('¥', "∂"),
-        EnvelopeOptions {
-            accept_aliases: true,
-            ..options
-        }
-    )
-    .is_err());
-    let aliases = EnvelopeOptions {
-        accept_aliases: true,
-        ..options
-    };
-    let mixed = wrap("∫#", aliases).unwrap();
-    assert_eq!(unwrap(&mixed, aliases).unwrap().payload, "∫#");
-    assert!(unwrap(&mixed, options).is_err());
 }
 
 #[test]
 fn all_binary_tail_lengths_and_chunk_boundaries() {
-    for alphabet in [compact_alphabet(), math_alphabet()] {
+    for alphabet in [default_alphabet()] {
         let options = DecodeOptions {
             alphabet: Some(alphabet),
-            accept_aliases: false,
         };
         for size in 0..=512 {
             let bytes: Vec<_> = (0..size)
@@ -336,4 +277,23 @@ fn all_binary_tail_lengths_and_chunk_boundaries() {
             }
         }
     }
+}
+
+#[test]
+fn official_digit_order_and_excluded_symbols() {
+    assert_eq!(default_alphabet().symbol_at(10), Some('a'));
+    assert_eq!(default_alphabet().symbol_at(36), Some('A'));
+    assert_eq!(default_alphabet().symbol_at(62), Some('α'));
+    assert_eq!(default_alphabet().symbol_at(81), Some('Γ'));
+    assert_eq!(default_alphabet().symbol_at(87), Some('Σ'));
+    assert_eq!(default_alphabet().symbol_at(91), Some('!'));
+    for (i, c) in DEFAULT_ALPHABET_TEXT.chars().enumerate() {
+        assert_eq!(encode_integer(i as u128), c.to_string());
+        assert_eq!(decode_integer(&c.to_string()).unwrap(), i as u128);
+    }
+    for c in "§©®¶∂∏∑νρυχ◾⸱Ω".chars() {
+        assert_eq!(decode_integer(&c.to_string()), Err(Error::InvalidSymbol(c)));
+    }
+    assert_eq!(encode_integer(1000), "7.");
+    assert_eq!(encode(&[1, 0]), "0γ0");
 }
