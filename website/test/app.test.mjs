@@ -127,12 +127,12 @@ test('website official alphabet, strict decode, custom reset, explorer, and file
     let copied;
     Object.defineProperty(globalThis,'navigator',{configurable:true,value:{clipboard:{writeText:async value=>{copied=value;}}}});
     try {
-      for (const kind of ['private','public','private']) {
+      for (const kind of ['private','address','private']) {
         get('ethereum-key').value=kind;
         await get('ethereum-key').fire('change');
         const cards=get('ethereum-values').children;
         assert.equal(cards.length,4);
-        assert.match(get('ethereum-key-description').textContent,kind==='private'?/32-byte private/:/64-byte uncompressed public/);
+        assert.match(get('ethereum-key-description').textContent,kind==='private'?/32-byte private/:/20-byte Ethereum address/);
         for (const [i,value] of Object.values(demo[kind]).entries()) {
           assert.equal(cards[i].children[2].textContent,value);
           assert.equal(cards[i].children[1].textContent,`${Array.from(value).length} characters · ${Buffer.byteLength(value)} UTF-8 bytes`);

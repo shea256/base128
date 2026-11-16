@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["cryptography>=46"]
+# dependencies = ["cryptography>=46", "eth-hash[pycryptodome]>=0.7"]
 # ///
 """Generate or verify the public, disposable Ethereum encoding example."""
 
@@ -13,6 +13,7 @@ from pathlib import Path
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
+from eth_hash.auto import keccak
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "packages/python"))
@@ -48,10 +49,18 @@ def generate() -> dict[str, dict[str, str]]:
     return {
         "private": representations(private),
         "public": representations(public_bytes(key)),
+        "address": representations(keccak(public_bytes(key))[-20:]),
     }
 
 
 def verify(data: dict[str, dict[str, str]]) -> None:
+    # Known secp256k1 generator address guards against SHA3 or compressed-key hashing.
+    generator = ec.derive_private_key(1, ec.SECP256K1())
+    if (
+        keccak(public_bytes(generator))[-20:].hex()
+        != "7e5f4552091a69125d5dfcb7b8c2659029395bdf"
+    ):
+        raise ValueError("Ethereum address derivation failed its known-answer check")
     private = bytes.fromhex(data["private"]["base16"][2:])
     public = bytes.fromhex(data["public"]["base16"][2:])
     if len(private) != 32 or len(public) != 64:
@@ -59,7 +68,11 @@ def verify(data: dict[str, dict[str, str]]) -> None:
     key = ec.derive_private_key(int.from_bytes(private, "big"), ec.SECP256K1())
     if public_bytes(key) != public:
         raise ValueError("Public key does not match the demo private key")
-    for name, raw in [("private", private), ("public", public)]:
+    for name, raw in [
+        ("private", private),
+        ("public", public),
+        ("address", keccak(public)[-20:]),
+    ]:
         values = data[name]
         if values != representations(raw):
             raise ValueError(f"Noncanonical {name} key encoding")
@@ -75,9 +88,10 @@ def verify(data: dict[str, dict[str, str]]) -> None:
 
 def markdown(data: dict[str, dict[str, str]]) -> str:
     lines = [START]
-    for kind, size in [("private", 32), ("public", 64)]:
+    for kind, size in [("private", 32), ("address", 20)]:
+        label = "Private key" if kind == "private" else "Ethereum address"
         lines += [
-            f"**{kind.capitalize()} key ({size} bytes)**",
+            f"**{label} ({size} bytes)**",
             "",
             "| Encoding | Characters | UTF-8 bytes | Display |",
             "| --- | ---: | ---: | --- |",
@@ -127,7 +141,7 @@ def main() -> None:
     elif args.check:
         if text != expected:
             raise ValueError("README demo tables are out of sync with the fixture")
-        print("PASS: secp256k1 keypair, eight encoding round-trips, and README tables")
+        print("PASS: secp256k1 keypair, twelve encoding round-trips, and README tables")
     else:
         print(table)
 

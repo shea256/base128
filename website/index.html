@@ -49,12 +49,12 @@
       <section class="panel ethereum-section" id="ethereum-demo" aria-labelledby="ethereum-title">
         <div class="section-head"><div><div class="section-kicker">ETHEREUM / ONE KEYPAIR, FOUR ENCODINGS</div><h2 id="ethereum-title">Same key. Different alphabets.</h2><p>A disposable secp256k1 keypair, displayed as hexadecimal, Base32, Base64, and Base128.</p></div></div>
         <p class="ethereum-notice">This private key is public demo data. Never use it for funds.</p>
-        <div class="toolbar"><label class="mode-wrapper" for="ethereum-key">Show <select id="ethereum-key"><option value="private">Private key</option><option value="public">Public key</option></select></label><a id="ethereum-load" class="ghost-btn" href="#playground">Load raw bytes in playground ↑</a></div>
+        <div class="toolbar"><label class="mode-wrapper" for="ethereum-key">Show <select id="ethereum-key"><option value="private">Private key</option><option value="address">Ethereum address</option></select></label><a id="ethereum-load" class="ghost-btn" href="#playground">Load raw bytes in playground ↑</a></div>
         <p id="ethereum-key-description" class="muted"></p>
         <div id="ethereum-values" class="ethereum-grid"></div>
         <div id="ethereum-feedback" class="feedback" role="status" aria-live="polite"></div>
         <p class="comparison-note">Every encoding represents the same raw bytes. Counts include the hex <code>0x</code> prefix and standard Base32/Base64 <code>=</code> padding. Base128 uses the official alphabet without a wrapper. Characters are Unicode code points; compare UTF-8 sizes separately. This demo is independent of the playground’s alphabet selection.</p>
-        <p class="comparison-note">The public key is <code>x || y</code>, without the SEC1 <code>04</code> tag, not the 20-byte Ethereum address. <a href="https://github.com/shea256/base128#ethereum-keypair-demo">Reproduce this example →</a></p>
+        <p class="comparison-note">The address is the last 20 bytes of Keccak-256 of the uncompressed public key (<code>x || y</code>, without the SEC1 <code>04</code> tag). Hex is shown in lowercase, without an EIP-55 case checksum. <a href="https://github.com/shea256/base128#ethereum-keypair-demo">Reproduce this example →</a></p>
         <noscript>Enable JavaScript to switch keys and compare encodings, or read the example in the README linked above.</noscript>
       </section>
 

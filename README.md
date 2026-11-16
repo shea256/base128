@@ -156,8 +156,10 @@ The site also compares UTF-8 size and character counts. Files are processed loca
 One disposable [Ethereum secp256k1 keypair](https://ethereum.org/developers/docs/accounts/),
 shown as hexadecimal (Base16), RFC 4648 Base32 and Base64, and our official Base128.
 Each row encodes the **same raw bytes**, not the hexadecimal text. The private key
-is 32 bytes; the public key is the 64-byte uncompressed `x || y`, without the SEC1
-`04` tag. The public key is **not** the 20-byte Ethereum address.
+is 32 bytes. The 20-byte Ethereum address is the last 20 bytes of Keccak-256 of
+the uncompressed public key (`x || y`, without the SEC1 `04` tag). This uses
+Keccak-256, not standardized SHA3-256. Hex addresses below are lowercase,
+without an EIP-55 case checksum.
 
 **This private key is public demo data. Never use it for funds.**
 Try the [interactive comparison](https://shea256.github.io/base128/#ethereum-demo).
@@ -176,22 +178,22 @@ Unicode code points; fewer characters need not mean fewer UTF-8 bytes.
 | Base64 | 44 | 44 | <code>djGXHA2zOrCKnBZpu6TVP6M9182e5pUQdB6XN/Mh/Ow=</code> |
 | Base128 | 37 | 44 | <code>XcO[&amp;S,WΦyΘδPC{A:ψ^P&gt;%ru]By7w~KT}λβφ&amp;</code> |
 
-**Public key (64 bytes)**
+**Ethereum address (20 bytes)**
 
 | Encoding | Characters | UTF-8 bytes | Display |
 | --- | ---: | ---: | --- |
-| Base16 | 130 | 130 | <code>0x2509d498119e3b183b2d5d0957fdd1fb3111d595e4ea221943c5930babf78957c721689b300bde668618a3d3fefd7e5e79825a988f510063665f0bbf87acdbc8</code> |
-| Base32 | 104 | 104 | <code>EUE5JGARTY5RQOZNLUEVP7OR7MYRDVMV4TVCEGKDYWJQXK7XRFL4OILITMYAXXTGQYMKHU767V7F46MCLKMI6UIAMNTF6C57Q6WNXSA=</code> |
-| Base64 | 88 | 88 | <code>JQnUmBGeOxg7LV0JV/3R+zER1ZXk6iIZQ8WTC6v3iVfHIWibMAveZoYYo9P+/X5eeYJamI9RAGNmXwu/h6zbyA==</code> |
-| Base128 | 74 | 100 | <code>iεWμγιYXce+Ξ.BL∇.√,heΠH*_8ζkumCbΞ∇[lαsε.τσ1Z]qcoΓ^∫?;}Y}δmΘ8~η0)Pn'X÷uΨ!*0</code> |
+| Base16 | 42 | 42 | <code>0x471e7a43195afd1105e1472c847e58a5546af0a9</code> |
+| Base32 | 32 | 32 | <code>I4PHUQYZLL6RCBPBI4WII7SYUVKGV4FJ</code> |
+| Base64 | 28 | 28 | <code>Rx56Qxla/REF4UcshH5YpVRq8Kk=</code> |
+| Base128 | 23 | 34 | <code>zκψAo+R∇8δYkVO8√IFGιΣεΔ</code> |
 
 <!-- ethereum-demo:end -->
 
 Reproduce and verify the committed example with `uv run scripts/ethereum-demo.py --check`.
 Run it without flags to print the tables. To replace the example with a fresh random
 keypair, run `uv run scripts/ethereum-demo.py --generate` followed by `npm run build`.
-The script uses Python's `cryptography` package for secp256k1; it is a demo-only
-dependency. The website displays the published fixture and does not generate or
+The script uses Python's `cryptography` package for secp256k1 and `eth-hash` with
+PyCryptodome for Keccak-256; these are demo-only dependencies. The website displays the published fixture and does not generate or
 accept wallet keys.
 
 ## Alphabets and decoding

@@ -11,7 +11,7 @@ test('demo keypair and every encoding agree with independent byte representation
   const key=createECDH('secp256k1');
   key.setPrivateKey(Buffer.from(fixture.private.base16.slice(2),'hex'));
   assert.equal(key.getPublicKey('hex','uncompressed').slice(2),fixture.public.base16.slice(2));
-  for (const [kind,size] of [['private',32],['public',64]]) {
+  for (const [kind,size] of [['private',32],['public',64],['address',20]]) {
     const values=fixture[kind];
     const bytes=Buffer.from(values.base16.slice(2),'hex');
     assert.equal(bytes.length,size);

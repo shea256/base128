@@ -242,7 +242,7 @@ function renderEthereumDemo() {
   const values=ETHEREUM_DEMO[kind];
   $('ethereum-key-description').textContent=kind==='private'
     ? '32-byte private key · publicly disclosed demo data'
-    : '64-byte uncompressed public key (x || y) · not an Ethereum address';
+    : '20-byte Ethereum address · last 20 bytes of Keccak-256(public key)';
   $('ethereum-feedback').textContent='';
   const grid=$('ethereum-values');
   grid.replaceChildren();
@@ -260,11 +260,11 @@ function renderEthereumDemo() {
     const copy=document.createElement('button');
     copy.type='button';copy.className='ghost-btn small';
     copy.textContent='Copy '+label;
-    copy.setAttribute('aria-label',`Copy ${kind} demo key in ${label}`);
+    copy.setAttribute('aria-label',`Copy demo ${kind} in ${label}`);
     copy.addEventListener('click',async()=>{
       try {
         await navigator.clipboard.writeText(value);
-        $('ethereum-feedback').textContent=`Copied ${label} ${kind} demo key.`;
+        $('ethereum-feedback').textContent=`Copied ${label} demo ${kind}.`;
       } catch {
         $('ethereum-feedback').textContent='Clipboard unavailable; select and copy the displayed value.';
       }
