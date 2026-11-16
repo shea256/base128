@@ -1,6 +1,6 @@
-import { Alphabet, DEFAULT_ALPHABET, resolveAlphabet, } from "./alphabet.js?v=playground-alphabet-0.1";
-import { encode, decode } from "./binary.js?v=playground-alphabet-0.1";
-import { decodeInteger } from "./integer.js?v=playground-alphabet-0.1";
+import { Alphabet, DEFAULT_ALPHABET, resolveAlphabet, } from "./alphabet.js?v=ethereum-demo-0.1";
+import { encode, decode } from "./binary.js?v=ethereum-demo-0.1";
+import { decodeInteger } from "./integer.js?v=ethereum-demo-0.1";
 const SEPARATOR = '·';
 // Fixed wire alphabet: never infer it from the payload or DEFAULT_ALPHABET.
 const HEADER_ALPHABET = new Alphabet("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμξπστφψωΓΔΘΛΞΠΣΦΨΩ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~¥÷∇√∫");
